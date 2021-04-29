@@ -1,4 +1,6 @@
-﻿using Emerald.Domain.Models.UserAggregate;
+﻿using Emerald.Application.Services;
+using Emerald.Domain.Models.UserAggregate;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -18,21 +20,36 @@ namespace Emerald.Application.Controllers
     {
         private SignInManager<User> signInManager;
         private UserManager<User> userManager;
+        private IJwtAuthentication authentication;
 
-        public AuthenticationController(SignInManager<User> signInManager, UserManager<User> userManager)
+        public AuthenticationController(
+            SignInManager<User> signInManager, 
+            UserManager<User> userManager,
+            IJwtAuthentication authentication)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
+            this.authentication = authentication;
+        }
+
+        [Authorize]
+        [HttpGet("authorized")]
+        public IActionResult IsAuthorized()
+        {
+            return Ok();
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(string username, string password)
         {
             User user = await userManager.FindByNameAsync(username);
+            
             if (await userManager.CheckPasswordAsync(user, password))
             {
-
+                return Ok(await authentication.GenerateToken(user));
             }
+
+            return BadRequest();
         }
 
         [HttpPost("create")]
@@ -54,23 +71,6 @@ namespace Emerald.Application.Controllers
             {
                 return BadRequest(result.Errors.First());
             }
-        }
-
-        private string GenerateToken(User user)
-        {
-            // generate token that is valid for 7 days
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("");
-            
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            return tokenHandler.WriteToken(
-                tokenHandler.CreateToken(tokenDescriptor)); 
         }
     }
 }

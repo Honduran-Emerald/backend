@@ -1,4 +1,5 @@
 using AspNetCore.Identity.Mongo;
+using Emerald.Application.Services;
 using Emerald.Domain.Models.UserAggregate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,6 +29,8 @@ namespace Emerald.Application
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IJwtAuthentication, JwtAuthentication>();
+
             services.AddControllers();
 
             services.AddSwaggerGen(options =>
@@ -40,7 +43,13 @@ namespace Emerald.Application
             });
 
             services.AddIdentityMongoDbProvider<User>(options =>
-                options.ConnectionString = Configuration["Mongo:ConnectionString"]);
+                options.ConnectionString = Configuration["Mongo:ConnectionString"])
+                .AddDefaultTokenProviders();
+
+            /*services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults
+            });*/
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
