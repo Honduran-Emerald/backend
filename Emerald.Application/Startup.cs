@@ -1,5 +1,4 @@
 using Emerald.Domain.Repositories;
-using Emerald.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,10 +27,6 @@ namespace Emerald.Application
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IQuestRepository, QuestRepository>()
-                    .AddScoped<IQuestTrackerRepository, QuestTrackerRepository>()
-                    .AddScoped<IUserRepository, UserRepository>();
-
             services.AddControllers();
 
             services.AddSwaggerGen(options =>
