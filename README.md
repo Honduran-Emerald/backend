@@ -4,6 +4,7 @@ This is the backend for a geolocation based quest app
 
 # Notes
 ## Exmaple MongoDB with ASP.NET Core and Identity
+https://github.com/coolc0ders/SocialAuthXamarinFormsAspNetCore/blob/master/AuthDemoWeb/AuthDemoWeb/Startup.cs
 https://github.com/HueByte/CloudLette/tree/master/src/backend
 https://github.com/hamed-shirbandi/CorMon/tree/master/CorMon.Web
 ## MongoDB with Identity
