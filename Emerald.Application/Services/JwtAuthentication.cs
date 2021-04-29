@@ -43,7 +43,9 @@ namespace Emerald.Application.Services
                 configuration["Jwt:Issuer"],
                 configuration["Jwt:Issuer"],
                 claims,
-                signingCredentials: creds);
+                null,
+                DateTime.Now.AddMonths(1),
+                creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
