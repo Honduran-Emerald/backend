@@ -1,4 +1,5 @@
-using Emerald.Domain.Repositories;
+using AspNetCore.Identity.Mongo;
+using Emerald.Domain.Models.UserAggregate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -37,6 +38,9 @@ namespace Emerald.Application
                     Version = "v1"
                 });
             });
+
+            services.AddIdentityMongoDbProvider<User>(options =>
+                options.ConnectionString = Configuration["Mongo:ConnectionString"]);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -58,13 +62,11 @@ namespace Emerald.Application
                 endpoints.MapControllers();
             });
 
-            if (env.IsProduction() == false)
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
             {
-                app.UseSwaggerUI(options =>
-                {
-                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Honduran Emerald");
-                });
-            }
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Honduran Emerald");
+            });
         }
     }
 }
