@@ -1,4 +1,5 @@
-﻿using Emerald.Application.Services;
+﻿using Emerald.Application.Models.Bindings;
+using Emerald.Application.Services;
 using Emerald.Domain.Models.UserAggregate;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -40,11 +41,12 @@ namespace Emerald.Application.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(string username, string password)
+        public async Task<IActionResult> Login(
+            [FromForm] AuthLoginBinding binding)
         {
-            User user = await userManager.FindByNameAsync(username);
+            User user = await userManager.FindByEmailAsync(binding.Email);
             
-            if (await userManager.CheckPasswordAsync(user, password))
+            if (await userManager.CheckPasswordAsync(user, binding.Password))
             {
                 return Ok(await authentication.GenerateToken(user));
             }
@@ -54,14 +56,12 @@ namespace Emerald.Application.Controllers
 
         [HttpPost("create")]
         public async Task<IActionResult> Create(
-            string username,
-            string email, 
-            string password)
+            [FromForm] AuthRegisterBinding binding)
         {
-            User user = new User(username);
-            user.Email = email;
+            User user = new User(binding.Username);
+            user.Email = binding.Email;
 
-            var result = await userManager.CreateAsync(user, password);
+            var result = await userManager.CreateAsync(user, binding.Password);
 
             if (result.Succeeded)
             {
