@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Emerald.Domain.Models.QuestionVersionAggregate
+namespace Emerald.Domain.Models.QuestVersionAggregate
 {
-    public class Module
+    public class NextModuleEvent
     {
     }
 }
