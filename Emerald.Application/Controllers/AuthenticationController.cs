@@ -1,6 +1,7 @@
 ﻿using Emerald.Application.Models.Bindings;
 using Emerald.Application.Services;
 using Emerald.Domain.Models.UserAggregate;
+using Emerald.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,7 @@ namespace Emerald.Application.Controllers
         private IJwtAuthentication authentication;
 
         public AuthenticationController(
-            SignInManager<User> signInManager, 
+            SignInManager<User> signInManager,
             UserManager<User> userManager,
             IJwtAuthentication authentication)
         {
@@ -35,9 +36,11 @@ namespace Emerald.Application.Controllers
 
         [Authorize]
         [HttpGet("authorized")]
-        public IActionResult IsAuthorized()
+        public async Task<IActionResult> IsAuthorized(
+            [FromServices] IUserRepository userRepository)
         {
-            return Ok();
+            List<User> users = await userRepository.All();
+            return Ok(users.Select(u => u.UserName).ToList());
         }
 
         [HttpPost("login")]
