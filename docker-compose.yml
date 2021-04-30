@@ -8,6 +8,7 @@
       - emerald_mongodb
     environment: 
       Mongo__ConnectionString: "mongodb://root:rootpassword@emerald_mongodb:27017/emerald?authSource=admin"
+      Mongo__DatabaseName: "emerald"
 
   emerald_mongodb:
     image: mongo:latest
