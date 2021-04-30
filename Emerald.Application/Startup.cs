@@ -1,6 +1,8 @@
 using AspNetCore.Identity.Mongo;
 using Emerald.Application.Services;
 using Emerald.Domain.Models.UserAggregate;
+using Emerald.Infrastructure;
+using Emerald.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +15,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,9 +36,14 @@ namespace Emerald.Application
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IJwtAuthentication, JwtAuthentication>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
-            services.AddControllers();
+            services.AddScoped<IJwtAuthentication, JwtAuthentication>()
+                    .AddSingleton<IMongoDbContext, MongoDbContext>();
+
+            services.AddControllers()
+                    .AddNewtonsoftJson(options => 
+                        options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
             services.AddSwaggerGen(options =>
             {
