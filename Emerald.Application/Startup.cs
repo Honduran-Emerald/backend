@@ -16,6 +16,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +41,9 @@ namespace Emerald.Application
             services.AddScoped<IJwtAuthentication, JwtAuthentication>()
                     .AddSingleton<IMongoDbContext, MongoDbContext>();
 
-            services.AddControllers();
+            services.AddControllers()
+                    .AddNewtonsoftJson(options => 
+                        options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
             services.AddSwaggerGen(options =>
             {
