@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Emerald.Infrastructure.Repositories
 {
-    class QuestVersionRepository
+    public class QuestVersionRepository : IQuestVersionRepository
     {
     }
 }
