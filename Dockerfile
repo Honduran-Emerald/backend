@@ -18,7 +18,7 @@ COPY . .
 
 FROM build AS publish
 WORKDIR /work/Emerald.Application
-RUN dotnet publish -c Release -o /app --no-restore
+RUN dotnet publish -c Development -o /app --no-restore
 #RUN dotnet publish "Emerald.Application.csproj" -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS final

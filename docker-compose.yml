@@ -6,6 +6,8 @@
       - 5000:80
     depends_on:
       - emerald_mongodb
+    environment: 
+      Mongo__ConnectionString: "mongodb://root:rootpassword@emerald_mongodb:27017/emerald?authSource=admin"
 
   emerald_mongodb:
     image: mongo:latest
