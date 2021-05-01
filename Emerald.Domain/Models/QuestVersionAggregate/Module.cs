@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using Vitamin.Value.Domain.SeedWork;
 
-namespace Emerald.Domain.Models.QuestionVersionAggregate
+namespace Emerald.Domain.Models.QuestVersionAggregate
 {
     public class Module : Entity
     {

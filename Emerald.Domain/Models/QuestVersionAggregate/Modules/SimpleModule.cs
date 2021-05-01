@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Emerald.Domain.Models.QuestionVersionAggregate.Modules
+namespace Emerald.Domain.Models.QuestVersionAggregate.Modules
 {
     public class SimpleModule
     {

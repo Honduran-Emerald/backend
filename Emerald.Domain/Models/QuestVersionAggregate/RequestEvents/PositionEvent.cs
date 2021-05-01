@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Emerald.Domain.Models.QuestionVersionAggregate.RequestEvents
+namespace Emerald.Domain.Models.QuestVersionAggregate.RequestEvents
 {
     class PositionEvent
     {
