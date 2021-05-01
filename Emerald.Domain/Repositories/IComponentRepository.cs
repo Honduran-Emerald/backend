@@ -11,6 +11,7 @@ namespace Emerald.Infrastructure.Repositories
     {
         Task<Component> Get(ObjectId id);
         Task<IEnumerable<Component>> GetAll(List<ObjectId> ids);
+        Task<IEnumerable<Component>> GetAll();
         Task Add(Component component);
     }
 }

@@ -13,6 +13,7 @@
     <PackageReference Include="AspNetCore.Identity.Mongo" Version="8.1.0" />
     <PackageReference Include="GeoCoordinate.NetStandard1" Version="1.0.1" />
     <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AspNetCore.Identity.Mongo.Mongo;
@@ -14,7 +15,7 @@ namespace Emerald.Infrastructure.Repositories
     {
         private IMongoCollection<Component> collection;
 
-        public ComponentRepository(MongoDbContext dbContext)
+        public ComponentRepository(IMongoDbContext dbContext)
         {
             collection = dbContext.Emerald.GetCollection<Component>("Components");
         }
@@ -35,6 +36,13 @@ namespace Emerald.Infrastructure.Repositories
         public async Task Add(Component component)
         {
             await collection.InsertOneAsync(component);
+        }
+
+        public async Task<IEnumerable<Component>> GetAll()
+        {
+            return await collection
+                .AsQueryable()
+                .ToListAsync();
         }
     }
 }
