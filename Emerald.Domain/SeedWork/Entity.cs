@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,13 +10,14 @@ namespace Vitamin.Value.Domain.SeedWork
 {
     public abstract class Entity
     {
-        public abstract long Id { get; protected set; }
+        public abstract ObjectId Id { get; protected set; }
 
         public override bool Equals(object obj)
-        {
-            return obj is Entity entity &&
-                   Id.Equals(entity.Id);
-        }
+            => obj is Entity entity
+            && Id.Equals(entity.Id);
+
+        public override int GetHashCode()
+            => Id.GetHashCode();
 
         public void ClearEvents()
             => domainEvents.Clear();
