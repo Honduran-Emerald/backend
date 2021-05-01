@@ -36,7 +36,8 @@ namespace Emerald.Application
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserRepository, UserRepository>()
+                    .AddScoped<IComponentRepository, ComponentRepository>();
 
             services.AddScoped<IJwtAuthentication, JwtAuthentication>()
                     .AddSingleton<IMongoDbContext, MongoDbContext>();
