@@ -1,16 +1,16 @@
 ﻿services:
-  emerald_asp:
+  asp:
     build:
       context: .
     ports:
       - 5000:80
     depends_on:
-      - emerald_mongodb
+      - mongodb
     environment: 
-      Mongo__ConnectionString: "mongodb://root:rootpassword@emerald_mongodb:27017/emerald?authSource=admin"
+      Mongo__ConnectionString: "mongodb://root:rootpassword@mongodb:27017/emerald?authSource=admin"
       Mongo__DatabaseName: "emerald"
 
-  emerald_mongodb:
+  mongodb:
     image: mongo:latest
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
