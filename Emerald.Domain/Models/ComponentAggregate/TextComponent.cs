@@ -12,5 +12,9 @@ namespace Emerald.Domain.Models.ComponentAggregate
         {
             Text = text;
         }
+
+        private TextComponent()
+        {
+        }
     }
 }
