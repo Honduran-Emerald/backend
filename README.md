@@ -3,6 +3,8 @@
 This is the backend for a geolocation based quest app
 
 # Notes
+## MongoDB Mapping (Domain Modelling)
+https://mongodb.github.io/mongo-csharp-driver/2.8/reference/bson/mapping/
 ## MongoDB Handling Inheritance
 https://codingcanvas.com/storing-polymorphic-classes-in-mongodb-using-c/
 ## Geo Location
