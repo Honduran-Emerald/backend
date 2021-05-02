@@ -2,6 +2,7 @@ using AspNetCore.Identity.Mongo;
 using Emerald.Application.Infrastructure.OperationFilter;
 using Emerald.Application.Services;
 using Emerald.Domain.Models.UserAggregate;
+using Emerald.Domain.Services;
 using Emerald.Infrastructure;
 using Emerald.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -39,8 +40,13 @@ namespace Emerald.Application
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<QuestPlayService>();
+
             services.AddScoped<IUserRepository, UserRepository>()
-                    .AddScoped<IComponentRepository, ComponentRepository>();
+                    .AddScoped<IComponentRepository, ComponentRepository>()
+                    .AddScoped<IQuestRepository, QuestRepository>()
+                    .AddScoped<IQuestVersionRepository, QuestVersionRepository>()
+                    .AddScoped<ITrackerRepository, TrackerRepository>();
 
             services.AddScoped<IJwtAuthentication, JwtAuthentication>()
                     .AddSingleton<IMongoDbContext, MongoDbContext>();
@@ -101,6 +107,10 @@ namespace Emerald.Application
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseHttpsRedirection();
             }
 
             app.UseRouting();
