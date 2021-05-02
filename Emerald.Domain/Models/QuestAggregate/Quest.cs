@@ -13,10 +13,6 @@ namespace Emerald.Domain.Models.QuestAggregate
         public override ObjectId Id { get; protected set; }
         public ObjectId OwnerUserId { get; protected set; }
 
-        public long Votes { get; private set; }
-        public long Plays { get; private set; }
-        public long Finishs { get; private set; }
-
         public List<ObjectId> QuestVersions { get; private set; }
         public ObjectId StableQuestVersion { get; private set; }
         
@@ -24,30 +20,11 @@ namespace Emerald.Domain.Models.QuestAggregate
             : this()
         {
             OwnerUserId = user.Id;
-
-            Votes = 0;
-            Plays = 0;
-            Finishs = 0;
         }
 
         private Quest()
         {
             QuestVersions = new List<ObjectId>();
-        }
-
-        public void AddVote()
-        {
-            ++Votes;
-        }
-
-        public void AddPlay()
-        {
-            ++Plays;
-        }
-
-        public void AddFinish()
-        {
-            ++Finishs;
         }
 
         public void SetStableQuestVersion(QuestVersion questVersion)
