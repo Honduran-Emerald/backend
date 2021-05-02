@@ -9,6 +9,7 @@ namespace Emerald.Application.Models.Bindings
     public class AuthLoginBinding
     {
         [Required]
+        [EmailAddress]
         public string Email { get; set; }
 
         [Required]
