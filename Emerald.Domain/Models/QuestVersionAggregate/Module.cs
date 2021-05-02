@@ -12,16 +12,12 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
     {
         public override ObjectId Id { get; protected set; }
 
-        public QuestVersion QuestVersion { get; private set; }
         public List<ObjectId> ComponentIds { get; private set; }
 
-        public Module(QuestVersion questVersion)
+        public Module()
         {
-            QuestVersion = questVersion;
+            ComponentIds = new List<ObjectId>();
         }
 
-        private Module()
-        {
-        }
     }
 }
