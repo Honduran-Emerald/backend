@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using Emerald.Domain.Models.QuestAggregate;
+using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,9 +22,10 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
         public List<Module> Modules { get; private set; }
         public Module FirstModule { get; private set; }
 
-        public QuestVersion(ObjectId questId, string title, string description, long version)
+        public QuestVersion(Quest quest, string title, string description, long version)
+            : this()
         {
-            QuestId = questId;
+            QuestId = quest.Id;
             Title = title;
             Description = description;
             Version = version;
@@ -33,6 +35,7 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
 
         private QuestVersion()
         {
+            Modules = new List<Module>();
         }
 
         public void ChangeFirstModule(Module module)
@@ -50,11 +53,6 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
             if (Modules.Contains(module))
             {
                 throw new DomainException("Can not add already existing module");
-            }
-
-            if (module.QuestVersion.Id != Id)
-            {
-                throw new DomainException("Can not add module from other questversion");
             }
 
             Modules.Add(module);
