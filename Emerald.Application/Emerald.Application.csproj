@@ -9,6 +9,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>C:\Users\hinz\source\repos\Emerald\backend\Emerald.Application\Emerald.Application.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591;1998</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
