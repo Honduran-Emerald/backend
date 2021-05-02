@@ -1,7 +1,9 @@
 ﻿using Emerald.Domain.Models.QuestAggregate;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using Vitamin.Value.Domain.SeedWork;
 
@@ -31,6 +33,13 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
             Version = version;
 
             CreatedAt = DateTime.UtcNow;
+        }
+
+        [BsonConstructor]
+        private QuestVersion(List<Module> modules)
+        {
+            Modules = modules;
+            Modules.ForEach(m => m.QuestVersion = this);
         }
 
         private QuestVersion()
