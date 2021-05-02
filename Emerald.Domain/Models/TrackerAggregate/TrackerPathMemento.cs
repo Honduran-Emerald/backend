@@ -1,10 +1,13 @@
-﻿using System;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Emerald.Domain.Models.TrackerAggregate
 {
-    public class TrackerPathMemento
+    [BsonDiscriminator(RootClass = true)]
+    [BsonKnownTypes()]
+    public abstract class TrackerPathMemento
     {
 
     }
