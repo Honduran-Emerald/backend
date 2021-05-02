@@ -7,6 +7,10 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Users\hinz\source\repos\Emerald\backend\Emerald.Application\Emerald.Application.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="AspNetCore.Identity.Mongo" Version="8.1.0" />
     <PackageReference Include="AspNetCore.Identity.MongoDbCore" Version="3.1.1" />

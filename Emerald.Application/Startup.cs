@@ -1,4 +1,5 @@
 using AspNetCore.Identity.Mongo;
+using Emerald.Application.Infrastructure.OperationFilter;
 using Emerald.Application.Services;
 using Emerald.Domain.Models.UserAggregate;
 using Emerald.Infrastructure;
@@ -19,7 +20,9 @@ using MongoDB.Driver;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -53,6 +56,21 @@ namespace Emerald.Application
                     Title = "Honduran Emerald",
                     Version = "v1"
                 });
+
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using Bearer scheme.",
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "Bearer",
+                });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                options.IncludeXmlComments(xmlPath);
+
+                options.OperationFilter<AuthorizeCheckOperationFilter>();
             });
 
             services.AddIdentityMongoDbProvider<User>(options =>
