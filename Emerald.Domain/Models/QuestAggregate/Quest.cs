@@ -1,4 +1,5 @@
 ﻿using Emerald.Domain.Models.QuestVersionAggregate;
+using Emerald.Domain.Models.UserAggregate;
 using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
@@ -19,9 +20,10 @@ namespace Emerald.Domain.Models.QuestAggregate
         public List<ObjectId> QuestVersions { get; private set; }
         public ObjectId StableQuestVersion { get; private set; }
         
-        public Quest(ObjectId userOwnerId)
+        public Quest(User user)
+            : this()
         {
-            OwnerUserId = userOwnerId;
+            OwnerUserId = user.Id;
 
             Votes = 0;
             Plays = 0;
@@ -30,6 +32,7 @@ namespace Emerald.Domain.Models.QuestAggregate
 
         private Quest()
         {
+            QuestVersions = new List<ObjectId>();
         }
 
         public void AddVote()
@@ -62,7 +65,7 @@ namespace Emerald.Domain.Models.QuestAggregate
                 throw new DomainException("Can not add already existing questversion");
             }
 
-            if (questVersion.Id != Id)
+            if (questVersion.QuestId != Id)
             {
                 throw new DomainException("Can not add questversion from other quest");
             }
