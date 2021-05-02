@@ -13,6 +13,11 @@ namespace Vitamin.Value.Domain.SeedWork
     {
         public abstract ObjectId Id { get; protected set; }
 
+        public Entity()
+        {
+            Id = ObjectId.GenerateNewId();
+        }
+
         public override bool Equals(object obj)
             => obj is Entity entity
             && Id.Equals(entity.Id);
