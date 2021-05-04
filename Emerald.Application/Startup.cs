@@ -108,10 +108,6 @@ namespace Emerald.Application
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseHttpsRedirection();
-            }
 
             app.UseRouting();
 
