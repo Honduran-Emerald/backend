@@ -47,6 +47,7 @@ namespace Emerald.Application.Controllers
             [FromServices] IQuestRepository questRepository,
             [FromServices] IQuestVersionRepository questVersionRepository)
         {
+            /*
             User user = await userManager.GetUserAsync(User);
 
             Quest quest = new Quest(user);
@@ -57,12 +58,15 @@ namespace Emerald.Application.Controllers
 
             await questRepository.Add(quest);
             await questVersionRepository.Add(questVersion);
-
+            
             return Ok(new 
             { 
                 quest = quest, 
                 questVersion = questVersion 
             });
+            */
+
+            return Ok();
         }
     }
 }
