@@ -46,9 +46,6 @@
   </ItemGroup>
 
 	<Target Name="CopyDocumentationFile" BeforeTargets="PrepareForPublish">
-		<ItemGroup>
-			<DocFile Include="y$(DocumentationFile)" />
-		</ItemGroup>
-		<Copy SourceFiles="@(DocFile)" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="Emerald.Application.xml" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="true" />
 	</Target>
 </Project>
