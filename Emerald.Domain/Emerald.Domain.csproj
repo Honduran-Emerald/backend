@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Folder Include="Events\" />
+     <Folder Include="Models\TrackerAggregate\ModuleMementos\" />
   </ItemGroup>
 
   <ItemGroup>

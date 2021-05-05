@@ -2,6 +2,7 @@
 using Emerald.Application.Services;
 using Emerald.Domain.Models.UserAggregate;
 using Emerald.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +35,11 @@ namespace Emerald.Application.Controllers
             this.authentication = authentication;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userRepository"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpGet("authorized")]
         public async Task<IActionResult> IsAuthorized(

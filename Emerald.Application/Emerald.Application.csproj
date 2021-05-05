@@ -5,6 +5,8 @@
     <UserSecretsId>aspnet-Emerald.Application-8C584F5B-B597-4A5A-B4E3-6CC4CF1C6FC4</UserSecretsId>
     <WebProject_DirectoryAccessLevelKey>0</WebProject_DirectoryAccessLevelKey>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <Nullable>disable</Nullable>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -43,4 +45,10 @@
     <Folder Include="Areas\" />
   </ItemGroup>
 
+	<Target Name="CopyDocumentationFile" BeforeTargets="PrepareForPublish">
+		<ItemGroup>
+			<DocFile Include="y$(DocumentationFile)" />
+		</ItemGroup>
+		<Copy SourceFiles="@(DocFile)" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="true" />
+	</Target>
 </Project>
