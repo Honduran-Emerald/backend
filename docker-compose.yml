@@ -10,6 +10,9 @@ services:
       - 812:80
     depends_on:
       - mongo
+    environment: 
+      Mongo__ConnectionString: "mongodb://mongo:27017/emerald"
+      Mongo__DatabaseName: "emerald"
 
   mongo:
     image: mongo:latest
