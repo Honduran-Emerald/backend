@@ -7,9 +7,8 @@ services:
       context: .
       dockerfile: Emerald.Application/Dockerfile
     ports:
-    - 81:80
-    - 82:443
-
+    - 811:80
+      
   mongodb:
     image: mongo:latest
     ports:

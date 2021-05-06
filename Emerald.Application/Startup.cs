@@ -52,7 +52,7 @@ namespace Emerald.Application
                     .AddSingleton<IMongoDbContext, MongoDbContext>();
 
             services.AddControllers()
-                    .AddNewtonsoftJson(options => 
+                    .AddNewtonsoftJson(options =>
                         options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
             services.AddSwaggerGen(options =>
@@ -75,7 +75,7 @@ namespace Emerald.Application
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 options.IncludeXmlComments(xmlPath);
-                
+
                 options.OperationFilter<AuthorizeCheckOperationFilter>();
             });
 
