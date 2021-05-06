@@ -74,7 +74,7 @@ namespace Emerald.Application.Controllers
 
             if (result.Succeeded)
             {
-                return Ok(User.Identity.Name);
+                return Ok(await authentication.GenerateToken(user));
             }
             else
             {
