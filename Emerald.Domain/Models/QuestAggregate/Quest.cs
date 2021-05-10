@@ -3,6 +3,7 @@ using Emerald.Domain.Models.UserAggregate;
 using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Vitamin.Value.Domain.SeedWork;
 
@@ -13,7 +14,7 @@ namespace Emerald.Domain.Models.QuestAggregate
         public override ObjectId Id { get; protected set; }
         public ObjectId OwnerUserId { get; protected set; }
 
-        public List<ObjectId> QuestVersions { get; private set; }
+        public List<QuestVersion> QuestVersions { get; private set; }
         public ObjectId StableQuestVersion { get; private set; }
         
         public Quest(User user)
@@ -24,30 +25,32 @@ namespace Emerald.Domain.Models.QuestAggregate
 
         private Quest()
         {
-            QuestVersions = new List<ObjectId>();
+            QuestVersions = new List<QuestVersion>();
         }
 
         public void SetStableQuestVersion(QuestVersion questVersion)
         {
-            if (QuestVersions.Contains(questVersion.Id) == false)
+            if (QuestVersions.Any(q => q.Id == questVersion.Id) == false)
             {
                 throw new DomainException("Stable quest version has to be already a quest version");
             }
+
+            if (StableQuestVersion == questVersion.Id)
+            {
+                throw new DomainException("Quest version already set as stable");
+            }
+
+            StableQuestVersion = questVersion.Id;
         }
 
         public void AddQuestVersion(QuestVersion questVersion)
         {
-            if (QuestVersions.Contains(questVersion.Id))
+            if (QuestVersions.Any(q => q.Id == questVersion.Id))
             {
                 throw new DomainException("Can not add already existing questversion");
             }
 
-            if (questVersion.QuestId != Id)
-            {
-                throw new DomainException("Can not add questversion from other quest");
-            }
-
-            QuestVersions.Add(questVersion.Id);
+            QuestVersions.Add(questVersion);
         }
     }
 }
