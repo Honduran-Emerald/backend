@@ -35,11 +35,6 @@ namespace Emerald.Application.Controllers
             this.authentication = authentication;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="userRepository"></param>
-        /// <returns></returns>
         [Authorize]
         [HttpGet("authorized")]
         public async Task<IActionResult> IsAuthorized(
@@ -74,12 +69,20 @@ namespace Emerald.Application.Controllers
 
             if (result.Succeeded)
             {
-                return Ok(User.Identity.Name);
+                return Ok(await authentication.GenerateToken(user));
             }
             else
             {
                 return BadRequest(result.Errors.First());
             }
         }
-    }
+
+        [Authorize]
+        [HttpPost("renew")]
+        public async Task<IActionResult> Renew()
+        {
+            return Ok(authentication.GenerateToken(
+                await userManager.GetUserAsync(User)));
+        }
+    } 
 }
