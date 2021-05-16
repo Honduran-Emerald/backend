@@ -9,6 +9,5 @@ namespace Emerald.Domain.Models.TrackerAggregate
     [BsonKnownTypes()]
     public abstract class TrackerPathMemento
     {
-
     }
 }

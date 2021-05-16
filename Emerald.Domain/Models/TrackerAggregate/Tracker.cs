@@ -1,4 +1,5 @@
-﻿using Emerald.Domain.Models.QuestAggregate;
+﻿using Emerald.Domain.Models.ModuleAggregate;
+using Emerald.Domain.Models.QuestAggregate;
 using Emerald.Domain.Models.QuestVersionAggregate;
 using MongoDB.Bson;
 using System;
@@ -22,14 +23,22 @@ namespace Emerald.Domain.Models.TrackerAggregate
             : this()
         {
             QuestVersionId = questVersion.Id;
-            Path.Add(new TrackerPath(questVersion.FirstModule));
-
             CreatedAt = DateTime.UtcNow;
         }
 
         private Tracker()
         {
             Path = new List<TrackerPath>();
+        }
+
+        public void AddTrackerPath(TrackerPath trackerPath)
+        {
+            Path.Add(trackerPath);
+        }
+
+        public TrackerPath GetCurrentTrackerPath()
+        {
+            return Path[Path.Count - 1];
         }
 
         public void Upvote()

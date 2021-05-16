@@ -15,9 +15,9 @@ namespace Emerald.Domain.Models.TrackerAggregate
         public DateTime CreatedAt { get; private set; }
         public TrackerPathMemento Memento { get; private set; }
 
-        public TrackerPath(Module module)
+        public TrackerPath(ObjectId moduleId)
         {
-            ModuleId = module.Id;
+            ModuleId = moduleId;
 
             CreatedAt = DateTime.UtcNow;
             Memento = null;
