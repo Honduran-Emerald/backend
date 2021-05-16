@@ -1,4 +1,5 @@
-﻿using Emerald.Application.Models.Bindings;
+﻿using Emerald.Application.Models.Binding;
+using Emerald.Application.Models.Bindings;
 using Emerald.Application.Services;
 using Emerald.Domain.Models.UserAggregate;
 using Emerald.Infrastructure.Repositories;
@@ -35,32 +36,26 @@ namespace Emerald.Application.Controllers
             this.authentication = authentication;
         }
 
-        [Authorize]
-        [HttpGet("authorized")]
-        public async Task<IActionResult> IsAuthorized(
-            [FromServices] IUserRepository userRepository)
-        {
-            List<User> users = await userRepository.All();
-            return Ok(users.Select(u => u.UserName).ToList());
-        }
-
         [HttpPost("login")]
-        public async Task<IActionResult> Login(
-            [FromForm] AuthLoginBinding binding)
+        public async Task<ActionResult<NewTokenBinding>> Login(
+            [FromBody] AuthLoginModel binding)
         {
             User user = await userManager.FindByEmailAsync(binding.Email);
             
             if (await userManager.CheckPasswordAsync(user, binding.Password))
             {
-                return Ok(await authentication.GenerateToken(user));
+                return Ok(new NewTokenBinding
+                {
+                    Token = await authentication.GenerateToken(user)
+                });
             }
 
             return BadRequest();
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> Create(
-            [FromForm] AuthRegisterBinding binding)
+        public async Task<ActionResult<NewTokenBinding>> Create(
+            [FromBody] AuthRegisterModel binding)
         {
             User user = new User(binding.Username);
             user.Email = binding.Email;
@@ -69,20 +64,28 @@ namespace Emerald.Application.Controllers
 
             if (result.Succeeded)
             {
-                return Ok(await authentication.GenerateToken(user));
+                return Ok(new NewTokenBinding
+                {
+                    Token = await authentication.GenerateToken(user)
+                });
             }
             else
             {
-                return BadRequest(result.Errors.First());
+                return BadRequest(new
+                {
+                    message = result.Errors.First()
+                });
             }
         }
 
         [Authorize]
         [HttpPost("renew")]
-        public async Task<IActionResult> Renew()
+        public async Task<ActionResult<NewTokenBinding>> Renew()
         {
-            return Ok(authentication.GenerateToken(
-                await userManager.GetUserAsync(User)));
+            return Ok(new NewTokenBinding
+            {
+                Token = await authentication.GenerateToken(await userManager.GetUserAsync(User))
+            });
         }
     } 
 }
