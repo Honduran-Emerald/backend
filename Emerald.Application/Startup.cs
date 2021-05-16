@@ -53,8 +53,7 @@ namespace Emerald.Application
                     .AddSingleton<IMongoDbContext, MongoDbContext>();
 
             services.AddControllers()
-                    .AddNewtonsoftJson(options =>
-                        options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+                    .AddNewtonsoftJson();
 
             services.AddSwaggerGen(options =>
             {
