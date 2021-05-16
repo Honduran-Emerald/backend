@@ -1,8 +1,11 @@
-﻿using Emerald.Domain.Models.TrackerAggregate;
+﻿using AspNetCore.Identity.Mongo.Mongo;
+using Emerald.Domain.Models.TrackerAggregate;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Emerald.Infrastructure.Repositories
 {
@@ -15,6 +18,20 @@ namespace Emerald.Infrastructure.Repositories
             collection = dbContext.Emerald.GetCollection<Tracker>("Trackers");
         }
 
+        public async Task Add(Tracker tracker)
+        {
+            await collection.InsertOneAsync(tracker);
+        }
 
+        public async Task<Tracker> Get(ObjectId id)
+        {
+            return await collection.Find(o => o.Id == id)
+                .FirstAsync();
+        }
+
+        public async Task Update(Tracker tracker)
+        {
+            await collection.ReplaceOneAsync(o => o.Id == tracker.Id, tracker);
+        }
     }
 }
