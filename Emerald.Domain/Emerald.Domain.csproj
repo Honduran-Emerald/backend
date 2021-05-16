@@ -5,8 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Events\" />
-     <Folder Include="Models\TrackerAggregate\ModuleMementos\" />
+    <Compile Remove="Models\TrackerAggregate\ModuleMementos\**" />
+    <EmbeddedResource Remove="Models\TrackerAggregate\ModuleMementos\**" />
+    <None Remove="Models\TrackerAggregate\ModuleMementos\**" />
   </ItemGroup>
 
   <ItemGroup>

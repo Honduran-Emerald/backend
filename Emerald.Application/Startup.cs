@@ -1,7 +1,9 @@
 using AspNetCore.Identity.Mongo;
 using Emerald.Application.Infrastructure.OperationFilter;
 using Emerald.Application.Services;
+using Emerald.Application.Services.Factories;
 using Emerald.Domain.Models.UserAggregate;
+using Emerald.Domain.Repositories;
 using Emerald.Domain.Services;
 using Emerald.Infrastructure;
 using Emerald.Infrastructure.Repositories;
@@ -42,10 +44,15 @@ namespace Emerald.Application
         {
             services.AddScoped<QuestPlayService>();
 
+            services.AddScoped<IComponentModelFactory, ComponentModelFactory>()
+                    .AddScoped<IMementoModelFactory, MementoModelFactory>()
+                    .AddScoped<IModuleModelFactory, ModuleModuleFactory>()
+                    .AddScoped<IResponseEventModelFactory, ResponseEventModelFactory>();
+
             services.AddScoped<IUserRepository, UserRepository>()
+                    .AddScoped<IModuleRepository, ModuleRepository>()
                     .AddScoped<IComponentRepository, ComponentRepository>()
                     .AddScoped<IQuestRepository, QuestRepository>()
-                    .AddScoped<IQuestVersionRepository, QuestVersionRepository>()
                     .AddScoped<ITrackerRepository, TrackerRepository>();
 
             services.AddScoped<IJwtAuthentication, JwtAuthentication>()
@@ -77,6 +84,7 @@ namespace Emerald.Application
                 options.IncludeXmlComments(xmlPath);
                 
                 options.OperationFilter<AuthorizeCheckOperationFilter>();
+                options.GeneratePolymorphicSchemas();
             });
 
             services.AddIdentityMongoDbProvider<User>(options =>
