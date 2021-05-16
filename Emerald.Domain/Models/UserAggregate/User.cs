@@ -2,6 +2,7 @@
 using Emerald.Domain.Models.TrackerAggregate;
 using MongoDB.Bson;
 using System.Collections.Generic;
+using Vitamin.Value.Domain;
 using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.UserAggregate
@@ -11,6 +12,7 @@ namespace Emerald.Domain.Models.UserAggregate
         public List<ObjectId> QuestIds { get; private set; }
         public List<ObjectId> TrackerIds { get; private set; }
         public ObjectId? ActiveTrackerId { get; private set; }
+        public string SyncToken { get; private set; }
 
         public User() : base()
         {
@@ -32,6 +34,11 @@ namespace Emerald.Domain.Models.UserAggregate
             }
 
             ActiveTrackerId = tracker.Id;
+        }
+
+        public void GenerateNewSyncToken()
+        {
+            SyncToken = Utility.RandomString(8);
         }
     }
 }
