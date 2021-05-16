@@ -1,37 +1,59 @@
 ﻿using Emerald.Domain.Models;
+using Emerald.Domain.Models.ModuleAggregate;
+using Emerald.Domain.Models.ModuleAggregate.RequestEvents;
 using Emerald.Domain.Models.QuestAggregate;
 using Emerald.Domain.Models.TrackerAggregate;
 using Emerald.Domain.Models.UserAggregate;
+using Emerald.Domain.Repositories;
 using Emerald.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Services
 {
     public class QuestPlayService
     {
-        private IQuestVersionRepository questVersionRepository;
+        private IModuleRepository moduleRepository;
         private ITrackerRepository trackerRepository;
 
         // representing a user playing a quest and handling
         // requestevents
-        public QuestPlayService(IQuestVersionRepository questVersionRepository, ITrackerRepository trackerRepository)
+        public QuestPlayService(IModuleRepository moduleRepository, ITrackerRepository trackerRepository)
         {
-            this.questVersionRepository = questVersionRepository;
+            this.moduleRepository = moduleRepository;
             this.trackerRepository = trackerRepository;
         }
 
-        public void HandleEvent(User user, RequestEvent requestEvent)
+        public async Task<ResponseEvent> HandleEvent(User user, RequestEvent requestEvent)
         {
-            // 1. get current tracker
-            // 2. get quest for tracker
-            // 3. process event
+            if (user.ActiveTrackerId == null)
+            {
+                throw new DomainException("Can not handle event without active tracker");
+            }
+
+            Tracker tracker = await trackerRepository.Get(user.ActiveTrackerId.Value);
+            TrackerPath path = tracker.GetCurrentTrackerPath();
+            Module module = await moduleRepository.Get(path.ModuleId);
+
+            ResponseEvent responseEvent = module.ProcessEvent(path.Memento, requestEvent);
+            path.UpdateMemento(responseEvent.Memento);
+
+            if (responseEvent is NextModuleResponseEvent nextModuleEvent)
+            {
+                tracker.Path.Add(
+                    new TrackerPath(nextModuleEvent.ModuleId));
+            }
+
+            await trackerRepository.Update(tracker);
+
+            return responseEvent;
         }
 
-        public void SelectQuest(User user, Quest quest)
+        private async Task HandleChoiceEvent()
         {
         }
     }
