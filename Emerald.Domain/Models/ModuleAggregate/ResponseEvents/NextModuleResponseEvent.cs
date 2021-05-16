@@ -6,11 +6,11 @@ using System.Text;
 
 namespace Emerald.Domain.Models.ModuleAggregate
 {
-    public class NextModuleEvent : ResponseEvent
+    public class NextModuleResponseEvent : ResponseEvent
     {
         public ObjectId ModuleId { get; }
 
-        public NextModuleEvent(TrackerPathMemento memento, ObjectId moduleId) : base(memento)
+        public NextModuleResponseEvent(TrackerPathMemento memento, ObjectId moduleId) : base(memento)
         {
             this.ModuleId = moduleId;
         }

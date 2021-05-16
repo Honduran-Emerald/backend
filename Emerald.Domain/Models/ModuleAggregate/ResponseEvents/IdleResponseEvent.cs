@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Emerald.Domain.Models.ModuleAggregate.ResponseEvents
 {
-    public class IdleEvent : ResponseEvent
+    public class IdleResponseEvent : ResponseEvent
     {
-        public IdleEvent(TrackerPathMemento memento) : base(memento)
+        public IdleResponseEvent(TrackerPathMemento memento) : base(memento)
         {
         }
     }

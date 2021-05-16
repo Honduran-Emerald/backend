@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Emerald.Domain.Models.ModuleAggregate.RequestEvents
 {
-    public class ChoiceEvent : RequestEvent
+    public class ChoiceRequestEvent : RequestEvent
     {
         public int Choice { get; }
 
-        public ChoiceEvent(TrackerPathMemento memento, int choice) : base(memento)
+        public ChoiceRequestEvent(int choice)
         {
             Choice = choice;
         }

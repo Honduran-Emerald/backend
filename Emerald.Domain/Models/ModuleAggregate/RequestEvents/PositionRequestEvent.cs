@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Emerald.Domain.Models.ModuleAggregate.RequestEvents
 {
-    public class PositionEvent
+    public class PositionRequestEvent
     {
     }
 }
