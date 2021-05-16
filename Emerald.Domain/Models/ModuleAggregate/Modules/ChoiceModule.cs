@@ -1,5 +1,6 @@
 ﻿using Emerald.Domain.Models.ModuleAggregate.RequestEvents;
 using Emerald.Domain.Models.ModuleAggregate.ResponseEvents;
+using Emerald.Domain.Models.TrackerAggregate;
 using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
@@ -12,20 +13,26 @@ namespace Emerald.Domain.Models.ModuleAggregate.Modules
 {
     public class ChoiceModule : Module
     {
-        public List<ObjectId> ChoiceModuleIds { get; set; }
+        public List<string> Choices { get; private set; }
+        public List<ObjectId> ChoiceModuleIds { get; private set; }
 
         public ChoiceModule(string title, List<Module> choices) : base(title)
         {
             ChoiceModuleIds = choices.Select(m => m.Id).ToList();
         }
 
-        public void AddChoice(Module module)
+        public ChoiceModule() : base()
+        {
+        }
+
+        public void AddChoice(Module module, string choice)
         {
             if (ChoiceModuleIds.Contains(module.Id))
             {
                 throw new DomainException("Can not add already existing component");
             }
 
+            Choices.Add(choice);
             ChoiceModuleIds.Add(module.Id);
         }
 
@@ -36,20 +43,24 @@ namespace Emerald.Domain.Models.ModuleAggregate.Modules
                 throw new DomainException("Can not remove missing component");
             }
 
-            ChoiceModuleIds.Remove(module.Id);
+            int index = ChoiceModuleIds.IndexOf(module.Id);
+
+            Choices.RemoveAt(index);
+            ChoiceModuleIds.RemoveAt(index);
         }
 
-        public override ResponseEvent ProcessEvent(RequestEvent requestEvent)
+        public override ResponseEvent ProcessEvent(TrackerPathMemento memento, RequestEvent requestEvent)
         {
-            switch (requestEvent)
+            if (requestEvent is ChoiceRequestEvent choiceEvent &&
+                choiceEvent.Choice < ChoiceModuleIds.Count)
             {
-                case ChoiceEvent choiceEvent when choiceEvent.Choice < ChoiceModuleIds.Count:
-                    return new NextModuleEvent(
-                        new ChoiceModuleMemento(choiceEvent.Choice),
-                        ChoiceModuleIds[choiceEvent.Choice]);
-
-                default:
-                    return new IdleEvent(requestEvent.Memento);
+                return new NextModuleResponseEvent(
+                    new ChoiceModuleMemento(choiceEvent.Choice),
+                    ChoiceModuleIds[choiceEvent.Choice]);
+            }
+            else
+            {
+                return new IdleResponseEvent(memento);
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Emerald.Domain.Models.ComponentAggregate;
 using Emerald.Domain.Models.ModuleAggregate.Modules;
+using Emerald.Domain.Models.TrackerAggregate;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
@@ -25,12 +26,12 @@ namespace Emerald.Domain.Models.ModuleAggregate
             Title = title;
         }
 
-        private Module()
+        public Module()
         {
             ComponentIds = new List<ObjectId>();
         }
 
-        public abstract ResponseEvent ProcessEvent(RequestEvent requestEvent);
+        public abstract ResponseEvent ProcessEvent(TrackerPathMemento memento, RequestEvent requestEvent);
 
         public void SetTitle(string title)
         {

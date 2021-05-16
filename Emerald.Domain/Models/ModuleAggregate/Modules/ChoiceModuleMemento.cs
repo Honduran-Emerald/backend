@@ -15,5 +15,9 @@ namespace Emerald.Domain.Models.ModuleAggregate.Modules
         {
             Choice = choice;
         }
+
+        public ChoiceModuleMemento() : base()
+        {
+        }
     }
 }
