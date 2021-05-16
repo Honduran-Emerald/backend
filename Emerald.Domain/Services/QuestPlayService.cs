@@ -1,15 +1,8 @@
-﻿using Emerald.Domain.Models;
-using Emerald.Domain.Models.ModuleAggregate;
-using Emerald.Domain.Models.ModuleAggregate.RequestEvents;
-using Emerald.Domain.Models.QuestAggregate;
+﻿using Emerald.Domain.Models.ModuleAggregate;
 using Emerald.Domain.Models.TrackerAggregate;
 using Emerald.Domain.Models.UserAggregate;
 using Emerald.Domain.Repositories;
 using Emerald.Infrastructure.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Vitamin.Value.Domain.SeedWork;
 

@@ -3,9 +3,7 @@ using Emerald.Domain.Models.ModuleAggregate.Modules;
 using Emerald.Domain.Models.TrackerAggregate;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.ModuleAggregate
@@ -19,7 +17,7 @@ namespace Emerald.Domain.Models.ModuleAggregate
 
         public List<ObjectId> ComponentIds { get; private set; }
         public string Title { get; private set; }
-        
+
         public Module(string title)
             : this()
         {

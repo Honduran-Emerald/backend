@@ -1,9 +1,7 @@
 ﻿using AspNetCore.Identity.Mongo.Model;
 using Emerald.Domain.Models.TrackerAggregate;
 using MongoDB.Bson;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.UserAggregate

@@ -1,10 +1,8 @@
 ﻿using Emerald.Domain.Models.QuestVersionAggregate;
 using Emerald.Domain.Models.UserAggregate;
 using MongoDB.Bson;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.QuestAggregate
@@ -16,7 +14,7 @@ namespace Emerald.Domain.Models.QuestAggregate
 
         public List<QuestVersion> QuestVersions { get; private set; }
         public ObjectId StableQuestVersion { get; private set; }
-        
+
         public Quest(User user)
             : this()
         {

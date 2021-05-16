@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Emerald.Application.Infrastructure.OperationFilter
 {
@@ -13,7 +11,7 @@ namespace Emerald.Application.Infrastructure.OperationFilter
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             bool hasAuthorize =
-              context.MethodInfo.DeclaringType.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any() || 
+              context.MethodInfo.DeclaringType.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any() ||
               context.MethodInfo.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any();
 
             if (hasAuthorize)

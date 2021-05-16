@@ -1,10 +1,7 @@
-﻿using Emerald.Domain.Models.ModuleAggregate;
-using Emerald.Domain.Models.QuestAggregate;
-using Emerald.Domain.Models.QuestVersionAggregate;
+﻿using Emerald.Domain.Models.QuestVersionAggregate;
 using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.TrackerAggregate

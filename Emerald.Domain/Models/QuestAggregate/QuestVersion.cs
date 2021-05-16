@@ -1,11 +1,8 @@
 ﻿using Emerald.Domain.Models.ModuleAggregate;
 using Emerald.Domain.Models.QuestAggregate;
 using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
 using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.QuestVersionAggregate

@@ -5,8 +5,6 @@ using Emerald.Domain.Models.ModuleAggregate;
 using Emerald.Domain.Models.ModuleAggregate.ResponseEvents;
 using Emerald.Domain.Repositories;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Emerald.Application.Services

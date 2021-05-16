@@ -1,10 +1,6 @@
-﻿using AspNetCore.Identity.Mongo.Mongo;
-using Emerald.Domain.Models.TrackerAggregate;
+﻿using Emerald.Domain.Models.TrackerAggregate;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Emerald.Infrastructure.Repositories
