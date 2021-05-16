@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace Emerald.Application.Models.Bindings
 {
-    public class AuthRegisterBinding
+    public class AuthLoginModel
     {
-        [Required]
-        public string Username { get; set; }
-
         [Required]
         [EmailAddress]
         public string Email { get; set; }
