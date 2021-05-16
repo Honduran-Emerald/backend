@@ -1,14 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp5.0</TargetFramework>
-    <UserSecretsId>aspnet-Emerald.Application-8C584F5B-B597-4A5A-B4E3-6CC4CF1C6FC4</UserSecretsId>
-    <WebProject_DirectoryAccessLevelKey>0</WebProject_DirectoryAccessLevelKey>
+    <TargetFramework>net5.0</TargetFramework>
+	  <UserSecretsId>aspnet-Emerald.Application-8C584F5B-B597-4A5A-B4E3-6CC4CF1C6FC4</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <Nullable>disable</Nullable>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
-
+	
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>C:\Users\hinz\source\repos\Emerald\backend\Emerald.Application\Emerald.Application.xml</DocumentationFile>
     <NoWarn>1701;1702;1591;1998</NoWarn>
@@ -38,17 +36,13 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.1.4" />
     <PackageReference Include="Swashbuckle.Core" Version="5.6.0" />
   </ItemGroup>
-
+	
   <ItemGroup>
     <ProjectReference Include="..\Emerald.Domain\Emerald.Domain.csproj" />
     <ProjectReference Include="..\Emerald.Infrastructure\Emerald.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\" />
-  </ItemGroup>
-
-	<Target Name="CopyDocumentationFile" BeforeTargets="PrepareForPublish">
-		<Copy SourceFiles="Emerald.Application.xml" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="true" />
-	</Target>
+  <Target Name="CopyDocumentationFile" BeforeTargets="PrepareForPublish">
+    <Copy SourceFiles="Emerald.Application.xml" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="true" />
+  </Target>
 </Project>

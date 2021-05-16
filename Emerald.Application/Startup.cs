@@ -59,7 +59,7 @@ namespace Emerald.Application
                     .AddSingleton<IMongoDbContext, MongoDbContext>();
 
             services.AddControllers()
-                    .AddNewtonsoftJson(options => 
+                    .AddNewtonsoftJson(options =>
                         options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
             services.AddSwaggerGen(options =>
@@ -82,7 +82,7 @@ namespace Emerald.Application
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 options.IncludeXmlComments(xmlPath);
-                
+
                 options.OperationFilter<AuthorizeCheckOperationFilter>();
                 options.GeneratePolymorphicSchemas();
             });
@@ -96,6 +96,7 @@ namespace Emerald.Application
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
                 })
                 .AddJwtBearer(options =>
                 {
@@ -108,10 +109,21 @@ namespace Emerald.Application
                             Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                     };
                 });
+
+            services
+                .Configure<IdentityOptions>(options =>
+                {
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
+            logger.LogCritical(env.EnvironmentName);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
