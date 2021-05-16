@@ -1,4 +1,5 @@
 using AspNetCore.Identity.Mongo;
+using Emerald.Application.Infrastructure.ActionFilter;
 using Emerald.Application.Infrastructure.OperationFilter;
 using Emerald.Application.Services;
 using Emerald.Application.Services.Factories;
@@ -77,6 +78,8 @@ namespace Emerald.Application
                 options.IncludeXmlComments(xmlPath);
 
                 options.OperationFilter<AuthorizeCheckOperationFilter>();
+                options.OperationFilter<SyncTokenOperationFilter>();
+
                 options.GeneratePolymorphicSchemas();
             });
 
@@ -126,6 +129,8 @@ namespace Emerald.Application
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseQuestSyncMiddleware();
 
             app.UseEndpoints(endpoints =>
             {
