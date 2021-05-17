@@ -1,5 +1,6 @@
 ﻿using Emerald.Domain.Models.QuestAggregate;
 using MongoDB.Bson;
+using MongoDB.Driver.Linq;
 using System.Threading.Tasks;
 
 namespace Emerald.Infrastructure.Repositories
@@ -9,5 +10,7 @@ namespace Emerald.Infrastructure.Repositories
         Task Add(Quest quest);
         Task<Quest> Get(ObjectId questId);
         Task Update(Quest quest);
+
+        IMongoQueryable<Quest> GetQueryable();
     }
 }
