@@ -1,6 +1,5 @@
 using AspNetCore.Identity.Mongo;
 using Emerald.Application.Infrastructure.ActionFilter;
-using Emerald.Application.Infrastructure.JsonConverter;
 using Emerald.Application.Infrastructure.OperationFilter;
 using Emerald.Application.Services;
 using Emerald.Application.Services.Factories;
@@ -63,10 +62,11 @@ namespace Emerald.Application
                     .AddNewtonsoftJson(options =>
                     {
                         options.SerializerSettings.Converters.Add(new StringEnumConverter());
-                        options.SerializerSettings.Converters.Add(new ObjectIdJsonConverter());
                     });
 
-            services.AddSwaggerGen(options =>
+            services
+                .AddSwaggerGenNewtonsoftSupport()
+                .AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
