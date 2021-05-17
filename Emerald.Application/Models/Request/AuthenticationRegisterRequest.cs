@@ -2,8 +2,11 @@
 
 namespace Emerald.Application.Models.Bindings
 {
-    public class AuthLoginModel
+    public class AuthenticationRegisterRequest
     {
+        [Required]
+        public string Username { get; set; }
+
         [Required]
         [EmailAddress]
         public string Email { get; set; }
