@@ -44,6 +44,7 @@ namespace Emerald.Application
             services.AddScoped<ComponentModelFactory>()
                     .AddScoped<MementoModelFactory>()
                     .AddScoped<ModuleModelFactory>()
+                    .AddScoped<UserModelFactory>()
                     .AddScoped<QuestModelFactory>()
                     .AddScoped<ResponseEventModelFactory>();
 
