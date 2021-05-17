@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Emerald.Application.Services
 {
-    public class ResponseEventModelFactory : IResponseEventModelFactory
+    public class ResponseEventModelFactory
     {
         private IModuleRepository moduleRepository;
-        private IModuleModelFactory moduleModelFactory;
+        private ModuleModelFactory moduleModelFactory;
 
-        public ResponseEventModelFactory(IModuleRepository moduleRepository, IModuleModelFactory moduleModelFactory)
+        public ResponseEventModelFactory(IModuleRepository moduleRepository, ModuleModelFactory moduleModelFactory)
         {
             this.moduleRepository = moduleRepository;
             this.moduleModelFactory = moduleModelFactory;

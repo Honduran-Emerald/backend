@@ -11,10 +11,16 @@ using System.Threading.Tasks;
 
 namespace Emerald.Application.Services.Factories
 {
-    public class ModuleModuleFactory : IModuleModelFactory
+    public class ModuleModelFactory
     {
-        private IComponentModelFactory componentModelFactory;
+        private ComponentModelFactory componentModelFactory;
         private IComponentRepository componentRepository;
+
+        public ModuleModelFactory(ComponentModelFactory componentModelFactory, IComponentRepository componentRepository)
+        {
+            this.componentModelFactory = componentModelFactory;
+            this.componentRepository = componentRepository;
+        }
 
         public async Task<ModuleModel> Create(Module module)
         {

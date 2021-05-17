@@ -1,4 +1,5 @@
-﻿using Emerald.Application.Models.Quest;
+﻿using Emerald.Application.Models;
+using Emerald.Application.Models.Quest;
 using Emerald.Domain.Models.QuestAggregate;
 using Emerald.Domain.Models.QuestVersionAggregate;
 using Emerald.Infrastructure.ViewModelHandlers;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Emerald.Application.Services.Factories
 {
-    public class QuestModelFactory : IQuestModelFactory
+    public class QuestModelFactory
     {
         private QuestViewModelStash questStash;
 
@@ -29,12 +30,18 @@ namespace Emerald.Application.Services.Factories
                 Id = quest.Id.ToString(),
                 OwnerId = quest.OwnerUserId,
 
+                Location = new LocationModel
+                {
+                    Latitude = version.Location.Latitude,
+                    Longitude = version.Location.Longitude
+                },
+
                 Title = version.Title,
                 Description = version.Description,
                 Image = version.Image,
                 Version = version.Version,
 
-                CreatedAt = version.CreatedAt,
+                CreationTime = version.CreatedAt,
                 
                 Votes = viewModel.Votes,
                 Plays = viewModel.Plays,

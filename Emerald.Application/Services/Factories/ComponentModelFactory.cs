@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Emerald.Application.Services.Factories
 {
-    public class ComponentModelFactory : IComponentModelFactory
+    public class ComponentModelFactory
     {
         public async Task<ComponentModel> Create(Component component)
         {
