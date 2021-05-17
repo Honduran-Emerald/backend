@@ -29,8 +29,8 @@ namespace Emerald.Application.Controllers
         [Authorize]
         [HttpPost("init")]
         public async Task<IActionResult> Init(
-            [FromBody] string title,
-            [FromBody] string description)
+            [FromQuery] string title,
+            [FromQuery] string description)
         {
             User user = await userManager.GetUserAsync(User);
             Domain.Models.QuestAggregate.Quest quest = new Domain.Models.QuestAggregate.Quest(user);
