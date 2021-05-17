@@ -27,6 +27,7 @@ namespace Emerald.Application.Controllers
         }
 
         [Authorize]
+        [HttpPost("init")]
         public async Task<IActionResult> Init(
             [FromBody] string title,
             [FromBody] string description)
