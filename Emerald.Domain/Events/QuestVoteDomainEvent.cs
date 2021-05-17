@@ -1,9 +1,10 @@
 ﻿using Emerald.Domain.Models.TrackerAggregate;
+using MediatR;
 using MongoDB.Bson;
 
 namespace Emerald.Domain.Events
 {
-    public class QuestVoteDomainEvent
+    public class QuestVoteDomainEvent : INotification
     {
         public ObjectId QuestId { get; set; }
         public ObjectId UserId { get; set; }

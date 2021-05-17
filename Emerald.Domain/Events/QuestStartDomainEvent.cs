@@ -1,8 +1,9 @@
-﻿using MongoDB.Bson;
+﻿using MediatR;
+using MongoDB.Bson;
 
 namespace Emerald.Domain.Events
 {
-    public class QuestStartDomainEvent
+    public class QuestStartDomainEvent : INotification
     {
         public ObjectId QuestId { get; set; }
         public ObjectId UserId { get; set; }
