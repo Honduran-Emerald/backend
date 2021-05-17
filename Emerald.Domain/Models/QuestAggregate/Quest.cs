@@ -41,6 +41,18 @@ namespace Emerald.Domain.Models.QuestAggregate
             StableQuestVersion = questVersion.Id;
         }
 
+        public QuestVersion GetStableQuestVersion()
+        {
+            if (QuestVersions.Count == 0)
+            {
+                throw new DomainException("Quest has no active version");
+            }
+
+            return QuestVersions
+                .Where(v => v.Id == StableQuestVersion)
+                .First();
+        }
+
         public void AddQuestVersion(QuestVersion questVersion)
         {
             if (QuestVersions.Any(q => q.Id == questVersion.Id))
@@ -49,6 +61,11 @@ namespace Emerald.Domain.Models.QuestAggregate
             }
 
             QuestVersions.Add(questVersion);
+
+            if (QuestVersions.Count == 1)
+            {
+                SetStableQuestVersion(questVersion);
+            }
         }
     }
 }

@@ -15,6 +15,8 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
 
         public string Title { get; private set; }
         public string Description { get; private set; }
+        public string Image { get; private set; }
+
         public long Version { get; private set; }
         public DateTime CreatedAt { get; private set; }
 
