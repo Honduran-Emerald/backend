@@ -41,11 +41,11 @@ namespace Emerald.Application
         {
             services.AddScoped<QuestPlayService>();
 
-            services.AddScoped<IComponentModelFactory, ComponentModelFactory>()
-                    .AddScoped<IMementoModelFactory, MementoModelFactory>()
-                    .AddScoped<IModuleModelFactory, ModuleModuleFactory>()
-                    .AddScoped<IQuestModelFactory, QuestModelFactory>()
-                    .AddScoped<IResponseEventModelFactory, ResponseEventModelFactory>();
+            services.AddScoped<ComponentModelFactory>()
+                    .AddScoped<MementoModelFactory>()
+                    .AddScoped<ModuleModelFactory>()
+                    .AddScoped<QuestModelFactory>()
+                    .AddScoped<ResponseEventModelFactory>();
 
             services.AddScoped<IUserRepository, UserRepository>()
                     .AddScoped<IModuleRepository, ModuleRepository>()
