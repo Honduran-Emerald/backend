@@ -1,5 +1,6 @@
 using AspNetCore.Identity.Mongo;
 using Emerald.Application.Infrastructure.ActionFilter;
+using Emerald.Application.Infrastructure.JsonConverter;
 using Emerald.Application.Infrastructure.OperationFilter;
 using Emerald.Application.Services;
 using Emerald.Application.Services.Factories;
@@ -8,6 +9,7 @@ using Emerald.Domain.Repositories;
 using Emerald.Domain.Services;
 using Emerald.Infrastructure;
 using Emerald.Infrastructure.Repositories;
+using Emerald.Infrastructure.ViewModelHandlers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,6 +20,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.IO;
@@ -42,6 +45,7 @@ namespace Emerald.Application
             services.AddScoped<IComponentModelFactory, ComponentModelFactory>()
                     .AddScoped<IMementoModelFactory, MementoModelFactory>()
                     .AddScoped<IModuleModelFactory, ModuleModuleFactory>()
+                    .AddScoped<IQuestModelFactory, QuestModelFactory>()
                     .AddScoped<IResponseEventModelFactory, ResponseEventModelFactory>();
 
             services.AddScoped<IUserRepository, UserRepository>()
@@ -50,11 +54,17 @@ namespace Emerald.Application
                     .AddScoped<IQuestRepository, QuestRepository>()
                     .AddScoped<ITrackerRepository, TrackerRepository>();
 
+            services.AddScoped<QuestViewModelStash>();
+
             services.AddScoped<IJwtAuthentication, JwtAuthentication>()
                     .AddSingleton<IMongoDbContext, MongoDbContext>();
 
             services.AddControllers()
-                    .AddNewtonsoftJson();
+                    .AddNewtonsoftJson(options =>
+                    {
+                        options.SerializerSettings.Converters.Add(new StringEnumConverter());
+                        options.SerializerSettings.Converters.Add(new ObjectIdJsonConverter());
+                    });
 
             services.AddSwaggerGen(options =>
             {

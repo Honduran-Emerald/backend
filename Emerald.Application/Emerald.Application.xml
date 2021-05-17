@@ -4,12 +4,5 @@
         <name>Emerald.Application</name>
     </assembly>
     <members>
-        <member name="M:Emerald.Application.Controllers.AuthenticationController.IsAuthorized(Emerald.Infrastructure.Repositories.IUserRepository)">
-            <summary>
-            
-            </summary>
-            <param name="userRepository"></param>
-            <returns></returns>
-        </member>
     </members>
 </doc>
