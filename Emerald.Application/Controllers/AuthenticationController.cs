@@ -1,4 +1,4 @@
-﻿using Emerald.Application.Models.Binding;
+﻿using Emerald.Application.Models.Response;
 using Emerald.Application.Models.Bindings;
 using Emerald.Application.Services;
 using Emerald.Domain.Models.UserAggregate;
@@ -29,14 +29,14 @@ namespace Emerald.Application.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<NewTokenBinding>> Login(
+        public async Task<ActionResult<AuthenticationTokenResponse>> Login(
             [FromBody] AuthLoginModel binding)
         {
             User user = await userManager.FindByEmailAsync(binding.Email);
 
             if (await userManager.CheckPasswordAsync(user, binding.Password))
             {
-                return Ok(new NewTokenBinding
+                return Ok(new AuthenticationTokenResponse
                 {
                     Token = await authentication.GenerateToken(user)
                 });
@@ -46,7 +46,7 @@ namespace Emerald.Application.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<ActionResult<NewTokenBinding>> Create(
+        public async Task<ActionResult<AuthenticationTokenResponse>> Create(
             [FromBody] AuthRegisterModel binding)
         {
             User user = new User(binding.Username);
@@ -56,7 +56,7 @@ namespace Emerald.Application.Controllers
 
             if (result.Succeeded)
             {
-                return Ok(new NewTokenBinding
+                return Ok(new AuthenticationTokenResponse
                 {
                     Token = await authentication.GenerateToken(user)
                 });
@@ -72,9 +72,9 @@ namespace Emerald.Application.Controllers
 
         [Authorize]
         [HttpPost("renew")]
-        public async Task<ActionResult<NewTokenBinding>> Renew()
+        public async Task<ActionResult<AuthenticationTokenResponse>> Renew()
         {
-            return Ok(new NewTokenBinding
+            return Ok(new AuthenticationTokenResponse
             {
                 Token = await authentication.GenerateToken(await userManager.GetUserAsync(User))
             });

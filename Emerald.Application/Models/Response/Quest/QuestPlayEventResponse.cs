@@ -1,8 +1,8 @@
 ﻿using Emerald.Application.Models.Quest.Events;
 
-namespace Emerald.Application.Models.Binding
+namespace Emerald.Application.Models.Response.Quest
 {
-    public class ResponseEventBinding
+    public class QuestPlayEventResponse
     {
         public ResponseEventModel ResponseEvent { get; set; }
     }

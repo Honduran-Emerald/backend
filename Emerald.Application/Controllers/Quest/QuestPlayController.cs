@@ -1,4 +1,4 @@
-﻿using Emerald.Application.Models.Binding;
+﻿using Emerald.Application.Models.Response;
 using Emerald.Application.Models.Quest.Events;
 using Emerald.Application.Services;
 using Emerald.Domain.Models.ModuleAggregate;
@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Vitamin.Value.Domain.SeedWork;
+using Emerald.Application.Models.Response.Quest;
 
 namespace Emerald.Application.Controllers
 {
@@ -38,7 +39,7 @@ namespace Emerald.Application.Controllers
         }
 
         [HttpPost("event/choice")]
-        public async Task<ActionResult<ResponseEventBinding>> HandleEvent(ChoiceRequestEventModel choiceEvent)
+        public async Task<ActionResult<QuestPlayEventResponse>> HandleEvent(ChoiceRequestEventModel choiceEvent)
         {
             try
             {
@@ -46,7 +47,7 @@ namespace Emerald.Application.Controllers
                     await userManager.GetUserAsync(User),
                     new ChoiceRequestEvent(choiceEvent.Choice));
 
-                return Ok(new ResponseEventBinding
+                return Ok(new QuestPlayEventResponse
                 {
                     ResponseEvent = await responseEventFactory.Create(responseEvent)
                 });
