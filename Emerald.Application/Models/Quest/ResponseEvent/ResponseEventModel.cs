@@ -2,8 +2,7 @@
 {
     public class ResponseEventModel
     {
-        ResponseEventType Type { get; set; }
-
+        public ResponseEventType Type { get; set; }
 
         public ResponseEventModel(ResponseEventType type)
         {
