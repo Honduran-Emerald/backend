@@ -1,6 +1,7 @@
 ﻿using AspNetCore.Identity.Mongo.Model;
 using Emerald.Domain.Models.TrackerAggregate;
 using MongoDB.Bson;
+using System;
 using System.Collections.Generic;
 using Vitamin.Value.Domain;
 using Vitamin.Value.Domain.SeedWork;
@@ -48,7 +49,7 @@ namespace Emerald.Domain.Models.UserAggregate
 
         public int GetLevel()
         {
-            return 0;
+            return (int) Math.Round(Math.Sqrt((Experience + 22562.5) / 250.0) - 12.5);
         }
     }
 }
