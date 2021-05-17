@@ -13,6 +13,7 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
 
         public bool Published { get; private set; }
 
+        public Location Location { get; private set; }
         public string Title { get; private set; }
         public string Description { get; private set; }
         public string Image { get; private set; }
@@ -23,7 +24,7 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
         public List<ObjectId> ModuleIds { get; private set; }
         public ObjectId FirstModule { get; private set; }
 
-        public QuestVersion(Quest quest, string title, string description, long version)
+        public QuestVersion(Quest quest, Location location, string title, string description, long version)
             : this()
         {
             Title = title;

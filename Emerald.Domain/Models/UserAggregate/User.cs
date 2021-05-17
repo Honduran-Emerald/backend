@@ -12,7 +12,12 @@ namespace Emerald.Domain.Models.UserAggregate
         public List<ObjectId> QuestIds { get; private set; }
         public List<ObjectId> TrackerIds { get; private set; }
         public ObjectId? ActiveTrackerId { get; private set; }
+
+        public string Image { get; set; }
         public string SyncToken { get; private set; }
+
+        public long Experience { get; set; }
+        public int Glory { get; set; }
 
         public User() : base()
         {
@@ -39,6 +44,11 @@ namespace Emerald.Domain.Models.UserAggregate
         public void GenerateNewSyncToken()
         {
             SyncToken = Utility.RandomString(8);
+        }
+
+        public int GetLevel()
+        {
+            return 0;
         }
     }
 }
