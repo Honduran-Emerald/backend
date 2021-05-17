@@ -26,8 +26,8 @@ namespace Emerald.Application.Services.Factories
 
             return new QuestModel
             {
-                Id = quest.Id,
-                Owner = quest.OwnerUserId,
+                Id = quest.Id.ToString(),
+                OwnerId = quest.OwnerUserId,
 
                 Title = version.Title,
                 Description = version.Description,

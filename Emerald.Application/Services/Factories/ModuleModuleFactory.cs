@@ -23,7 +23,7 @@ namespace Emerald.Application.Services.Factories
             switch (module)
             {
                 case ChoiceModule choiceModule:
-                    return new ChoiceModuleModel(choiceModule.Choices, componentModels);
+                    return new ChoiceModuleModel(choiceModule.Id.ToString(), choiceModule.Choices, componentModels);
             }
 
             throw new Exception("Got invalid Module");

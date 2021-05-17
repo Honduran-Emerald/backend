@@ -7,8 +7,8 @@ namespace Emerald.Application.Models.Quest.Module
     {
         public List<string> Choices { get; set; }
 
-        public ChoiceModuleModel(List<string> choices, List<ComponentModel> components)
-            : base(ModuleType.Choice, components)
+        public ChoiceModuleModel(string id, List<string> choices, List<ComponentModel> components)
+            : base(id, ModuleType.Choice, components)
         {
             Choices = choices;
         }

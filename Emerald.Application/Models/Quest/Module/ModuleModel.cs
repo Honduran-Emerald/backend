@@ -5,11 +5,13 @@ namespace Emerald.Application.Models.Quest.Module
 {
     public class ModuleModel
     {
+        public string ModuleId { get; set; }
         public ModuleType Type { get; set; }
         public List<ComponentModel> Components { get; set; }
 
-        public ModuleModel(ModuleType type, List<ComponentModel> components)
+        public ModuleModel(string moduleId, ModuleType type, List<ComponentModel> components)
         {
+            ModuleId = moduleId;
             Type = type;
             Components = components;
         }

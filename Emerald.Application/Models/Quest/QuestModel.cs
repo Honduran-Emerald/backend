@@ -10,8 +10,8 @@ namespace Emerald.Application.Models.Quest
 {
     public class QuestModel
     {
-        public ObjectId Id { get; set; }
-        public ObjectId Owner { get; set; }
+        public string Id { get; set; }
+        public ObjectId OwnerId { get; set; }
 
         public string Title { get; set; }
         public string Description { get; set; }
