@@ -4,6 +4,7 @@ using Emerald.Application.Services.Factories;
 using Emerald.Domain.Models.QuestAggregate;
 using Emerald.Infrastructure;
 using Emerald.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
@@ -28,6 +29,7 @@ namespace Emerald.Application.Controllers.Quest
             this.questModelFactory = questModelFactory;
         }
 
+        [Authorize]
         [HttpGet("query")]
         public async Task<ActionResult<QuestQueryResponse>> Query(
             [FromBody] int offset)
