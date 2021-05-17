@@ -30,7 +30,7 @@ namespace Emerald.Application.Controllers
 
         [HttpPost("login")]
         public async Task<ActionResult<AuthenticationTokenResponse>> Login(
-            [FromBody] AuthLoginModel binding)
+            [FromBody] AuthenticationLoginRequest binding)
         {
             User user = await userManager.FindByEmailAsync(binding.Email);
 
@@ -42,12 +42,15 @@ namespace Emerald.Application.Controllers
                 });
             }
 
-            return BadRequest();
+            return BadRequest(new
+            {
+                message = "Login failed"
+            });
         }
 
         [HttpPost("create")]
         public async Task<ActionResult<AuthenticationTokenResponse>> Create(
-            [FromBody] AuthRegisterModel binding)
+            [FromBody] AuthenticationRegisterRequest binding)
         {
             User user = new User(binding.Username);
             user.Email = binding.Email;

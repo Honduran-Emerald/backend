@@ -20,9 +20,9 @@ namespace Emerald.Application.Controllers.Quest
     {
         private IConfiguration configuration;
         private IQuestRepository questRepository;
-        private IQuestModelFactory questModelFactory;
+        private QuestModelFactory questModelFactory;
 
-        public QuestController(IConfiguration configuration, IQuestRepository questRepository, IQuestModelFactory questModelFactory)
+        public QuestController(IConfiguration configuration, IQuestRepository questRepository, QuestModelFactory questModelFactory)
         {
             this.configuration = configuration;
             this.questRepository = questRepository;
@@ -32,7 +32,7 @@ namespace Emerald.Application.Controllers.Quest
         [Authorize]
         [HttpGet("query")]
         public async Task<ActionResult<QuestQueryResponse>> Query(
-            [FromBody] int offset)
+            [FromQuery] int offset)
         {
             List<QuestModel> questModels = new List<QuestModel>();
 

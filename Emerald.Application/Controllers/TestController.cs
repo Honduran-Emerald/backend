@@ -1,4 +1,5 @@
-﻿using Emerald.Domain.Models.QuestAggregate;
+﻿using Emerald.Application.Models;
+using Emerald.Domain.Models.QuestAggregate;
 using Emerald.Domain.Models.UserAggregate;
 using Emerald.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -29,6 +30,7 @@ namespace Emerald.Application.Controllers
         [Authorize]
         [HttpPost("init")]
         public async Task<IActionResult> Init(
+            [FromQuery] LocationModel location,
             [FromQuery] string title,
             [FromQuery] string description)
         {
@@ -36,6 +38,9 @@ namespace Emerald.Application.Controllers
             Domain.Models.QuestAggregate.Quest quest = new Domain.Models.QuestAggregate.Quest(user);
             quest.AddQuestVersion(new Domain.Models.QuestVersionAggregate.QuestVersion(
                 quest,
+                new Domain.Models.Location(
+                    location.Longitude,
+                    location.Latitude),
                 title,
                 description,
                 1));

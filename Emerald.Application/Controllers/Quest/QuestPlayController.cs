@@ -19,11 +19,11 @@ namespace Emerald.Application.Controllers
     [Route("/play")]
     public class QuestPlayController : ControllerBase
     {
-        private IResponseEventModelFactory responseEventFactory;
+        private ResponseEventModelFactory responseEventFactory;
         private QuestPlayService questPlayService;
         private UserManager<User> userManager;
 
-        public QuestPlayController(IResponseEventModelFactory responseEventFactory, QuestPlayService questPlayService, UserManager<User> userManager)
+        public QuestPlayController(ResponseEventModelFactory responseEventFactory, QuestPlayService questPlayService, UserManager<User> userManager)
         {
             this.responseEventFactory = responseEventFactory;
             this.questPlayService = questPlayService;
@@ -39,7 +39,8 @@ namespace Emerald.Application.Controllers
         }
 
         [HttpPost("event/choice")]
-        public async Task<ActionResult<QuestPlayEventResponse>> HandleEvent(ChoiceRequestEventModel choiceEvent)
+        public async Task<ActionResult<QuestPlayEventResponse>> HandleEvent(
+            [FromBody] ChoiceRequestEventModel choiceEvent)
         {
             try
             {
