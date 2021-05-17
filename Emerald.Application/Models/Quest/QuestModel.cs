@@ -13,12 +13,14 @@ namespace Emerald.Application.Models.Quest
         public string Id { get; set; }
         public ObjectId OwnerId { get; set; }
 
+        public LocationModel Location { get; set; }
+
         public string Title { get; set; }
         public string Description { get; set; }
         public string Image { get; set; }
         public long Version { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreationTime { get; set; }
 
         public int Votes { get; set; }
         public int Plays { get; set; }
