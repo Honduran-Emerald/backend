@@ -154,9 +154,6 @@ namespace Emerald.Application
             app.UseAuthentication();
             app.UseAuthorization();
 
-            Location location;
-
-
             app.UseKissLogMiddleware(options =>
             {
                 options.InternalLog = message => Debug.WriteLine(message);

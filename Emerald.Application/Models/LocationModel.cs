@@ -15,5 +15,9 @@ namespace Emerald.Application.Models
             Longitude = longitude;
             Latitude = latitude;
         }
+
+        public LocationModel()
+        {
+        }
     }
 }

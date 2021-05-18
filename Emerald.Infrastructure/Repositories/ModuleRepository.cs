@@ -43,6 +43,11 @@ namespace Emerald.Infrastructure.Repositories
 
         public async Task<List<Module>> GetForQuest(QuestVersion questVersion)
         {
+            if (questVersion.ModuleIds == null)
+            {
+                return new List<Module>();
+            }
+
             var modules = await collection
                 .Find(o => questVersion.ModuleIds.Contains(o.Id))
                 .ToListAsync();
