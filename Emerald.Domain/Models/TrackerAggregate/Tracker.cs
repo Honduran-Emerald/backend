@@ -15,6 +15,7 @@ namespace Emerald.Domain.Models.TrackerAggregate
         public DateTime CreatedAt { get; private set; }
 
         public List<TrackerPath> Path { get; private set; }
+        public bool Finished { get; private set; }
 
         public Tracker(QuestVersion questVersion)
             : this()
