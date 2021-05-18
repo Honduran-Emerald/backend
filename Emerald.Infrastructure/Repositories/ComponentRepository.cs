@@ -1,5 +1,6 @@
 ﻿using AspNetCore.Identity.Mongo.Mongo;
 using Emerald.Domain.Models.ComponentAggregate;
+using MediatR;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Collections.Generic;
@@ -11,10 +12,12 @@ namespace Emerald.Infrastructure.Repositories
     public class ComponentRepository : IComponentRepository
     {
         private IMongoCollection<Component> collection;
+        private Mediator mediator;
 
-        public ComponentRepository(IMongoDbContext dbContext)
+        public ComponentRepository(IMongoDbContext dbContext, Mediator mediator)
         {
             collection = dbContext.Emerald.GetCollection<Component>("Components");
+            this.mediator = mediator;
         }
 
         public async Task<Component> Get(ObjectId id)
@@ -32,6 +35,7 @@ namespace Emerald.Infrastructure.Repositories
 
         public async Task Add(Component component)
         {
+            await mediator.PublishEntity(component);
             await collection.InsertOneAsync(component);
         }
 
