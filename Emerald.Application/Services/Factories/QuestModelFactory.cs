@@ -29,11 +29,9 @@ namespace Emerald.Application.Services.Factories
                 quest.Id.ToString(),
                 quest.OwnerUserId,
 
-                new LocationModel
-                {
-                    Latitude = version.Location.Latitude,
-                    Longitude = version.Location.Longitude
-                },
+                new LocationModel(
+                    version.Location.Longitude,
+                    version.Location.Latitude),
 
                 version.Title,
                 version.Description,
