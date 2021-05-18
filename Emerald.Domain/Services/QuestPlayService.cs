@@ -1,8 +1,10 @@
-﻿using Emerald.Domain.Models.ModuleAggregate;
+﻿using Emerald.Domain.Models;
+using Emerald.Domain.Models.ModuleAggregate;
 using Emerald.Domain.Models.TrackerAggregate;
 using Emerald.Domain.Models.UserAggregate;
 using Emerald.Domain.Repositories;
 using Emerald.Infrastructure.Repositories;
+using MediatR;
 using System.Threading.Tasks;
 using Vitamin.Value.Domain.SeedWork;
 
@@ -12,16 +14,16 @@ namespace Emerald.Domain.Services
     {
         private IModuleRepository moduleRepository;
         private ITrackerRepository trackerRepository;
+        private IMediator mediator;
 
-        // representing a user playing a quest and handling
-        // requestevents
-        public QuestPlayService(IModuleRepository moduleRepository, ITrackerRepository trackerRepository)
+        public QuestPlayService(IModuleRepository moduleRepository, ITrackerRepository trackerRepository, IMediator mediator)
         {
             this.moduleRepository = moduleRepository;
             this.trackerRepository = trackerRepository;
+            this.mediator = mediator;
         }
 
-        public async Task<ResponseEvent> HandleEvent(User user, RequestEvent requestEvent)
+        public async Task<ResponseEventCollection> HandleEvent(User user, RequestEvent requestEvent)
         {
             if (user.ActiveTrackerId == null)
             {
@@ -32,22 +34,16 @@ namespace Emerald.Domain.Services
             TrackerPath path = tracker.GetCurrentTrackerPath();
             Module module = await moduleRepository.Get(path.ModuleId);
 
-            ResponseEvent responseEvent = module.ProcessEvent(path.Memento, requestEvent);
-            path.UpdateMemento(responseEvent.Memento);
-
-            if (responseEvent is NextModuleResponseEvent nextModuleEvent)
-            {
-                tracker.Path.Add(
-                    new TrackerPath(nextModuleEvent.ModuleId));
-            }
-
+            ResponseEventCollection responseEventCollection = module.ProcessEvent(path.Memento, requestEvent);
+            path.UpdateMemento(responseEventCollection.Memento);
             await trackerRepository.Update(tracker);
 
-            return responseEvent;
-        }
+            foreach (IResponseEvent responseEvent in responseEventCollection.Events)
+            {
+                await mediator.Publish(responseEvent.ToDomainEvent(user.Id, tracker.Id));
+            }
 
-        private async Task HandleChoiceEvent()
-        {
+            return responseEventCollection;
         }
     }
 }
