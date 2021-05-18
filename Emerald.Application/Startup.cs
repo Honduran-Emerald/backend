@@ -9,10 +9,14 @@ using Emerald.Domain.Services;
 using Emerald.Infrastructure;
 using Emerald.Infrastructure.Repositories;
 using Emerald.Infrastructure.ViewModelHandlers;
+using KissLog;
+using KissLog.AspNetCore;
+using KissLog.CloudListeners.RequestLogsListener;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +27,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -128,6 +133,10 @@ namespace Emerald.Application
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
                 });
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
+                    .AddScoped(context => Logger.Factory.Get())
+                    .AddLogging(logging => logging.AddKissLog());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
@@ -143,6 +152,17 @@ namespace Emerald.Application
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseKissLogMiddleware(options =>
+            {
+                options.InternalLog = message => Debug.WriteLine(message);
+                options.Listeners.Add(new RequestLogsApiListener(new KissLog.CloudListeners.Auth.Application(
+                    Configuration["KissLog.OrganizationId"],
+                    Configuration["KissLog.ApplicationId"]))
+                {
+                    ApiUrl = Configuration["KissLog.ApiUrl"]
+                });
+            });
 
             app.UseQuestSyncMiddleware();
 
