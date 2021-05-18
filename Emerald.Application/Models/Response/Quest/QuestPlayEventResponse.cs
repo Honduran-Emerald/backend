@@ -4,6 +4,6 @@ namespace Emerald.Application.Models.Response.Quest
 {
     public class QuestPlayEventResponse
     {
-        public ResponseEventModel ResponseEvent { get; set; }
+        public ResponseEventCollectionModel ResponseEventCollection { get; set; }
     }
 }
