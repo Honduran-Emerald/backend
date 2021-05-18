@@ -9,6 +9,7 @@ using Emerald.Domain.Services;
 using Emerald.Infrastructure;
 using Emerald.Infrastructure.Repositories;
 using Emerald.Infrastructure.ViewModelHandlers;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -64,6 +65,8 @@ namespace Emerald.Application
                     {
                         options.SerializerSettings.Converters.Add(new StringEnumConverter());
                     });
+
+            services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services
                 .AddSwaggerGenNewtonsoftSupport()
