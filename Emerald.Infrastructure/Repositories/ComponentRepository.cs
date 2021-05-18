@@ -1,5 +1,6 @@
 ﻿using AspNetCore.Identity.Mongo.Mongo;
 using Emerald.Domain.Models.ComponentAggregate;
+using Emerald.Infrastructure.Exceptions;
 using MediatR;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -12,9 +13,9 @@ namespace Emerald.Infrastructure.Repositories
     public class ComponentRepository : IComponentRepository
     {
         private IMongoCollection<Component> collection;
-        private Mediator mediator;
+        private IMediator mediator;
 
-        public ComponentRepository(IMongoDbContext dbContext, Mediator mediator)
+        public ComponentRepository(IMongoDbContext dbContext, IMediator mediator)
         {
             collection = dbContext.Emerald.GetCollection<Component>("Components");
             this.mediator = mediator;
@@ -22,9 +23,16 @@ namespace Emerald.Infrastructure.Repositories
 
         public async Task<Component> Get(ObjectId id)
         {
-            return await collection
+            var component = await collection
                 .Find(c => c.Id == id)
-                .FirstAsync();
+                .FirstOrDefaultAsync();
+
+            if (component == null)
+            {
+                throw new MissingElementException();
+            }
+
+            return component;
         }
 
         public async Task<IEnumerable<Component>> GetAll(List<ObjectId> ids)

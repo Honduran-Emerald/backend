@@ -1,4 +1,5 @@
 ﻿using Emerald.Domain.Models.UserAggregate;
+using Emerald.Infrastructure.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson;
@@ -12,9 +13,9 @@ namespace Emerald.Infrastructure.Repositories
     {
         private IMongoCollection<User> users;
         private UserManager<User> userManager;
-        private Mediator mediator;
+        private IMediator mediator;
 
-        public UserRepository(MongoDbContext dbContext, UserManager<User> userManager, Mediator mediator)
+        public UserRepository(IMongoDbContext dbContext, UserManager<User> userManager, IMediator mediator)
         {
             this.userManager = userManager;
             users = dbContext.Emerald.GetCollection<User>("Users");
@@ -23,9 +24,16 @@ namespace Emerald.Infrastructure.Repositories
 
         public async Task<User> Get(ObjectId id)
         {
-            return await users
+            var user = await users
                 .Find(user => user.Id == id)
                 .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                throw new MissingElementException();
+            }
+
+            return user;
         }
 
         public async Task Update(User user)
@@ -43,6 +51,11 @@ namespace Emerald.Infrastructure.Repositories
             return await users
                 .AsQueryable()
                 .ToListAsync();
+        }
+
+        public async Task<User> GetByEmail(string email)
+        {
+            return await userManager.FindByEmailAsync(email);
         }
     }
 }

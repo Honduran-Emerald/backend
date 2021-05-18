@@ -10,7 +10,7 @@ namespace Emerald.Infrastructure
 {
     public static class MediatorExtensions
     {
-        public static async Task PublishEntity(this Mediator mediator, Entity entity)
+        public static async Task PublishEntity(this IMediator mediator, Entity entity)
         {
             foreach (var domainEvent in entity.DomainEvents)
                 await mediator.Publish(domainEvent);

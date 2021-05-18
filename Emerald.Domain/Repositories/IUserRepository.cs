@@ -10,6 +10,7 @@ namespace Emerald.Infrastructure.Repositories
     {
         Task Add(User user);
         Task<User> Get(ObjectId id);
+        Task<User> GetByEmail(string email);
         Task<List<User>> All();
         Task Update(User user);
     }

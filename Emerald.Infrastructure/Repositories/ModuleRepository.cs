@@ -2,6 +2,7 @@
 using Emerald.Domain.Models.QuestAggregate;
 using Emerald.Domain.Models.QuestVersionAggregate;
 using Emerald.Domain.Repositories;
+using Emerald.Infrastructure.Exceptions;
 using MediatR;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -13,9 +14,9 @@ namespace Emerald.Infrastructure.Repositories
     public class ModuleRepository : IModuleRepository
     {
         private IMongoCollection<Module> collection;
-        private Mediator mediator;
+        private IMediator mediator;
 
-        public ModuleRepository(IMongoDbContext dbContext, Mediator mediator)
+        public ModuleRepository(IMongoDbContext dbContext, IMediator mediator)
         {
             collection = dbContext.Emerald.GetCollection<Module>("Modules");
             this.mediator = mediator;
@@ -29,15 +30,29 @@ namespace Emerald.Infrastructure.Repositories
 
         public async Task<Module> Get(ObjectId id)
         {
-            return await collection.Find(o => o.Id == id)
-                .FirstAsync();
+            var module = await collection.Find(o => o.Id == id)
+                .FirstOrDefaultAsync();
+
+            if (module == null)
+            {
+                throw new MissingElementException();
+            }
+
+            return module;
         }
 
         public async Task<List<Module>> GetForQuest(QuestVersion questVersion)
         {
-            return await collection
+            var modules = await collection
                 .Find(o => questVersion.ModuleIds.Contains(o.Id))
                 .ToListAsync();
+
+            if (modules.Count != questVersion.ModuleIds.Count)
+            {
+                throw new MissingElementException();
+            }
+
+            return modules;
         }
 
         public async Task Update(Module module)

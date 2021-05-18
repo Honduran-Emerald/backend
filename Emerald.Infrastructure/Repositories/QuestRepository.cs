@@ -1,4 +1,5 @@
 ﻿using Emerald.Domain.Models.QuestAggregate;
+using Emerald.Infrastructure.Exceptions;
 using MediatR;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -10,9 +11,9 @@ namespace Emerald.Infrastructure.Repositories
     public class QuestRepository : IQuestRepository
     {
         private IMongoCollection<Quest> collection;
-        private Mediator mediator;
+        private IMediator mediator;
 
-        public QuestRepository(IMongoDbContext dbContext, Mediator mediator)
+        public QuestRepository(IMongoDbContext dbContext, IMediator mediator)
         {
             collection = dbContext.Emerald.GetCollection<Quest>("Quests");
             this.mediator = mediator;
@@ -26,8 +27,15 @@ namespace Emerald.Infrastructure.Repositories
 
         public async Task<Quest> Get(ObjectId questId)
         {
-            return await collection.Find(q => q.Id == questId)
-                .FirstAsync();
+            var quest = await collection.Find(q => q.Id == questId)
+                .FirstOrDefaultAsync();
+
+            if (quest == null)
+            {
+                throw new MissingElementException();
+            }
+
+            return quest;
         }
 
         public IMongoQueryable<Quest> GetQueryable()

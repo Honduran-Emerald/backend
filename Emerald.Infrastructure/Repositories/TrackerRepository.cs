@@ -1,4 +1,5 @@
 ﻿using Emerald.Domain.Models.TrackerAggregate;
+using Emerald.Infrastructure.Exceptions;
 using MediatR;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -9,9 +10,9 @@ namespace Emerald.Infrastructure.Repositories
     public class TrackerRepository : ITrackerRepository
     {
         private IMongoCollection<Tracker> collection;
-        private Mediator mediator;
+        private IMediator mediator;
 
-        public TrackerRepository(IMongoDbContext dbContext, Mediator mediator)
+        public TrackerRepository(IMongoDbContext dbContext, IMediator mediator)
         {
             collection = dbContext.Emerald.GetCollection<Tracker>("Trackers");
             this.mediator = mediator;
@@ -25,8 +26,15 @@ namespace Emerald.Infrastructure.Repositories
 
         public async Task<Tracker> Get(ObjectId id)
         {
-            return await collection.Find(o => o.Id == id)
+            var tracker = await collection.Find(o => o.Id == id)
                 .FirstAsync();
+
+            if (tracker == null)
+            {
+                throw new MissingElementException();
+            }
+
+            return tracker;
         }
 
         public async Task Update(Tracker tracker)
