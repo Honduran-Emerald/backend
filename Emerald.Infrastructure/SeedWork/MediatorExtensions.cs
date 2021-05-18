@@ -12,8 +12,11 @@ namespace Emerald.Infrastructure
     {
         public static async Task PublishEntity(this IMediator mediator, Entity entity)
         {
-            foreach (var domainEvent in entity.DomainEvents)
-                await mediator.Publish(domainEvent);
+            if (entity.DomainEvents != null)
+            {
+                foreach (var domainEvent in entity.DomainEvents)
+                    await mediator.Publish(domainEvent);
+            }
         }
     }
 }
