@@ -17,8 +17,8 @@ namespace Emerald.Domain.Models.UserAggregate
         public string Image { get; set; }
         public string SyncToken { get; private set; }
 
-        public long Experience { get; set; }
-        public int Glory { get; set; }
+        public long Experience { get; private set; }
+        public int Glory { get; private set; }
 
         public User() : base()
         {
@@ -40,6 +40,11 @@ namespace Emerald.Domain.Models.UserAggregate
             }
 
             ActiveTrackerId = tracker.Id;
+        }
+
+        public void AddExperience(long experience)
+        {
+            Experience += experience;
         }
 
         public void GenerateNewSyncToken()
