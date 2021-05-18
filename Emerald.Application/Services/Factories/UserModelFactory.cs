@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Emerald.Application.Services.Factories
 {
-    public class UserModelFactory
+    public class UserModelFactory : IModelFactory<User, UserModel>
     {
         public async Task<UserModel> Create(User user)
         {

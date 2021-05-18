@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Emerald.Application.Services.Factories
 {
-    public class QuestModelFactory
+    public class QuestModelFactory : IModelFactory<Quest, QuestModel>
     {
         private QuestViewModelStash questStash;
 
@@ -25,28 +25,26 @@ namespace Emerald.Application.Services.Factories
             QuestVersion version = quest.GetStableQuestVersion();
             QuestViewModel viewModel = await questStash.Get(quest.Id);
 
-            return new QuestModel
-            {
-                Id = quest.Id.ToString(),
-                OwnerId = quest.OwnerUserId,
+            return new QuestModel(
+                quest.Id.ToString(),
+                quest.OwnerUserId,
 
-                Location = new LocationModel
+                new LocationModel
                 {
                     Latitude = version.Location.Latitude,
                     Longitude = version.Location.Longitude
                 },
 
-                Title = version.Title,
-                Description = version.Description,
-                Image = version.Image,
-                Version = version.Version,
+                version.Title,
+                version.Description,
+                version.Image,
+                version.Version,
 
-                CreationTime = version.CreatedAt,
-                
-                Votes = viewModel.Votes,
-                Plays = viewModel.Plays,
-                Finishs = viewModel.Finishs
-            };
+                version.CreatedAt,
+
+                viewModel.Votes,
+                viewModel.Plays,
+                viewModel.Finishs);
         }
     }
 }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Emerald.Application.Services.Factories
 {
-    public class ModuleModelFactory
+    public class ModuleModelFactory : IModelFactory<Module, ModuleModel>
     {
         private ComponentModelFactory componentModelFactory;
         private IComponentRepository componentRepository;
@@ -29,7 +29,7 @@ namespace Emerald.Application.Services.Factories
             switch (module)
             {
                 case ChoiceModule choiceModule:
-                    return new ChoiceModuleModel(choiceModule.Id.ToString(), choiceModule.Choices, componentModels);
+                    return new ChoiceModuleModel(choiceModule.Id.ToString(), module.Objective, choiceModule.Choices, componentModels);
             }
 
             throw new Exception("Got invalid Module");

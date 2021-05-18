@@ -1,18 +1,30 @@
 ﻿using Emerald.Application.Models.Quest.Events;
 using Emerald.Application.Models.Quest.Module;
+using Emerald.Application.Models.Quest.ResponseEvent;
+using Emerald.Application.Models.Response;
 using Emerald.Application.Services.Factories;
+using Emerald.Domain.Models;
 using Emerald.Domain.Models.ModuleAggregate;
 using Emerald.Domain.Models.ModuleAggregate.ResponseEvents;
 using Emerald.Domain.Repositories;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Emerald.Application.Services
 {
-    public class ResponseEventModelFactory
+    public class ResponseEventModelFactory : IModelFactory<ResponseEventCollection, ResponseEventCollectionModel>
     {
         private IModuleRepository moduleRepository;
+        private MementoModelFactory mementoModelFactory;
         private ModuleModelFactory moduleModelFactory;
+
+        public ResponseEventModelFactory(IModuleRepository moduleRepository, MementoModelFactory mementoModelFactory, ModuleModelFactory moduleModelFactory)
+        {
+            this.moduleRepository = moduleRepository;
+            this.mementoModelFactory = mementoModelFactory;
+            this.moduleModelFactory = moduleModelFactory;
+        }
 
         public ResponseEventModelFactory(IModuleRepository moduleRepository, ModuleModelFactory moduleModelFactory)
         {
@@ -20,21 +32,35 @@ namespace Emerald.Application.Services
             this.moduleModelFactory = moduleModelFactory;
         }
 
-        public async Task<ResponseEventModel> Create(ResponseEvent responseEvent)
+        public async Task<ResponseEventCollectionModel> Create(ResponseEventCollection responseEventCollection)
         {
-            switch (responseEvent)
+            List<ResponseEventModel> responseEvents = new List<ResponseEventModel>();
+
+            foreach (IResponseEvent responseEvent in responseEventCollection.Events)
             {
-                case IdleResponseEvent idleEvent:
-                    return new IdleResponseEventModel();
+                switch (responseEvent)
+                {
+                    case ExperienceResponseEvent experienceEvent:
+                        responseEvents.Add(new ExperienceResponseEventModel(
+                            experienceEvent.Experience));
 
-                case NextModuleResponseEvent nextModuleEvent:
-                    ModuleModel moduleModel = await moduleModelFactory.Create(
-                        await moduleRepository.Get(nextModuleEvent.ModuleId));
+                        break;
+                    case ModuleFinishResponseEvent moduleFinishEvent:
+                        responseEvents.Add(new ModuleFinishResponseEventModel(
+                            await moduleModelFactory.Create(
+                                await moduleRepository.Get(moduleFinishEvent.ModuleId))));
 
-                    return new NextModuleResponseEventModel(moduleModel);
+                        break;
+                    default:
+                        throw new Exception($"Got invalid ResponseEvent ({responseEvent.GetType().Name})");
+                }
             }
 
-            throw new Exception("Got invalid ResponseEvent");
+            return new ResponseEventCollectionModel
+            {
+                ResponseEvents = responseEvents,
+                Memento = await mementoModelFactory.Create(responseEventCollection.Memento)
+            };
         }
     }
 }
