@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
+using Emerald.Infrastructure.Repositories;
 
 namespace Emerald.Application.Controllers
 {
@@ -14,17 +15,17 @@ namespace Emerald.Application.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private SignInManager<User> signInManager;
         private UserManager<User> userManager;
+        private IUserRepository userRepository;
         private IJwtAuthentication authentication;
 
         public AuthenticationController(
-            SignInManager<User> signInManager,
             UserManager<User> userManager,
+            IUserRepository userRepository,
             IJwtAuthentication authentication)
         {
-            this.signInManager = signInManager;
             this.userManager = userManager;
+            this.userRepository = userRepository;
             this.authentication = authentication;
         }
 
@@ -32,7 +33,7 @@ namespace Emerald.Application.Controllers
         public async Task<ActionResult<AuthenticationTokenResponse>> Login(
             [FromBody] AuthenticationLoginRequest binding)
         {
-            User user = await userManager.FindByEmailAsync(binding.Email);
+            User user = await userRepository.GetByEmail(binding.Email);
 
             if (await userManager.CheckPasswordAsync(user, binding.Password))
             {

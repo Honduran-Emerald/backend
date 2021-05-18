@@ -44,13 +44,13 @@ namespace Emerald.Application.Controllers
         {
             try
             {
-                ResponseEvent responseEvent = await questPlayService.HandleEvent(
+                ResponseEventCollection responseEvent = await questPlayService.HandleEvent(
                     await userManager.GetUserAsync(User),
                     new ChoiceRequestEvent(choiceEvent.Choice));
 
                 return Ok(new QuestPlayEventResponse
                 {
-                    ResponseEvent = await responseEventFactory.Create(responseEvent)
+                    ResponseEventCollection = await responseEventFactory.Create(responseEvent)
                 });
             }
             catch (DomainException e)
