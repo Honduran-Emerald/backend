@@ -44,7 +44,7 @@ namespace Emerald.Application.Services
                 configuration["Jwt:Issuer"],
                 claims,
                 null,
-                DateTime.Now.AddMonths(configuration.GetValue<int>("Jwt:LifespanInMonths")),
+                DateTime.Now.AddMinutes(2),
                 creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
