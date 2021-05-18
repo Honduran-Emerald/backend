@@ -54,7 +54,7 @@ namespace Emerald.Domain.Models.UserAggregate
 
         public int GetLevel()
         {
-            return (int) Math.Round(Math.Sqrt((Experience + 22562.5) / 250.0) - 12.5);
+            return (int) Math.Round(Math.Sqrt((Experience + 22562.5) / 250.0) - 8.5);
         }
     }
 }
