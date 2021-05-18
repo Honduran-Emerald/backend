@@ -53,7 +53,7 @@ namespace Emerald.Domain.Models.ModuleAggregate.Modules
             {
                 return new ResponseEventCollection(
                     new ChoiceModuleMemento(choiceEvent.Choice),
-                    new List<MediatR.INotification>
+                    new List<IResponseEvent>
                     {
                         new ModuleFinishResponseEvent(ChoiceModuleIds[choiceEvent.Choice]),
                         new ExperienceResponseEvent(200)
@@ -63,7 +63,7 @@ namespace Emerald.Domain.Models.ModuleAggregate.Modules
             {
                 return new ResponseEventCollection(
                     memento,
-                    new List<MediatR.INotification>());
+                    new List<IResponseEvent>());
             }
         }
     }
