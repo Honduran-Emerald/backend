@@ -8,7 +8,9 @@ namespace Emerald.Infrastructure.Repositories
     // user can be add by 
     public interface IUserRepository
     {
+        Task Add(User user);
         Task<User> Get(ObjectId id);
         Task<List<User>> All();
+        Task Update(User user);
     }
 }

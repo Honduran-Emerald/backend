@@ -1,8 +1,11 @@
 ﻿using Emerald.Domain.Models.ModuleAggregate;
+using Emerald.Domain.Models.QuestAggregate;
+using Emerald.Domain.Models.QuestVersionAggregate;
 using Emerald.Domain.Repositories;
 using MediatR;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Emerald.Infrastructure.Repositories
@@ -28,6 +31,13 @@ namespace Emerald.Infrastructure.Repositories
         {
             return await collection.Find(o => o.Id == id)
                 .FirstAsync();
+        }
+
+        public async Task<List<Module>> GetForQuest(QuestVersion questVersion)
+        {
+            return await collection
+                .Find(o => questVersion.ModuleIds.Contains(o.Id))
+                .ToListAsync();
         }
 
         public async Task Update(Module module)
