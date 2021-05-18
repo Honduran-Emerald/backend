@@ -7,6 +7,7 @@ namespace Emerald.Domain.Events
     {
         public ObjectId QuestId { get; set; }
         public ObjectId UserId { get; set; }
+        public ObjectId TrackerId { get; set; }
 
         public QuestFinishDomainEvent(ObjectId questId, ObjectId userId)
         {
