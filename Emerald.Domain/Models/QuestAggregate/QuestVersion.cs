@@ -24,11 +24,12 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
         public List<ObjectId> ModuleIds { get; private set; }
         public ObjectId FirstModule { get; private set; }
 
-        public QuestVersion(Quest quest, Location location, string title, string description, long version)
-            : this()
+        public QuestVersion(Location location, string title, string description, string image, long version)
         {
+            Location = location;
             Title = title;
             Description = description;
+            Image = image;
             Version = version;
 
             CreatedAt = DateTime.UtcNow;

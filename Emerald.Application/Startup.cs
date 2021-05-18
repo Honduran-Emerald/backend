@@ -3,6 +3,7 @@ using Emerald.Application.Infrastructure.ActionFilter;
 using Emerald.Application.Infrastructure.OperationFilter;
 using Emerald.Application.Services;
 using Emerald.Application.Services.Factories;
+using Emerald.Domain.Models;
 using Emerald.Domain.Models.UserAggregate;
 using Emerald.Domain.Repositories;
 using Emerald.Domain.Services;
@@ -152,6 +153,9 @@ namespace Emerald.Application
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            Location location;
+
 
             app.UseKissLogMiddleware(options =>
             {

@@ -32,17 +32,18 @@ namespace Emerald.Application.Controllers
         public async Task<IActionResult> Init(
             [FromQuery] LocationModel location,
             [FromQuery] string title,
-            [FromQuery] string description)
+            [FromQuery] string description,
+            [FromQuery] string imageName)
         {
             User user = await userManager.GetUserAsync(User);
             Domain.Models.QuestAggregate.Quest quest = new Domain.Models.QuestAggregate.Quest(user);
             quest.AddQuestVersion(new Domain.Models.QuestVersionAggregate.QuestVersion(
-                quest,
                 new Domain.Models.Location(
                     location.Longitude,
                     location.Latitude),
                 title,
                 description,
+                imageName,
                 1));
             await questRepository.Add(quest);
 
