@@ -2,7 +2,7 @@
 {
     public enum ResponseEventType
     {
-        Idle,
-        NextModuleEvent
+        ModuleFinish,
+        Experience
     }
 }

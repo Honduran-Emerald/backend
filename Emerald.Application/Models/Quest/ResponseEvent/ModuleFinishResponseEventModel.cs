@@ -2,11 +2,11 @@
 
 namespace Emerald.Application.Models.Quest.Events
 {
-    public class NextModuleResponseEventModel : ResponseEventModel
+    public class ModuleFinishResponseEventModel : ResponseEventModel
     {
         public ModuleModel Module { get; set; }
 
-        public NextModuleResponseEventModel(ModuleModel module) : base(ResponseEventType.NextModuleEvent)
+        public ModuleFinishResponseEventModel(ModuleModel module) : base(ResponseEventType.ModuleFinish)
         {
             Module = module;
         }

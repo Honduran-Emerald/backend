@@ -25,5 +25,20 @@ namespace Emerald.Application.Models.Quest
         public int Votes { get; set; }
         public int Plays { get; set; }
         public int Finishs { get; set; }
+
+        public QuestModel(string id, ObjectId ownerId, LocationModel location, string title, string description, string image, long version, DateTime creationTime, int votes, int plays, int finishs)
+        {
+            Id = id;
+            OwnerId = ownerId;
+            Location = location;
+            Title = title;
+            Description = description;
+            Image = image;
+            Version = version;
+            CreationTime = creationTime;
+            Votes = votes;
+            Plays = plays;
+            Finishs = finishs;
+        }
     }
 }
