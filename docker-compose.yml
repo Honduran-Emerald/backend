@@ -13,6 +13,10 @@ services:
     environment: 
       Mongo__ConnectionString: "mongodb://mongo:27017/emerald"
       Mongo__DatabaseName: "emerald"
+      Jwt__Key: ""
+      KissLog__OrganizationId: ""
+      KissLog__ApplicationId: ""
+      KissLog__ApiUrl: ""
 
   mongo:
     image: mongo:latest
