@@ -34,19 +34,12 @@ namespace Emerald.Application.Controllers.Quest
         public async Task<ActionResult<QuestQueryResponse>> Query(
             [FromQuery] int offset)
         {
-            List<QuestModel> questModels = new List<QuestModel>();
-
-            foreach (var quest in questRepository.GetQueryable()
-                    .Skip(offset)
-                    .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
-                    .ToEnumerable())
-            {
-                questModels.Add(await questModelFactory.Create(quest));
-            }
-
             return Ok(new QuestQueryResponse
             {
-                Quests = questModels
+                Quests = await questModelFactory.Create(await questRepository.GetQueryable()
+                    .Skip(offset)
+                    .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
+                    .ToListAsync())
             });
         }
     }
