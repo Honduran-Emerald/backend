@@ -16,12 +16,12 @@ namespace Emerald.Domain.Models.ModuleAggregate
         public override ObjectId Id { get; protected set; }
 
         public List<ObjectId> ComponentIds { get; private set; }
-        public string Title { get; private set; }
+        public string Objective { get; private set; }
 
-        public Module(string title)
+        public Module(string objective)
             : this()
         {
-            Title = title;
+            Objective = objective;
         }
 
         public Module()
@@ -29,11 +29,11 @@ namespace Emerald.Domain.Models.ModuleAggregate
             ComponentIds = new List<ObjectId>();
         }
 
-        public abstract ResponseEvent ProcessEvent(TrackerPathMemento memento, RequestEvent requestEvent);
+        public abstract ResponseEventCollection ProcessEvent(TrackerPathMemento memento, RequestEvent requestEvent);
 
-        public void SetTitle(string title)
+        public void SetObjective(string objective)
         {
-            Title = title;
+            Objective = objective;
         }
 
         public void AddComponent(Component component)

@@ -46,18 +46,24 @@ namespace Emerald.Domain.Models.ModuleAggregate.Modules
             ChoiceModuleIds.RemoveAt(index);
         }
 
-        public override ResponseEvent ProcessEvent(TrackerPathMemento memento, RequestEvent requestEvent)
+        public override ResponseEventCollection ProcessEvent(TrackerPathMemento memento, RequestEvent requestEvent)
         {
             if (requestEvent is ChoiceRequestEvent choiceEvent &&
                 choiceEvent.Choice < ChoiceModuleIds.Count)
             {
-                return new NextModuleResponseEvent(
+                return new ResponseEventCollection(
                     new ChoiceModuleMemento(choiceEvent.Choice),
-                    ChoiceModuleIds[choiceEvent.Choice]);
+                    new List<MediatR.INotification>
+                    {
+                        new ModuleFinishResponseEvent(ChoiceModuleIds[choiceEvent.Choice]),
+                        new ExperienceResponseEvent(200)
+                    });
             }
             else
             {
-                return new IdleResponseEvent(memento);
+                return new ResponseEventCollection(
+                    memento,
+                    new List<MediatR.INotification>());
             }
         }
     }
