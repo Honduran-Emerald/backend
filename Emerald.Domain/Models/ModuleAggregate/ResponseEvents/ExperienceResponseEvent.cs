@@ -21,7 +21,7 @@ namespace Emerald.Domain.Models.ModuleAggregate.ResponseEvents
         public INotification ToDomainEvent(ObjectId userId, ObjectId trackerId)
         {
             return new QuestResponseDomainEvent<ExperienceResponseEvent>(
-                userId, trackerId);
+                userId, trackerId, this);
         }
     }
 }
