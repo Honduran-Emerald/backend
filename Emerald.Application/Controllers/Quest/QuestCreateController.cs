@@ -40,7 +40,8 @@ namespace Emerald.Application.Controllers.Quest
                 return Ok(new QuestCreateQueryResponse
                 {
                     Modules = await moduleModelFactory.Create(await moduleRepository.GetForQuest(quest.GetStableQuestVersion())),
-                    Quest = await questModelFactory.Create(quest)
+                    Quest = await questModelFactory.Create(quest),
+                    FirstModuleId = quest.GetStableQuestVersion().FirstModule.ToString()
                 });
             }
             catch (DomainException exception)

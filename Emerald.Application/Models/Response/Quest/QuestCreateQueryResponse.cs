@@ -12,5 +12,6 @@ namespace Emerald.Application.Models.Response.Quest
     {
         public QuestModel Quest { get; set; }
         public List<ModuleModel> Modules { get; set; }
+        public string FirstModuleId { get; set; }
     }
 }
