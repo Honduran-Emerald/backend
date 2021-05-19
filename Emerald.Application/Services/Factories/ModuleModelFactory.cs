@@ -7,6 +7,7 @@ using Emerald.Infrastructure.Repositories;
 using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Emerald.Application.Services.Factories
@@ -29,7 +30,17 @@ namespace Emerald.Application.Services.Factories
             switch (module)
             {
                 case ChoiceModule choiceModule:
-                    return new ChoiceModuleModel(choiceModule.Id.ToString(), module.Objective, choiceModule.Choices, componentModels);
+                    return new ChoiceModuleModel(
+                        choiceModule.Id.ToString(), 
+                        module.Objective,
+                        Enumerable.Range(0, choiceModule.Choices.Count)
+                            .Select(i => new ChoiceModuleModel.Choice
+                            {
+                                ModuleId = choiceModule.ChoiceModuleIds[i].ToString(),
+                                Text = choiceModule.Choices[i]
+                            })
+                            .ToList(),
+                        componentModels);
             }
 
             throw new Exception("Got invalid Module");
