@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Emerald.Domain.SeedWork;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,14 @@ namespace Emerald.Infrastructure
 {
     public static class MediatorExtensions
     {
-        public static async Task PublishEntity(this IMediator mediator, Entity entity)
+        public static async Task PublishEntity(this IMediator mediator, IEntity entity)
         {
             if (entity.DomainEvents != null)
             {
                 foreach (var domainEvent in entity.DomainEvents)
                     await mediator.Publish(domainEvent);
+
+                entity.ClearEvents();
             }
         }
     }
