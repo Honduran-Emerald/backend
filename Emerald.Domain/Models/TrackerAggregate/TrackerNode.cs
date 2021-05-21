@@ -4,15 +4,15 @@ using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.TrackerAggregate
 {
-    public class TrackerPath : Entity
+    public class TrackerNode : Entity
     {
-        public override ObjectId Id { get; protected set; }
+        public ObjectId Id { get; set; }
 
         public ObjectId ModuleId { get; private set; }
         public DateTime CreatedAt { get; private set; }
-        public TrackerPathMemento Memento { get; private set; }
+        public TrackerNodeMemento Memento { get; private set; }
 
-        public TrackerPath(ObjectId moduleId)
+        public TrackerNode(ObjectId moduleId)
         {
             ModuleId = moduleId;
 
@@ -20,11 +20,11 @@ namespace Emerald.Domain.Models.TrackerAggregate
             Memento = null;
         }
 
-        private TrackerPath()
+        private TrackerNode()
         {
         }
 
-        public void UpdateMemento(TrackerPathMemento memento)
+        public void UpdateMemento(TrackerNodeMemento memento)
         {
             Memento = memento;
         }
