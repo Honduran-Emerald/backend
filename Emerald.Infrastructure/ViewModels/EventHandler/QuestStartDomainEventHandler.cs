@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Emerald.Infrastructure.ViewModels.EventHandler
 {
-    public class QuestStartDomainEventHandler : INotificationHandler<QuestStartDomainEvent>
+    public class QuestStartDomainEventHandler : INotificationHandler<QuestStartedDomainEvent>
     {
         private QuestViewModelStash stash;
 
@@ -19,7 +19,7 @@ namespace Emerald.Infrastructure.ViewModels.EventHandler
             this.stash = stash;
         }
 
-        public async Task Handle(QuestStartDomainEvent notification, CancellationToken cancellationToken)
+        public async Task Handle(QuestStartedDomainEvent notification, CancellationToken cancellationToken)
         {
             await stash.IncreasePlay(notification.QuestId);
         }

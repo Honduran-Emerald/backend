@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Emerald.Application.Services.Factories
 {
-    public class MementoModelFactory : IModelFactory<TrackerPathMemento, MementoModel>
+    public class MementoModelFactory : IModelFactory<TrackerNodeMemento, MementoModel>
     {
-        public async Task<MementoModel> Create(TrackerPathMemento memento)
+        public async Task<MementoModel> Create(TrackerNodeMemento memento)
         {
             switch (memento)
             {

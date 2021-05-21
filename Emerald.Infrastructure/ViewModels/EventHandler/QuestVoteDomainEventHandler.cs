@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Emerald.Infrastructure.ViewModels.EventHandler
 {
-    public class QuestVoteDomainEventHandler : INotificationHandler<QuestVoteDomainEvent>
+    public class QuestVoteDomainEventHandler : INotificationHandler<QuestVotedDomainEvent>
     {
         private QuestViewModelStash stash;
 
@@ -19,7 +19,7 @@ namespace Emerald.Infrastructure.ViewModels.EventHandler
             this.stash = stash;
         }
 
-        public async Task Handle(QuestVoteDomainEvent notification, CancellationToken cancellationToken)
+        public async Task Handle(QuestVotedDomainEvent notification, CancellationToken cancellationToken)
         {
             await stash.IncreaseVote(notification.QuestId, notification.VoteType);
         }
