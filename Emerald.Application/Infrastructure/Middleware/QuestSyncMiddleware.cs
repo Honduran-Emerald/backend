@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Emerald.Application.Infrastructure.ActionFilter
@@ -21,11 +22,18 @@ namespace Emerald.Application.Infrastructure.ActionFilter
 
         public async Task Invoke(HttpContext context, UserManager<User> userManager)
         {
-            if (context.User.Identity.IsAuthenticated)
+            if (context.User.Identity != null && context.User.Identity.IsAuthenticated)
             {
                 context.Response.OnStarting(async () =>
                 {
                     User user = await userManager.GetUserAsync(context.User);
+
+                    if (context.Request.Method == HttpMethod.Post.Method)
+                    {
+                        user.GenerateNewSyncToken();
+                        await userManager.UpdateAsync(user);
+                    }
+
                     context.Response.Headers.Add("Sync-Token", user.SyncToken);
                 });
 
