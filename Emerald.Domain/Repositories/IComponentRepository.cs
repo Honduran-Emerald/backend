@@ -7,9 +7,11 @@ namespace Emerald.Infrastructure.Repositories
 {
     public interface IComponentRepository
     {
+        Task Add(Component component);
+        Task Update(Component component);
+
         Task<Component> Get(ObjectId id);
         Task<IEnumerable<Component>> GetAll(List<ObjectId> ids);
         Task<IEnumerable<Component>> GetAll();
-        Task Add(Component component);
     }
 }

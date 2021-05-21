@@ -10,8 +10,9 @@ namespace Emerald.Domain.Repositories
     public interface IModuleRepository
     {
         Task Add(Module module);
+        Task Update(Module module);
+
         Task<Module> Get(ObjectId id);
         Task<List<Module>> GetForQuest(QuestVersion quest);
-        Task Update(Module module);
     }
 }

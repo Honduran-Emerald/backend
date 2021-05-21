@@ -8,9 +8,9 @@ namespace Emerald.Infrastructure.Repositories
     public interface IQuestRepository
     {
         Task Add(Quest quest);
-        Task<Quest> Get(ObjectId questId);
         Task Update(Quest quest);
 
+        Task<Quest> Get(ObjectId questId);
         IMongoQueryable<Quest> GetQueryable();
     }
 }
