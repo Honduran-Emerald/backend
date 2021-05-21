@@ -24,8 +24,14 @@ namespace Emerald.Infrastructure.Repositories
 
         public async Task Add(Module module)
         {
-            await mediator.PublishEntity(module);
             await collection.InsertOneAsync(module);
+            await mediator.PublishEntity(module);
+        }
+
+        public async Task Update(Module module)
+        {
+            await collection.ReplaceOneAsync(o => o.Id == module.Id, module);
+            await mediator.PublishEntity(module);
         }
 
         public async Task<Module> Get(ObjectId id)
@@ -58,12 +64,6 @@ namespace Emerald.Infrastructure.Repositories
             }
 
             return modules;
-        }
-
-        public async Task Update(Module module)
-        {
-            await mediator.PublishEntity(module);
-            await collection.ReplaceOneAsync(o => o.Id == module.Id, module);
         }
     }
 }

@@ -39,11 +39,13 @@ namespace Emerald.Infrastructure.Repositories
         public async Task Update(User user)
         {
             await userManager.UpdateAsync(user);
+            await mediator.PublishEntity(user);
         }
 
         public async Task Add(User user)
         {
             await userManager.CreateAsync(user);
+            await mediator.PublishEntity(user);
         }
 
         public async Task<List<User>> All()

@@ -43,8 +43,8 @@ namespace Emerald.Infrastructure.Repositories
 
         public async Task Add(Component component)
         {
-            await mediator.PublishEntity(component);
             await collection.InsertOneAsync(component);
+            await mediator.PublishEntity(component);
         }
 
         public async Task<IEnumerable<Component>> GetAll()
@@ -52,6 +52,12 @@ namespace Emerald.Infrastructure.Repositories
             return await collection
                 .AsQueryable()
                 .ToListAsync();
+        }
+
+        public async Task Update(Component component)
+        {
+            await collection.ReplaceOneAsync(o => o.Id == component.Id, component);
+            await mediator.PublishEntity(component);
         }
     }
 }

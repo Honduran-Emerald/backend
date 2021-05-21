@@ -21,8 +21,14 @@ namespace Emerald.Infrastructure.Repositories
 
         public async Task Add(Quest quest)
         {
-            await mediator.PublishEntity(quest);
             await collection.InsertOneAsync(quest);
+            await mediator.PublishEntity(quest);
+        }
+
+        public async Task Update(Quest quest)
+        {
+            await collection.ReplaceOneAsync(q => q.Id == quest.Id, quest);
+            await mediator.PublishEntity(quest);
         }
 
         public async Task<Quest> Get(ObjectId questId)
@@ -41,12 +47,6 @@ namespace Emerald.Infrastructure.Repositories
         public IMongoQueryable<Quest> GetQueryable()
         {
             return collection.AsQueryable();
-        }
-
-        public async Task Update(Quest quest)
-        {
-            await mediator.PublishEntity(quest);
-            await collection.ReplaceOneAsync(q => q.Id == quest.Id, quest);
         }
     }
 }

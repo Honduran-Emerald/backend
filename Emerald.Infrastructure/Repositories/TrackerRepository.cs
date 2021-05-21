@@ -20,8 +20,14 @@ namespace Emerald.Infrastructure.Repositories
 
         public async Task Add(Tracker tracker)
         {
-            await mediator.PublishEntity(tracker);
             await collection.InsertOneAsync(tracker);
+            await mediator.PublishEntity(tracker);
+        }
+
+        public async Task Update(Tracker tracker)
+        {
+            await collection.ReplaceOneAsync(o => o.Id == tracker.Id, tracker);
+            await mediator.PublishEntity(tracker);
         }
 
         public async Task<Tracker> Get(ObjectId id)
@@ -35,12 +41,6 @@ namespace Emerald.Infrastructure.Repositories
             }
 
             return tracker;
-        }
-
-        public async Task Update(Tracker tracker)
-        {
-            await mediator.PublishEntity(tracker);
-            await collection.ReplaceOneAsync(o => o.Id == tracker.Id, tracker);
         }
     }
 }
