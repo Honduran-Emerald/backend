@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Emerald.Domain.SeedWork;
+using MediatR;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
@@ -6,9 +7,10 @@ using System.Collections.Generic;
 
 namespace Vitamin.Value.Domain.SeedWork
 {
-    public abstract class Entity
+    public class Entity : IEntity
     {
-        public abstract ObjectId Id { get; protected set; }
+        public ObjectId Id { get; set; }
+        public int Test { get; }
 
         public Entity()
         {

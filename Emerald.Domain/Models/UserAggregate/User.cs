@@ -1,5 +1,8 @@
 ﻿using AspNetCore.Identity.Mongo.Model;
+using Emerald.Domain.Events;
 using Emerald.Domain.Models.TrackerAggregate;
+using Emerald.Domain.SeedWork;
+using MediatR;
 using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
@@ -8,7 +11,7 @@ using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.UserAggregate
 {
-    public class User : MongoUser
+    public class User : MongoUser, IEntity
     {
         public List<ObjectId> QuestIds { get; private set; }
         public List<ObjectId> TrackerIds { get; private set; }
@@ -20,16 +23,21 @@ namespace Emerald.Domain.Models.UserAggregate
         public long Experience { get; private set; }
         public int Glory { get; private set; }
 
+        private List<INotification> domainEvents;
+        public IReadOnlyCollection<INotification> DomainEvents => domainEvents;
+
         public User() : base()
         {
             QuestIds = new List<ObjectId>();
             TrackerIds = new List<ObjectId>();
+            domainEvents = new List<INotification>();
         }
 
         public User(string userName) : base(userName)
         {
             QuestIds = new List<ObjectId>();
             TrackerIds = new List<ObjectId>();
+            domainEvents = new List<INotification>();
         }
 
         public void SetActiveTracker(Tracker tracker)
@@ -55,6 +63,19 @@ namespace Emerald.Domain.Models.UserAggregate
         public int GetLevel()
         {
             return (int) Math.Round(Math.Sqrt((Experience + 22562.5) / 250.0) - 8.5);
+        }
+
+        public void ClearEvents()
+        {
+            domainEvents.Clear();
+        }
+
+        protected void AddDomainEvent(INotification domainEvent)
+        {
+            if (domainEvents == null)
+                domainEvents = new List<INotification>();
+
+            domainEvents.Add(domainEvent);
         }
     }
 }

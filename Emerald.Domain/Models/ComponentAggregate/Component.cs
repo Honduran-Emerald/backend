@@ -11,6 +11,6 @@ namespace Emerald.Domain.Models.ComponentAggregate
         typeof(ImageComponent))]
     public class Component : Entity
     {
-        public override ObjectId Id { get; protected set; }
+        public ObjectId Id { get; set; }
     }
 }

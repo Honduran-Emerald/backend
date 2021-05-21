@@ -46,7 +46,7 @@ namespace Emerald.Domain.Models.ModuleAggregate.Modules
             ChoiceModuleIds.RemoveAt(index);
         }
 
-        public override ResponseEventCollection ProcessEvent(TrackerPathMemento memento, RequestEvent requestEvent)
+        public override ResponseEventCollection ProcessEvent(TrackerNodeMemento memento, RequestEvent requestEvent)
         {
             if (requestEvent is ChoiceRequestEvent choiceEvent &&
                 choiceEvent.Choice < ChoiceModuleIds.Count)

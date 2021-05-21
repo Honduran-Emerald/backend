@@ -13,7 +13,7 @@ namespace Emerald.Domain.Models.ModuleAggregate
         typeof(ChoiceModule))]
     public abstract class Module : Entity
     {
-        public override ObjectId Id { get; protected set; }
+        public ObjectId Id { get; set; }
 
         public List<ObjectId> ComponentIds { get; private set; }
         public string Objective { get; private set; }
@@ -29,7 +29,7 @@ namespace Emerald.Domain.Models.ModuleAggregate
             ComponentIds = new List<ObjectId>();
         }
 
-        public abstract ResponseEventCollection ProcessEvent(TrackerPathMemento memento, RequestEvent requestEvent);
+        public abstract ResponseEventCollection ProcessEvent(TrackerNodeMemento memento, RequestEvent requestEvent);
 
         public void SetObjective(string objective)
         {

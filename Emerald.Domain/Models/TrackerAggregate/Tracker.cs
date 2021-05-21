@@ -8,33 +8,35 @@ namespace Emerald.Domain.Models.TrackerAggregate
 {
     public class Tracker : Entity
     {
-        public override ObjectId Id { get; protected set; }
+        public ObjectId Id { get; set; }
 
+        public ObjectId UserId { get; private set; }
         public ObjectId QuestVersionId { get; private set; }
         public VoteType Vote { get; private set; }
         public DateTime CreatedAt { get; private set; }
 
-        public List<TrackerPath> Path { get; private set; }
+        public List<TrackerNode> Path { get; private set; }
         public bool Finished { get; private set; }
 
-        public Tracker(QuestVersion questVersion)
+        public Tracker(ObjectId userId, QuestVersion questVersion)
             : this()
         {
+            UserId = userId;
             QuestVersionId = questVersion.Id;
             CreatedAt = DateTime.UtcNow;
         }
 
         private Tracker()
         {
-            Path = new List<TrackerPath>();
+            Path = new List<TrackerNode>();
         }
 
-        public void AddTrackerPath(TrackerPath trackerPath)
+        public void AddTrackerPath(TrackerNode trackerPath)
         {
             Path.Add(trackerPath);
         }
 
-        public TrackerPath GetCurrentTrackerPath()
+        public TrackerNode GetCurrentTrackerPath()
         {
             return Path[Path.Count - 1];
         }

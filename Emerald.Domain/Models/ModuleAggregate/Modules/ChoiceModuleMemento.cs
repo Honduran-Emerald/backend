@@ -2,7 +2,7 @@
 
 namespace Emerald.Domain.Models.ModuleAggregate.Modules
 {
-    public class ChoiceModuleMemento : TrackerPathMemento
+    public class ChoiceModuleMemento : TrackerNodeMemento
     {
         public int Choice { get; }
 

@@ -9,7 +9,7 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
 {
     public class QuestVersion : Entity
     {
-        public override ObjectId Id { get; protected set; }
+        public ObjectId Id { get; set; }
 
         public bool Published { get; private set; }
 
