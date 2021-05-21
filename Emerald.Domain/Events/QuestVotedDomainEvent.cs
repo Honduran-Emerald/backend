@@ -4,13 +4,13 @@ using MongoDB.Bson;
 
 namespace Emerald.Domain.Events
 {
-    public class QuestVoteDomainEvent : INotification
+    public class QuestVotedDomainEvent : INotification
     {
         public ObjectId QuestId { get; set; }
         public ObjectId UserId { get; set; }
         public VoteType VoteType { get; set; }
 
-        public QuestVoteDomainEvent(ObjectId questId, ObjectId userId, VoteType voteType)
+        public QuestVotedDomainEvent(ObjectId questId, ObjectId userId, VoteType voteType)
         {
             QuestId = questId;
             UserId = userId;
