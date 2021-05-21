@@ -26,7 +26,7 @@ namespace Emerald.Domain.EventHandler
         public async Task Handle(QuestResponseDomainEvent<ModuleFinishResponseEvent> notification, CancellationToken cancellationToken)
         {
             Tracker tracker = await trackerRepository.Get(notification.TrackerId);
-            tracker.AddTrackerPath(new TrackerPath(notification.Event.ModuleId));
+            tracker.AddTrackerPath(new TrackerNode(notification.Event.ModuleId));
             await trackerRepository.Update(tracker);
         }
     }
