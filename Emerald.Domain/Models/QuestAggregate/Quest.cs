@@ -9,7 +9,6 @@ namespace Emerald.Domain.Models.QuestAggregate
 {
     public class Quest : Entity
     {
-        public ObjectId Id { get; set; }
         public ObjectId OwnerUserId { get; protected set; }
 
         public List<QuestVersion> QuestVersions { get; private set; }

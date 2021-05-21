@@ -6,8 +6,6 @@ namespace Emerald.Domain.Models.TrackerAggregate
 {
     public class TrackerNode : Entity
     {
-        public ObjectId Id { get; set; }
-
         public ObjectId ModuleId { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public TrackerNodeMemento Memento { get; private set; }

@@ -13,8 +13,6 @@ namespace Emerald.Domain.Models.ModuleAggregate
         typeof(ChoiceModule))]
     public abstract class Module : Entity
     {
-        public ObjectId Id { get; set; }
-
         public List<ObjectId> ComponentIds { get; private set; }
         public string Objective { get; private set; }
 

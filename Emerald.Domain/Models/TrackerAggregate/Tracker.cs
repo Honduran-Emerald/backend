@@ -8,8 +8,6 @@ namespace Emerald.Domain.Models.TrackerAggregate
 {
     public class Tracker : Entity
     {
-        public ObjectId Id { get; set; }
-
         public ObjectId UserId { get; private set; }
         public ObjectId QuestVersionId { get; private set; }
         public VoteType Vote { get; private set; }
