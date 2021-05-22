@@ -2,6 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+	<!--Force non nullable-->
+	<Nullable>enable</Nullable>
+	<WarningsAsErrors>nullable</WarningsAsErrors>
+	<!--Force non nullable-->
   </PropertyGroup>
 
   <ItemGroup>
