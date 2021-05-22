@@ -21,6 +21,12 @@ namespace Emerald.Application.Models.Quest.Module
         {
             public string Text { get; set; }
             public string ModuleId { get; set; }
+
+            public Choice(string text, string moduleId)
+            {
+                Text = text;
+                ModuleId = moduleId;
+            }
         }
     }
 }

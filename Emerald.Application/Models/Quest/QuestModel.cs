@@ -1,5 +1,6 @@
 ﻿using Emerald.Domain.Models.QuestAggregate;
 using Emerald.Domain.Models.QuestVersionAggregate;
+using Emerald.Domain.Models.TrackerAggregate;
 using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
