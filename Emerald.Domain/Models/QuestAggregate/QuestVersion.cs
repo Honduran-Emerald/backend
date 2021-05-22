@@ -24,6 +24,8 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
 
         public QuestVersion(Location location, string title, string description, string image, long version)
         {
+            ModuleIds = new List<ObjectId>();
+
             Location = location;
             Title = title;
             Description = description;
@@ -36,6 +38,12 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
         private QuestVersion()
         {
             ModuleIds = new List<ObjectId>();
+            Location = new Location(0.0, 0.0);
+            Title = "Missing Title";
+            Description = "Missing Description";
+            Image = "";
+            Version = 0;
+            CreatedAt = DateTime.UtcNow;
         }
 
         public void ChangeFirstModule(Module module)
@@ -66,6 +74,16 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
             }
 
             ModuleIds.Remove(module.Id);
+        }
+
+        public void Publish()
+        {
+            if (Published)
+            {
+                throw new DomainException("Questversion already published");
+            }
+
+            Published = true;
         }
 
         public void ChangeTitle(string title)

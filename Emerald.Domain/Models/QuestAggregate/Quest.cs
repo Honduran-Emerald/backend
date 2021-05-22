@@ -10,14 +10,14 @@ namespace Emerald.Domain.Models.QuestAggregate
     public class Quest : Entity
     {
         public ObjectId OwnerUserId { get; protected set; }
-
         public List<QuestVersion> QuestVersions { get; private set; }
-        public ObjectId StableQuestVersion { get; private set; }
 
-        public Quest(User user)
+        public Quest(User user, Location location, string title, string description, string image)
             : this()
         {
             OwnerUserId = user.Id;
+            QuestVersions.Add(new QuestVersion(
+                location, title, description, image, 1));
         }
 
         private Quest()
@@ -25,46 +25,54 @@ namespace Emerald.Domain.Models.QuestAggregate
             QuestVersions = new List<QuestVersion>();
         }
 
-        public void SetStableQuestVersion(QuestVersion questVersion)
+        public QuestVersion GetQuestVersion(long version)
         {
-            if (QuestVersions.Any(q => q.Id == questVersion.Id) == false)
+            QuestVersion? questVersion = QuestVersions
+                .Where(q => q.Version == version)
+                .FirstOrDefault();
+
+            if (questVersion == null)
             {
-                throw new DomainException("Stable quest version has to be already a quest version");
+                throw new DomainException("Questversion not found by version");
             }
 
-            if (StableQuestVersion == questVersion.Id)
-            {
-                throw new DomainException("Quest version already set as stable");
-            }
-
-            StableQuestVersion = questVersion.Id;
+            return questVersion;
         }
 
-        public QuestVersion GetStableQuestVersion()
+        public QuestVersion? GetStableQuestVersion()
         {
-            if (QuestVersions.Count == 0)
-            {
-                throw new DomainException("Quest has no active version");
-            }
-
             return QuestVersions
-                .Where(v => v.Id == StableQuestVersion)
+                .Where(q => q.Published)
+                .OrderByDescending(q => q.Version)
+                .FirstOrDefault();
+        }
+
+        public QuestVersion GetDevelopmentQuestVersion()
+        {
+            return QuestVersions
+                .OrderByDescending(q => q.Version)
                 .First();
         }
 
-        public void AddQuestVersion(QuestVersion questVersion)
+        public void RemoveQuestVersion(QuestVersion questVersion)
         {
-            if (QuestVersions.Any(q => q.Id == questVersion.Id))
-            {
-                throw new DomainException("Can not add already existing questversion");
-            }
+            QuestVersions.Remove(questVersion);
+        }
 
-            QuestVersions.Add(questVersion);
+        public QuestVersion PublishQuestVersion()
+        {
+            QuestVersion questVersion = GetDevelopmentQuestVersion();
+            questVersion.Publish();
 
-            if (QuestVersions.Count == 1)
-            {
-                SetStableQuestVersion(questVersion);
-            }
+            QuestVersion newQuestVersion = new QuestVersion(
+                questVersion.Location,
+                questVersion.Title,
+                questVersion.Description,
+                questVersion.Image,
+                questVersion.Version + 1);
+
+            QuestVersions.Add(newQuestVersion);
+            return newQuestVersion;
         }
     }
 }
