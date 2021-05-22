@@ -6,6 +6,7 @@ using Emerald.Infrastructure.Exceptions;
 using MediatR;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -64,6 +65,16 @@ namespace Emerald.Infrastructure.Repositories
             }
 
             return modules;
+        }
+
+        public async Task Remove(Module module)
+        {
+            await collection.DeleteOneAsync(m => m.Id == module.Id);
+        }
+
+        public IMongoQueryable<Module> GetQueryable()
+        {
+            return collection.AsQueryable();
         }
     }
 }

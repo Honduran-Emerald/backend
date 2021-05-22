@@ -1,8 +1,10 @@
-﻿using Emerald.Domain.Models.TrackerAggregate;
+﻿using Emerald.Domain.Models.QuestAggregate;
+using Emerald.Domain.Models.TrackerAggregate;
 using Emerald.Infrastructure.Exceptions;
 using MediatR;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using System.Threading.Tasks;
 
 namespace Emerald.Infrastructure.Repositories
@@ -41,6 +43,18 @@ namespace Emerald.Infrastructure.Repositories
             }
 
             return tracker;
+        }
+
+        public async Task<bool> HasAnyTrackerForQuest(Quest quest)
+        {
+            return await collection
+                .Find(t => t.QuestId == quest.Id)
+                .AnyAsync();
+        }
+
+        public IMongoQueryable<Tracker> GetQueryable()
+        {
+            return collection.AsQueryable();
         }
     }
 }

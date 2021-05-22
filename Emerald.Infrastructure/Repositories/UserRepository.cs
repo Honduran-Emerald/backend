@@ -4,7 +4,9 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Emerald.Infrastructure.Repositories
@@ -58,6 +60,16 @@ namespace Emerald.Infrastructure.Repositories
         public async Task<User> GetByEmail(string email)
         {
             return await userManager.FindByEmailAsync(email);
+        }
+
+        public IMongoQueryable<User> GetQueryable()
+        {
+            return users.AsQueryable();
+        }
+
+        public async Task<User> Get(ClaimsPrincipal claim)
+        {
+            return await userManager.GetUserAsync(claim);
         }
     }
 }

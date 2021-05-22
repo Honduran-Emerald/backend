@@ -4,6 +4,7 @@ using Emerald.Infrastructure.Exceptions;
 using MediatR;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -58,6 +59,21 @@ namespace Emerald.Infrastructure.Repositories
         {
             await collection.ReplaceOneAsync(o => o.Id == component.Id, component);
             await mediator.PublishEntity(component);
+        }
+
+        public async Task Remove(Component component)
+        {
+            await collection.DeleteOneAsync(c => c.Id == component.Id);
+        }
+
+        public async Task RemoveAll(List<ObjectId> components)
+        {
+            await collection.DeleteManyAsync(f => components.Contains(f.Id));
+        }
+
+        public IMongoQueryable<Component> GetQueryable()
+        {
+            return collection.AsQueryable();
         }
     }
 }

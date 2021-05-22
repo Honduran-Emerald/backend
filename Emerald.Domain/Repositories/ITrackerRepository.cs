@@ -1,5 +1,7 @@
-﻿using Emerald.Domain.Models.TrackerAggregate;
+﻿using Emerald.Domain.Models.QuestAggregate;
+using Emerald.Domain.Models.TrackerAggregate;
 using MongoDB.Bson;
+using MongoDB.Driver.Linq;
 using System.Threading.Tasks;
 
 namespace Emerald.Infrastructure.Repositories
@@ -9,6 +11,8 @@ namespace Emerald.Infrastructure.Repositories
         Task Add(Tracker tracker);
         Task Update(Tracker tracker);
 
+        Task<bool> HasAnyTrackerForQuest(Quest quest);
         Task<Tracker> Get(ObjectId id);
+        IMongoQueryable<Tracker> GetQueryable();
     }
 }
