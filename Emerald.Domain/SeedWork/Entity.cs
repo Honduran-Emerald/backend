@@ -15,6 +15,12 @@ namespace Vitamin.Value.Domain.SeedWork
         public Entity()
         {
             Id = ObjectId.GenerateNewId();
+            domainEvents = new List<INotification>();
+        }
+
+        public void GenerateNewIdentifier()
+        {
+            Id = ObjectId.GenerateNewId();
         }
 
         public override bool Equals(object obj)
@@ -32,9 +38,6 @@ namespace Vitamin.Value.Domain.SeedWork
 
         protected void AddDomainEvent(INotification domainEvent)
         {
-            if (domainEvents == null)
-                domainEvents = new List<INotification>();
-
             domainEvents.Add(domainEvent);
         }
 
