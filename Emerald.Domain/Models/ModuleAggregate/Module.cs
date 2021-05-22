@@ -53,5 +53,10 @@ namespace Emerald.Domain.Models.ModuleAggregate
 
             ComponentIds.Remove(component.Id);
         }
+
+        public void ClearComponents()
+        {
+            ComponentIds.Clear();
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Emerald.Domain.Models.QuestVersionAggregate;
+﻿using Emerald.Domain.Models.QuestAggregate;
+using Emerald.Domain.Models.QuestVersionAggregate;
 using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
@@ -9,19 +10,32 @@ namespace Emerald.Domain.Models.TrackerAggregate
     public class Tracker : Entity
     {
         public ObjectId UserId { get; private set; }
-        public ObjectId QuestVersionId { get; private set; }
+
+        public ObjectId QuestId { get; private set; }
+        public long QuestVersion { get; private set; }
+
         public VoteType Vote { get; private set; }
         public DateTime CreatedAt { get; private set; }
 
         public List<TrackerNode> Path { get; private set; }
         public bool Finished { get; private set; }
 
-        public Tracker(ObjectId userId, QuestVersion questVersion)
+        public Tracker(ObjectId userId, Quest quest)
             : this()
         {
+            QuestVersion? questVersion = quest.GetStableQuestVersion();
+
+            if (questVersion == null)
+            {
+                throw new DomainException("Unable to create tracker for unpublished quest");
+            }
+
+            QuestId = quest.Id;
+            QuestVersion = questVersion.Version;
+
             UserId = userId;
-            QuestVersionId = questVersion.Id;
             CreatedAt = DateTime.UtcNow;
+            Finished = false;
         }
 
         private Tracker()
