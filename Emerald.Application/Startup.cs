@@ -46,14 +46,16 @@ namespace Emerald.Application
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<QuestPlayService>();
+            services.AddScoped<QuestPlayService>()
+                    .AddScoped<QuestCreateService>();
 
             services.AddScoped<ComponentModelFactory>()
                     .AddScoped<MementoModelFactory>()
                     .AddScoped<ModuleModelFactory>()
                     .AddScoped<UserModelFactory>()
                     .AddScoped<QuestModelFactory>()
-                    .AddScoped<ResponseEventModelFactory>();
+                    .AddScoped<ResponseEventModelFactory>()
+                    .AddScoped<TrackerModelFactory>();
 
             services.AddScoped<IUserRepository, UserRepository>()
                     .AddScoped<IModuleRepository, ModuleRepository>()
