@@ -2,7 +2,10 @@
 using Emerald.Application.Models.Response.Quest;
 using Emerald.Application.Services.Factories;
 using Emerald.Domain.Models.ModuleAggregate;
+using Emerald.Domain.Models.QuestAggregate;
+using Emerald.Domain.Models.QuestVersionAggregate;
 using Emerald.Domain.Repositories;
+using Emerald.Domain.Services;
 using Emerald.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
@@ -17,14 +20,21 @@ namespace Emerald.Application.Controllers.Quest
     public class QuestCreateController : ControllerBase
     {
         private IQuestRepository questRepository;
+        private IComponentRepository componentRepository;
+        private ITrackerRepository trackerRepository;
         private IModuleRepository moduleRepository;
+
+        private QuestCreateService questCreateService;
         private QuestModelFactory questModelFactory;
         private ModuleModelFactory moduleModelFactory;
 
-        public QuestCreateController(IQuestRepository questRepository, IModuleRepository moduleRepository, QuestModelFactory questModelFactory, ModuleModelFactory moduleModelFactory)
+        public QuestCreateController(IQuestRepository questRepository, IComponentRepository componentRepository, ITrackerRepository trackerRepository, IModuleRepository moduleRepository, QuestCreateService questCreateService, QuestModelFactory questModelFactory, ModuleModelFactory moduleModelFactory)
         {
             this.questRepository = questRepository;
+            this.componentRepository = componentRepository;
+            this.trackerRepository = trackerRepository;
             this.moduleRepository = moduleRepository;
+            this.questCreateService = questCreateService;
             this.questModelFactory = questModelFactory;
             this.moduleModelFactory = moduleModelFactory;
         }
@@ -36,12 +46,13 @@ namespace Emerald.Application.Controllers.Quest
             try
             {
                 Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(questId);
+                QuestVersion questVersion = quest.GetDevelopmentQuestVersion();
 
                 return Ok(new QuestCreateQueryResponse
                 {
-                    Modules = await moduleModelFactory.Create(await moduleRepository.GetForQuest(quest.GetStableQuestVersion())),
+                    Modules = await moduleModelFactory.Create(await moduleRepository.GetForQuest(questVersion)),
                     Quest = await questModelFactory.Create(quest),
-                    FirstModuleId = quest.GetStableQuestVersion().FirstModule.ToString()
+                    FirstModuleId = questVersion.FirstModule.ToString()
                 });
             }
             catch (DomainException exception)
@@ -51,6 +62,29 @@ namespace Emerald.Application.Controllers.Quest
                     Message = exception.Message
                 });
             }
+        }
+
+        [HttpPost("publish")]
+        public async Task<IActionResult> Publish(
+            [FromBody] ObjectId questId)
+        {
+            Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(questId);
+            QuestVersion? stableQuestVersion = quest.GetStableQuestVersion();
+
+            if (stableQuestVersion != null && 
+                await trackerRepository.HasAnyTrackerForQuest(quest) == false)
+            {
+                foreach (Module module in await moduleRepository.GetForQuest(stableQuestVersion))
+                {
+                    await componentRepository.RemoveAll(module.ComponentIds);
+                    await moduleRepository.Remove(module);
+                }
+
+                quest.RemoveQuestVersion(stableQuestVersion);
+            }
+
+            await questCreateService.Publish(quest);
+            return Ok();
         }
     }
 }

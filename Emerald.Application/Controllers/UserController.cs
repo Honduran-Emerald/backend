@@ -28,11 +28,9 @@ namespace Emerald.Application.Controllers
         [HttpGet("me")]
         public async Task<ActionResult<UserMeResponse>> Me()
         {
-            return Ok(new UserMeResponse
-            {
-                User = await userModelFactory.Create(
-                    await userManager.GetUserAsync(User))
-            });
+            return Ok(new UserMeResponse(
+                await userModelFactory.Create(
+                    await userManager.GetUserAsync(User))));
         }
     }
 }
