@@ -26,23 +26,23 @@ namespace Emerald.Application.Services.Factories
             QuestViewModel viewModel = await questStash.Get(quest.Id);
 
             return new QuestModel(
-                quest.Id.ToString(),
-                quest.OwnerUserId,
+                id: quest.Id.ToString(),
+                ownerId: quest.OwnerUserId,
 
-                new LocationModel(
+                location: new LocationModel(
                     version.Location.Longitude,
                     version.Location.Latitude),
 
-                version.Title,
-                version.Description,
-                version.Image,
-                version.Version,
+                title: version.Title,
+                description: version.Description,
+                image: version.Image,
+                version: version.Version,
 
-                version.CreatedAt,
+                creationTime: version.CreatedAt,
 
-                viewModel.Votes,
-                viewModel.Plays,
-                viewModel.Finishs);
+                votes: viewModel.Votes,
+                plays: viewModel.Plays,
+                finishs: viewModel.Finishs);
         }
     }
 }
