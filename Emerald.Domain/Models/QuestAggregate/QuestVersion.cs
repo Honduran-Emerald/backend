@@ -11,8 +11,6 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
 {
     public class QuestVersion
     {
-        public ObjectId Id { get; private set; }
-
         public int Version { get; private set; }
         public bool Public { get; private set; }
 
