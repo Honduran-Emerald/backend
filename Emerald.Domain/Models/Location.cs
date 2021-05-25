@@ -18,7 +18,7 @@ namespace Emerald.Domain.Models
             => new GeoCoordinate(Latitude, Longitude).GetDistanceTo(
                new GeoCoordinate(location.Latitude, location.Longitude));
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
             => obj is Location location
             && location.Distance(this) < 5;
     }

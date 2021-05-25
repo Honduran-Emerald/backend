@@ -8,7 +8,7 @@ namespace Emerald.Domain.Models.TrackerAggregate
     {
         public ObjectId ModuleId { get; private set; }
         public DateTime CreatedAt { get; private set; }
-        public TrackerNodeMemento Memento { get; private set; }
+        public TrackerNodeMemento? Memento { get; private set; }
 
         public TrackerNode(ObjectId moduleId)
         {
@@ -22,7 +22,7 @@ namespace Emerald.Domain.Models.TrackerAggregate
         {
         }
 
-        public void UpdateMemento(TrackerNodeMemento memento)
+        public void UpdateMemento(TrackerNodeMemento? memento)
         {
             Memento = memento;
         }

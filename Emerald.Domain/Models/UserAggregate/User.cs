@@ -17,7 +17,7 @@ namespace Emerald.Domain.Models.UserAggregate
         public List<ObjectId> TrackerIds { get; private set; }
         public ObjectId? ActiveTrackerId { get; private set; }
 
-        public string Image { get; set; }
+        public string? Image { get; set; }
         public string SyncToken { get; private set; }
 
         public long Experience { get; private set; }
@@ -31,6 +31,7 @@ namespace Emerald.Domain.Models.UserAggregate
             QuestIds = new List<ObjectId>();
             TrackerIds = new List<ObjectId>();
             domainEvents = new List<INotification>();
+            SyncToken = Utility.RandomString(8);
         }
 
         public User(string userName) : base(userName)
@@ -38,6 +39,7 @@ namespace Emerald.Domain.Models.UserAggregate
             QuestIds = new List<ObjectId>();
             TrackerIds = new List<ObjectId>();
             domainEvents = new List<INotification>();
+            SyncToken = Utility.RandomString(8);
         }
 
         public void SetActiveTracker(Tracker tracker)
