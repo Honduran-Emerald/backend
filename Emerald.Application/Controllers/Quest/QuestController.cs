@@ -29,18 +29,21 @@ namespace Emerald.Application.Controllers.Quest
             this.questModelFactory = questModelFactory;
         }
 
+        /// <summary>
+        /// Query quests based on specified settings without tracker information
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpGet("query")]
         public async Task<ActionResult<QuestQueryResponse>> Query(
             [FromQuery] int offset)
         {
-            return Ok(new QuestQueryResponse
-            {
-                Quests = await questModelFactory.Create(await questRepository.GetQueryable()
+            return Ok(new QuestQueryResponse(
+                quests: await questModelFactory.Create(await questRepository.GetQueryable()
                     .Skip(offset)
                     .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
-                    .ToListAsync())
-            });
+                    .ToListAsync())));
         }
     }
 }

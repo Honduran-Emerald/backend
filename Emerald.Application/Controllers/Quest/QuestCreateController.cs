@@ -39,6 +39,11 @@ namespace Emerald.Application.Controllers.Quest
             this.moduleModelFactory = moduleModelFactory;
         }
 
+        /// <summary>
+        /// Queries all information about a single by the user created quest
+        /// </summary>
+        /// <param name="questId"></param>
+        /// <returns></returns>
         [HttpGet("query")]
         public async Task<ActionResult<QuestCreateQueryResponse>> Query(
             [FromQuery] ObjectId questId)
@@ -64,6 +69,11 @@ namespace Emerald.Application.Controllers.Quest
             }
         }
 
+        /// <summary>
+        /// Publish the development version of a quest to make it stable
+        /// </summary>
+        /// <param name="questId"></param>
+        /// <returns></returns>
         [HttpPost("publish")]
         public async Task<IActionResult> Publish(
             [FromBody] ObjectId questId)

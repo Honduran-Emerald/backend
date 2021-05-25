@@ -35,6 +35,7 @@ namespace Emerald.Application.Controllers
             [FromQuery] string description,
             [FromQuery] string imageName)
         {
+            /*
             User user = await userManager.GetUserAsync(User);
             Domain.Models.QuestAggregate.Quest quest = new Domain.Models.QuestAggregate.Quest(user);
             quest.AddQuestVersion(new Domain.Models.QuestVersionAggregate.QuestVersion(
@@ -46,6 +47,7 @@ namespace Emerald.Application.Controllers
                 imageName,
                 1));
             await questRepository.Add(quest);
+            */
 
             return Ok();
         }

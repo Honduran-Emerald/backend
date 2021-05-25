@@ -41,6 +41,11 @@ namespace Emerald.Application.Controllers
             this.questPlayService = questPlayService;
         }
 
+        /// <summary>
+        /// Query based on specified settings already tracked quests
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpGet("query")]
         public async Task<ActionResult<QuestPlayQueryResponse>> Query(
             [FromForm] QuestPlayQueryRequest request)
@@ -60,6 +65,10 @@ namespace Emerald.Application.Controllers
             ));
         }
 
+        /// <summary>
+        /// Query trackernodes with all module and memento information for a single playing quest
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("querytrackernodes")]
         public async Task<IActionResult> QueryTrackerNodes()
         {
