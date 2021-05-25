@@ -12,18 +12,19 @@ namespace Vitamin.Value.Domain.SeedWork
         public ObjectId Id { get; set; }
         public int Test { get; }
 
+        public Entity(ObjectId id)
+        {
+            Id = id;
+            domainEvents = new List<INotification>();
+        }
+
         public Entity()
         {
             Id = ObjectId.GenerateNewId();
             domainEvents = new List<INotification>();
         }
 
-        public void GenerateNewIdentifier()
-        {
-            Id = ObjectId.GenerateNewId();
-        }
-
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
             => obj is Entity entity
             && Id.Equals(entity.Id);
 
