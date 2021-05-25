@@ -1,6 +1,9 @@
 ﻿using Emerald.Application.Models;
+using Emerald.Domain.Models;
+using Emerald.Domain.Models.PrototypeAggregate;
 using Emerald.Domain.Models.QuestAggregate;
 using Emerald.Domain.Models.UserAggregate;
+using Emerald.Domain.Repositories;
 using Emerald.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,11 +21,13 @@ namespace Emerald.Application.Controllers
     [ApiController]
     public class TestController : ControllerBase
     {
+        private IQuestPrototypeRepository questPrototypeRepository;
         private IQuestRepository questRepository;
         private UserManager<User> userManager;
 
-        public TestController(IQuestRepository questRepository, UserManager<User> userManager)
+        public TestController(IQuestPrototypeRepository questPrototypeRepository, IQuestRepository questRepository, UserManager<User> userManager)
         {
+            this.questPrototypeRepository = questPrototypeRepository;
             this.questRepository = questRepository;
             this.userManager = userManager;
         }
@@ -33,10 +38,26 @@ namespace Emerald.Application.Controllers
             [FromQuery] LocationModel location,
             [FromQuery] string title,
             [FromQuery] string description,
-            [FromQuery] string imageName)
+            [FromQuery] List<string> tags,
+            [FromQuery] string imageId)
         {
-            /*
             User user = await userManager.GetUserAsync(User);
+            QuestPrototype questPrototype = new QuestPrototype(
+                title,
+                description,
+                tags,
+                new Location(
+                    location.Longitude,
+                    location.Latitude),
+                imageId);
+
+            Domain.Models.QuestAggregate.Quest quest = new Domain.Models.QuestAggregate.Quest(
+                user,
+                questPrototype);
+
+            await questPrototypeRepository.Add(questPrototype);
+            await questRepository.Add(quest);
+            /*
             Domain.Models.QuestAggregate.Quest quest = new Domain.Models.QuestAggregate.Quest(user);
             quest.AddQuestVersion(new Domain.Models.QuestVersionAggregate.QuestVersion(
                 new Domain.Models.Location(
@@ -49,7 +70,7 @@ namespace Emerald.Application.Controllers
             await questRepository.Add(quest);
             */
 
-            return Ok();
+            return Ok(quest.Id);
         }
     }
 }
