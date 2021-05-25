@@ -9,7 +9,26 @@ namespace Emerald.Application.Services.Factories
     {
         public async Task<ComponentModel> Create(Component component)
         {
-            throw new Exception("Got invalid Component");
+            switch (component)
+            {
+                case TextComponent textComponent:
+                    return new TextComponentModel(
+                        component.Id.ToString(), 
+                        textComponent.Text);
+
+                case ImageComponent imageComponent:
+                    return new ImageComponentModel(
+                        component.Id.ToString(),
+                        imageComponent.ImageId);
+
+                case AnswerComponent answerComponent:
+                    return new AnswerComponentModel(
+                        component.Id.ToString(),
+                        answerComponent.Text);
+
+                default:
+                    throw new Exception("Got invalid component type");
+            }
         }
     }
 }

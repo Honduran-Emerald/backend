@@ -3,6 +3,7 @@
     public enum ComponentType
     {
         Text,
-        Image
+        Image,
+        Answer
     }
 }

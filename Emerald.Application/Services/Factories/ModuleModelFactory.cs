@@ -31,14 +31,26 @@ namespace Emerald.Application.Services.Factories
             {
                 case ChoiceModule choiceModule:
                     return new ChoiceModuleModel(
-                        choiceModule.Id.ToString(), 
+                        module.Id.ToString(), 
                         module.Objective,
                         Enumerable.Range(0, choiceModule.Choices.Count)
-                            .Select(i => new ChoiceModuleModel.Choice(
-                                moduleId: choiceModule.Choices[i].ModuleId.GetHashCode(),
+                            .Select(i => new ChoiceModuleModel.ChoiceModuleModelChoice(
                                 text: choiceModule.Choices[i].Text))
                             .ToList(),
                         componentModels);
+
+                case StoryModule storyModule:
+                    return new StoryModuleModel(
+                        module.Id.ToString(),
+                        module.Objective,
+                        componentModels);
+
+                case EndingModule endingModule:
+                    return new EndingModuleModel(
+                        module.Id.ToString(),
+                        module.Objective,
+                        componentModels,
+                        endingModule.EndingFactor);
             }
 
             throw new Exception("Got invalid Module");

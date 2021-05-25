@@ -1,5 +1,6 @@
 ﻿using Emerald.Application.Models.Quest;
 using Emerald.Application.Models.Quest.Module;
+using Emerald.Domain.Models.PrototypeAggregate;
 using Emerald.Domain.Models.QuestAggregate;
 using System;
 using System.Collections.Generic;
@@ -10,15 +11,11 @@ namespace Emerald.Application.Models.Response.Quest
 {
     public class QuestCreateQueryResponse
     {
-        public QuestModel Quest { get; set; }
-        public List<ModuleModel> Modules { get; set; }
-        public string FirstModuleId { get; set; }
+        QuestPrototype QuestPrototype { get; set; }
 
-        public QuestCreateQueryResponse()
+        public QuestCreateQueryResponse(QuestPrototype questPrototype)
         {
-            Quest = default!;
-            Modules = default!;
-            FirstModuleId = default!;
+            QuestPrototype = questPrototype;
         }
     }
 }

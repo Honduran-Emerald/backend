@@ -4,7 +4,7 @@
     {
         public string Text { get; set; }
 
-        public TextComponentModel(string text) : base(text, ComponentType.Text)
+        public TextComponentModel(string componentId, string text) : base(componentId, ComponentType.Text)
         {
             Text = text;
         }

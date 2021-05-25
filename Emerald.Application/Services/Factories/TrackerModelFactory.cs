@@ -23,7 +23,7 @@ namespace Emerald.Application.Services.Factories
         {
             Quest quest = await questRepository.Get(source.QuestId);
             QuestVersion questVersion = quest.GetQuestVersion(source.QuestVersion);
-            QuestVersion? stableQuestVersion = quest.GetStableQuestVersion();
+            QuestVersion? stableQuestVersion = quest.GetCurrentQuestVersion();
 
             if (stableQuestVersion == null)
             {

@@ -3,6 +3,7 @@
     public enum ResponseEventType
     {
         ModuleFinish,
-        Experience
+        Experience,
+        QuestFinish
     }
 }

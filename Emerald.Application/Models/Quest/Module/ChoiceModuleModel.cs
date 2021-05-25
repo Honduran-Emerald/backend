@@ -6,18 +6,10 @@ namespace Emerald.Application.Models.Quest.Module
 {
     public class ChoiceModuleModel : ModuleModel
     {
-        public List<Choice> Choices { get; set; }
+        public List<ChoiceModuleModelChoice> Choices { get; set; }
 
-        public ChoiceModuleModel(
-            string id,
-            string objective,
-            List<Choice> choices, 
-            List<ComponentModel> components)
-            : base(id, objective, ModuleType.Choice, 
-                  choices
-                    .Select(c => c.ModuleId)
-                    .ToList(), 
-                  components)
+        public ChoiceModuleModel(string id, string objective, List<ChoiceModuleModelChoice> choices, List<ComponentModel> components)
+            : base(id, objective, ModuleType.Choice, components)
         {
             Choices = choices;
         }
@@ -27,15 +19,13 @@ namespace Emerald.Application.Models.Quest.Module
             Choices = default!;
         }
 
-        public class Choice
+        public class ChoiceModuleModelChoice
         {
             public string Text { get; }
-            public long ModuleId { get; }
 
-            public Choice(string text, long moduleId)
+            public ChoiceModuleModelChoice(string text)
             {
                 Text = text;
-                ModuleId = moduleId;
             }
         }
     }

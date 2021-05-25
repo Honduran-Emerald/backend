@@ -3,6 +3,8 @@
     public enum ModuleType
     {
         Choice,
-        Position
+        Location,
+        Story,
+        Ending
     }
 }

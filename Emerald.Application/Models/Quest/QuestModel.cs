@@ -14,50 +14,73 @@ namespace Emerald.Application.Models.Quest
         public string Id { get; set; }
         public ObjectId OwnerId { get; set; }
 
+        public string OwnerName { get; set; }
+        public string? OwnerImageId { get; set; }
+
+        public bool Public { get; set; }
+        public int Version { get; set; }
+
         public string LocationName { get; set; }
-        public LocationModel Location { get; set; }
 
         public string Title { get; set; }
         public string Description { get; set; }
-        public string Image { get; set; }
-        public long Version { get; set; }
+        public List<string> Tags { get; set; }
+
+        public LocationModel Location { get; set; }
+        public string ImageId { get; set; }
+
+        public string ProfileImageId { get; set; }
+        public string ProfileName { get; set; }
 
         public DateTime CreationTime { get; set; }
 
         public int Votes { get; set; }
         public int Plays { get; set; }
-        public int Finishs { get; set; }
+        public int Finishes { get; set; }
 
-        public QuestModel(string id, ObjectId ownerId, string locationName, LocationModel location, string title, string description, string image, long version, DateTime creationTime, int votes, int plays, int finishs)
+        public QuestModel(string id, ObjectId ownerId, string ownerName, string? ownerImageId, bool @public, int version, string locationName, string title, string description, List<string> tags, LocationModel location, string imageId, string profileImageId, string profileName, DateTime creationTime, int votes, int plays, int finishes)
         {
             Id = id;
             OwnerId = ownerId;
+            OwnerName = ownerName;
+            OwnerImageId = ownerImageId;
+            Public = @public;
+            Version = version;
             LocationName = locationName;
-            Location = location;
             Title = title;
             Description = description;
-            Image = image;
-            Version = version;
+            Tags = tags;
+            Location = location;
+            ImageId = imageId;
+            ProfileImageId = profileImageId;
+            ProfileName = profileName;
             CreationTime = creationTime;
             Votes = votes;
             Plays = plays;
-            Finishs = finishs;
+            Finishes = finishes;
         }
 
         private QuestModel()
         {
             Id = default!;
             OwnerId = default!;
+            OwnerId = default!;
+            OwnerName = default!;
+            OwnerImageId = default!;
+            Public = default!;
+            Version = default!;
             LocationName = default!;
-            Location = default!;
             Title = default!;
             Description = default!;
-            Image = default!;
-            Version = default!;
+            Tags = default!;
+            Location = default!;
+            ImageId = default!;
+            ProfileImageId = default!;
+            ProfileName = default!;
             CreationTime = default!;
             Votes = default!;
             Plays = default!;
-            Finishs = default!;
+            Finishes = default!;
         }
     }
 }

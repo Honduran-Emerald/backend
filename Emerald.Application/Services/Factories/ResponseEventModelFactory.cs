@@ -45,6 +45,11 @@ namespace Emerald.Application.Services
                                 await moduleRepository.Get(moduleFinishEvent.ModuleId))));
 
                         break;
+                    case QuestFinishResponseEvent questFinishResponseEvent:
+                        responseEvents.Add(new QuestFinishResponseEventModel(
+                            questFinishResponseEvent.FinishFactor));
+
+                        break;
                     default:
                         throw new Exception($"Got invalid ResponseEvent ({responseEvent.GetType().Name})");
                 }
