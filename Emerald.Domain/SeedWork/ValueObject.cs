@@ -2,7 +2,7 @@
 {
     public abstract class ValueObject
     {
-        public override abstract bool Equals(object obj);
+        public override abstract bool Equals(object? obj);
 
         public static bool operator ==(ValueObject left, ValueObject right)
             => ReferenceEquals(left, null) || ReferenceEquals(right, null)
