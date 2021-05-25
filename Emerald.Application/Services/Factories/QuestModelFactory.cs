@@ -42,7 +42,7 @@ namespace Emerald.Application.Services.Factories
 
                 ownerId: quest.OwnerUserId,
                 ownerName: user.UserName,
-                ownerImageId: user.ImageId,
+                ownerImageId: user.Image,
 
                 @public: version.Public,
                 
