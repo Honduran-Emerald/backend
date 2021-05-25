@@ -11,7 +11,7 @@
 
         private TextComponent()
         {
-            Text = "";
+            Text = default!;
         }
     }
 }

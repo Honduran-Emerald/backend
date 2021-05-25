@@ -40,7 +40,7 @@ namespace Emerald.Infrastructure.ViewModelHandlers
         public async Task IncreaseFinish(ObjectId questId)
         {
             QuestViewModel model = await Get(questId);
-            ++model.Finishs;
+            ++model.Finishes;
             await Update(model);
         }
 

@@ -10,8 +10,7 @@ namespace Vitamin.Value.Domain.SeedWork
     public class Entity : IEntity
     {
         public ObjectId Id { get; set; }
-        public int Test { get; }
-
+        
         public Entity(ObjectId id)
         {
             Id = id;

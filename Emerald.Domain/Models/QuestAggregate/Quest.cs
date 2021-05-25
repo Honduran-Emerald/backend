@@ -43,14 +43,14 @@ namespace Emerald.Domain.Models.QuestAggregate
             return questVersion;
         }
 
-        public QuestVersion? GetPrivateQuestVersion()
+        public QuestVersion? GetCurrentPrivateQuestVersion()
         {
             return QuestVersions
                 .OrderByDescending(q => q.Version)
                 .FirstOrDefault();
         }
 
-        public QuestVersion? GetPublicQuestVersion()
+        public QuestVersion? GetCurrentQuestVersion()
         {
             return QuestVersions
                 .Where(q => q.Public)
@@ -66,10 +66,7 @@ namespace Emerald.Domain.Models.QuestAggregate
         public QuestVersion PublishQuestVersion(QuestPrototype questPrototype)
         {
             QuestVersion newQuestVersion = new QuestVersion(
-                questPrototype.Location,
-                questPrototype.Title,
-                questPrototype.Description,
-                questPrototype.Image,
+                questPrototype,
                 GetNewestQuestVersion() + 1);
 
             QuestVersions.Add(newQuestVersion);

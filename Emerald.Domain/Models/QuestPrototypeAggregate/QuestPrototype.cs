@@ -11,31 +11,46 @@ namespace Emerald.Domain.Models.PrototypeAggregate
 {
     public class QuestPrototype : Entity
     {
-        public Location Location { get; }
         public string Title { get; }
         public string Description { get; }
-        public string Image { get; }
+        public List<string> Tags { get; }
 
-        public List<ModulePrototype> Modules { get; }
+        public Location Location { get; }
+        public string ImageId { get; }
+        public string ApproximateTime { get; }
+
+        public string ProfileImageId { get; }
+        public string ProfileName { get; }
+
         public int FirstModuleId { get; }
+        public List<ModulePrototype> Modules { get; }
 
-        public QuestPrototype(Location location, string title, string description, string image)
+        public QuestPrototype(string title, string description, List<string> tags, Location location, string imageId, string approximateTime, string profileImageId, string profileName, int firstModuleId)
         {
-            Location = location;
             Title = title;
             Description = description;
-            Image = image;
-            Modules = new List<ModulePrototype>();
+            Tags = tags;
+            Location = location;
+            ImageId = imageId;
+            ApproximateTime = approximateTime;
+            ProfileImageId = profileImageId;
+            ProfileName = profileName;
+            FirstModuleId = firstModuleId;
+            Modules = default!;
         }
 
         private QuestPrototype()
         {
-            Location = default!;
             Title = default!;
             Description = default!;
-            Image = default!;
-            Modules = default!;
+            Tags = default!;
+            Location = default!;
+            ImageId = default!;
+            ApproximateTime = default!;
+            ProfileImageId = default!;
+            ProfileName = default!;
             FirstModuleId = default!;
+            Modules = default!;
         }
     }
 }

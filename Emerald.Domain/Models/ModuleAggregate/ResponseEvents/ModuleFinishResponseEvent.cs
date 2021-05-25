@@ -15,9 +15,6 @@ namespace Emerald.Domain.Models.ModuleAggregate
         }
 
         public INotification ToDomainEvent(ObjectId userId, ObjectId trackerId)
-        {
-            return new QuestResponseDomainEvent<ModuleFinishResponseEvent>(
-                userId, trackerId, this);
-        }
+            => new QuestResponseDomainEvent<ModuleFinishResponseEvent>(userId, trackerId, this);
     }
 }

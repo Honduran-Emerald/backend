@@ -7,7 +7,8 @@ namespace Emerald.Domain.Models.ComponentAggregate
     [BsonDiscriminator(RootClass = true)]
     [BsonKnownTypes(
         typeof(TextComponent),
-        typeof(ImageComponent))]
+        typeof(ImageComponent),
+        typeof(AnswerComponent))]
     public class Component : Entity
     {
     }

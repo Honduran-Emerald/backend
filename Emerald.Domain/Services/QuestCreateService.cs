@@ -36,6 +36,8 @@ namespace Emerald.Domain.Services
             QuestVersion questVersion = quest.PublishQuestVersion(questPrototype);
             QuestPrototypeContext context = new QuestPrototypeContext(questPrototype);
 
+            List<ObjectId> moduleIds = new List<ObjectId>();
+
             foreach (ModulePrototype modulePrototype in questPrototype.Modules)
             {
                 Module module = modulePrototype.ConvertToModule(context);
@@ -48,10 +50,13 @@ namespace Emerald.Domain.Services
                     await componentRepository.Add(component);
                 }
 
-                questVersion.AddModule(module);
+                moduleIds.Add(module.Id);
                 await moduleRepository.Add(module);
             }
 
+            questVersion.PlaceModules(
+                moduleIds, 
+                context.ConvertModuleId(questPrototype.FirstModuleId));
             await questRepository.Update(quest);
         }
     }

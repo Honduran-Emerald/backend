@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace Emerald.Domain.Models.QuestPrototypeAggregate.Components
 {
-    public class ImageComponentPrototype : ComponentPrototype
+    public class AnswerComponentPrototype : ComponentPrototype
     {
-        public string ImageId { get; }
+        public string Text { get; }
 
-        private ImageComponentPrototype()
+        private AnswerComponentPrototype()
         {
-            ImageId = default!;
+            Text = default!;
         }
 
         public override Component ConvertToComponent()
-            => new ImageComponent(ImageId);
+            => new TextComponent(Text);
     }
 }

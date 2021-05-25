@@ -12,7 +12,7 @@ namespace Emerald.Domain.Models.TrackerAggregate
         public ObjectId UserId { get; private set; }
 
         public ObjectId QuestId { get; private set; }
-        public long QuestVersion { get; private set; }
+        public int QuestVersion { get; private set; }
 
         public VoteType Vote { get; private set; }
         public DateTime CreatedAt { get; private set; }
@@ -64,6 +64,11 @@ namespace Emerald.Domain.Models.TrackerAggregate
             }
 
             Vote = VoteType.Down;
+        }
+
+        public void Finish()
+        {
+            Finished = true;
         }
     }
 }

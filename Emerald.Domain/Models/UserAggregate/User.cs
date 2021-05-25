@@ -17,7 +17,7 @@ namespace Emerald.Domain.Models.UserAggregate
         public List<ObjectId> TrackerIds { get; private set; }
         public ObjectId? ActiveTrackerId { get; private set; }
 
-        public string? Image { get; set; }
+        public string? ImageId { get; set; }
         public string SyncToken { get; private set; }
 
         public long Experience { get; private set; }

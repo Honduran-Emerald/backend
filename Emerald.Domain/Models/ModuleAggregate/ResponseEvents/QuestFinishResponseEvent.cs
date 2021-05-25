@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace Emerald.Domain.Models.ModuleAggregate.ResponseEvents
 {
-    public class ExperienceResponseEvent : IResponseEvent
+    public class QuestFinishResponseEvent : IResponseEvent
     {
-        public long Experience { get; set; }
+        public float FinishFactor { get; private set; }
 
-        public ExperienceResponseEvent(long experience)
+        public QuestFinishResponseEvent(float finishFactor)
         {
-            Experience = experience;
+            FinishFactor = finishFactor;
         }
 
         public INotification ToDomainEvent(ObjectId userId, ObjectId trackerId)
-            => new QuestResponseDomainEvent<ExperienceResponseEvent>(userId, trackerId, this);
+            => new QuestResponseDomainEvent<QuestFinishResponseEvent>(userId, trackerId, this);
     }
 }

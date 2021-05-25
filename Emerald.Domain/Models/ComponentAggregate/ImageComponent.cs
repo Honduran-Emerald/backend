@@ -2,11 +2,11 @@
 {
     public class ImageComponent : Component
     {
-        public string Filename { get; set; }
+        public string ImageId { get; set; }
 
-        public ImageComponent(string filename)
+        public ImageComponent(string imageId)
         {
-            Filename = filename;
+            ImageId = imageId;
         }
     }
 }

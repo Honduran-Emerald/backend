@@ -1,8 +1,10 @@
 ﻿using Emerald.Domain.Models.ModuleAggregate;
+using Emerald.Domain.Models.PrototypeAggregate;
 using Emerald.Domain.Models.QuestAggregate;
 using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.QuestVersionAggregate
@@ -10,81 +12,72 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
     public class QuestVersion
     {
         public int Version { get; private set; }
-
         public bool Public { get; private set; }
 
-        public Location Location { get; private set; }
-        public string Title { get; private set; }
-        public string Description { get; private set; }
-        public string Image { get; private set; }
+        public string Title { get; }
+        public string Description { get; }
+        public List<string> Tags { get; }
 
-        public DateTime CreatedAt { get; private set; }
+        public Location Location { get; }
+        public string ImageId { get; }
+        public string ApproximateTime { get; }
+
+        public string ProfileImageId { get; }
+        public string ProfileName { get; }
+
+        public DateTime CreationTime { get; private set; }
 
         public List<ObjectId> ModuleIds { get; private set; }
-        public ObjectId FirstModule { get; private set; }
+        public ObjectId FirstModuleId { get; private set; }
 
-        public QuestVersion(Location location, string title, string description, string image, int version)
+        public QuestVersion(QuestPrototype questPrototype, int version)
         {
-            ModuleIds = new List<ObjectId>();
-
-            Location = location;
-            Title = title;
-            Description = description;
-            Image = image;
             Version = version;
+            Public = false;
 
-            CreatedAt = DateTime.UtcNow;
+            Title = questPrototype.Title;
+            Description = questPrototype.Description;
+            Tags = questPrototype.Tags;
+
+            Location = questPrototype.Location;
+            ImageId = questPrototype.ImageId;
+            ApproximateTime = questPrototype.ApproximateTime;
+
+            ProfileImageId = questPrototype.ProfileImageId;
+            ProfileName = questPrototype.ProfileName;
+
+            CreationTime = DateTime.UtcNow;
+            ModuleIds = new List<ObjectId>();
         }
 
         private QuestVersion()
         {
-            ModuleIds = default!;
-            Location = default!;
+            Version = default!;
+
             Title = default!;
             Description = default!;
-            Image = default!;
-            Version = default!;
-            CreatedAt = default!;
+            Tags = default!;
+
+            Location = default!;
+            ImageId = default!;
+            ApproximateTime = default!;
+
+            ProfileImageId = default!;
+            ProfileName = default!;
+
+            ModuleIds = default!;
         }
 
-        public void ChangeFirstModule(Module module)
+        public void PlaceModules(List<ObjectId> moduleIds, ObjectId firstModuleId)
         {
-            if (ModuleIds.Contains(module.Id) == false)
+            if (moduleIds.Contains(firstModuleId) == false)
             {
-                throw new DomainException("First module has to be already in all modules");
+                throw new DomainException("First moduleid missing in modules");
             }
 
-            FirstModule = module.Id;
-        }
-
-        public void AddModule(Module module)
-        {
-            if (ModuleIds.Contains(module.Id))
-            {
-                throw new DomainException("Can not add already existing module");
-            }
-
-            ModuleIds.Add(module.Id);
-        }
-
-        public void RemoveModule(Module module)
-        {
-            if (ModuleIds.Contains(module.Id) == false)
-            {
-                throw new DomainException("Can not remove missing module");
-            }
-
-            ModuleIds.Remove(module.Id);
-        }
-
-        public void ChangeTitle(string title)
-        {
-            Title = title;
-        }
-
-        public void ChangeDescription(string description)
-        {
-            Description = description;
+            ModuleIds.Clear();
+            ModuleIds.AddRange(moduleIds);
+            ModuleIds.Add(firstModuleId);
         }
     }
 }
