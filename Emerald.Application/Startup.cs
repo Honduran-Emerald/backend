@@ -61,7 +61,8 @@ namespace Emerald.Application
                     .AddScoped<IModuleRepository, ModuleRepository>()
                     .AddScoped<IComponentRepository, ComponentRepository>()
                     .AddScoped<IQuestRepository, QuestRepository>()
-                    .AddScoped<ITrackerRepository, TrackerRepository>();
+                    .AddScoped<ITrackerRepository, TrackerRepository>()
+                    .AddScoped<IQuestPrototypeRepository, QuestPrototypeRepository>();
 
             services.AddScoped<QuestViewModelStash>();
 
