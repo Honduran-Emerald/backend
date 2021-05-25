@@ -16,18 +16,20 @@ namespace Emerald.Domain.Models.ModuleAggregate
         public List<ObjectId> ComponentIds { get; private set; }
         public string Objective { get; private set; }
 
-        public Module(string objective)
-            : this()
+        public Module(ObjectId id, string objective)
+            : base(id)
         {
+            ComponentIds = new List<ObjectId>();
             Objective = objective;
         }
 
         public Module()
         {
-            ComponentIds = new List<ObjectId>();
+            ComponentIds = default!;
+            Objective = default!;
         }
 
-        public abstract ResponseEventCollection ProcessEvent(TrackerNodeMemento memento, RequestEvent requestEvent);
+        public abstract ResponseEventCollection ProcessEvent(TrackerNodeMemento? memento, RequestEvent requestEvent);
 
         public void SetObjective(string objective)
         {

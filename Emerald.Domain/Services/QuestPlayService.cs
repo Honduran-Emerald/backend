@@ -34,7 +34,9 @@ namespace Emerald.Domain.Services
             TrackerNode path = tracker.GetCurrentTrackerPath();
             Module module = await moduleRepository.Get(path.ModuleId);
 
-            ResponseEventCollection responseEventCollection = module.ProcessEvent(path.Memento, requestEvent);
+            ResponseEventCollection responseEventCollection = module.ProcessEvent(
+                path.Memento, 
+                requestEvent);
             path.UpdateMemento(responseEventCollection.Memento);
             await trackerRepository.Update(tracker);
 

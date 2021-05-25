@@ -10,52 +10,51 @@ namespace Emerald.Domain.Models.ModuleAggregate.Modules
 {
     public class ChoiceModule : Module
     {
-        public List<string> Choices { get; private set; }
-        public List<ObjectId> ChoiceModuleIds { get; private set; }
+        public List<Choice> Choices { get; set; }
 
-        public ChoiceModule(string title, List<Module> choices) : base(title)
+        public ChoiceModule(ObjectId id, string objective, List<Choice> choices) 
+            : base(id, objective)
         {
-            ChoiceModuleIds = choices.Select(m => m.Id).ToList();
+            Choices = choices;
         }
 
-        public ChoiceModule() : base()
+        private ChoiceModule() : base()
         {
+            Choices = default!;
         }
 
         public void AddChoice(Module module, string choice)
         {
-            if (ChoiceModuleIds.Contains(module.Id))
+            if (Choices.Any(c => c.ModuleId == module.Id))
             {
                 throw new DomainException("Can not add already existing component");
             }
 
-            Choices.Add(choice);
-            ChoiceModuleIds.Add(module.Id);
+            Choices.Add(new Choice(module.Id, choice));
         }
 
         public void RemoveChoice(Module module)
         {
-            if (ChoiceModuleIds.Contains(module.Id) == false)
+            if (Choices.Any(c => c.ModuleId == module.Id) == false)
             {
                 throw new DomainException("Can not remove missing component");
             }
 
-            int index = ChoiceModuleIds.IndexOf(module.Id);
-
-            Choices.RemoveAt(index);
-            ChoiceModuleIds.RemoveAt(index);
+            Choices.Remove(Choices
+                .Where(c => c.ModuleId == module.Id)
+                .First());
         }
 
-        public override ResponseEventCollection ProcessEvent(TrackerNodeMemento memento, RequestEvent requestEvent)
+        public override ResponseEventCollection ProcessEvent(TrackerNodeMemento? memento, RequestEvent requestEvent)
         {
             if (requestEvent is ChoiceRequestEvent choiceEvent &&
-                choiceEvent.Choice < ChoiceModuleIds.Count)
+                choiceEvent.Choice < Choices.Count)
             {
                 return new ResponseEventCollection(
                     new ChoiceModuleMemento(choiceEvent.Choice),
                     new List<IResponseEvent>
                     {
-                        new ModuleFinishResponseEvent(ChoiceModuleIds[choiceEvent.Choice]),
+                        new ModuleFinishResponseEvent(Choices[choiceEvent.Choice].ModuleId),
                         new ExperienceResponseEvent(200)
                     });
             }
@@ -64,6 +63,18 @@ namespace Emerald.Domain.Models.ModuleAggregate.Modules
                 return new ResponseEventCollection(
                     memento,
                     new List<IResponseEvent>());
+            }
+        }
+
+        public class Choice
+        {
+            public ObjectId ModuleId { get; }
+            public string Text { get; }
+
+            public Choice(ObjectId moduleId, string text)
+            {
+                ModuleId = moduleId;
+                Text = text;
             }
         }
     }

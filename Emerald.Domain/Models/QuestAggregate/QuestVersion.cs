@@ -7,22 +7,23 @@ using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.QuestVersionAggregate
 {
-    public class QuestVersion : Entity
+    public class QuestVersion
     {
-        public bool Published { get; private set; }
+        public int Version { get; private set; }
+
+        public bool Public { get; private set; }
 
         public Location Location { get; private set; }
         public string Title { get; private set; }
         public string Description { get; private set; }
         public string Image { get; private set; }
 
-        public long Version { get; private set; }
         public DateTime CreatedAt { get; private set; }
 
         public List<ObjectId> ModuleIds { get; private set; }
         public ObjectId FirstModule { get; private set; }
 
-        public QuestVersion(Location location, string title, string description, string image, long version)
+        public QuestVersion(Location location, string title, string description, string image, int version)
         {
             ModuleIds = new List<ObjectId>();
 
@@ -37,13 +38,13 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
 
         private QuestVersion()
         {
-            ModuleIds = new List<ObjectId>();
-            Location = new Location(0.0, 0.0);
-            Title = "Missing Title";
-            Description = "Missing Description";
-            Image = "";
-            Version = 0;
-            CreatedAt = DateTime.UtcNow;
+            ModuleIds = default!;
+            Location = default!;
+            Title = default!;
+            Description = default!;
+            Image = default!;
+            Version = default!;
+            CreatedAt = default!;
         }
 
         public void ChangeFirstModule(Module module)
@@ -74,16 +75,6 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
             }
 
             ModuleIds.Remove(module.Id);
-        }
-
-        public void Publish()
-        {
-            if (Published)
-            {
-                throw new DomainException("Questversion already published");
-            }
-
-            Published = true;
         }
 
         public void ChangeTitle(string title)

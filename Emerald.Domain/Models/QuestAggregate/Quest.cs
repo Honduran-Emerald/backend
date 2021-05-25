@@ -1,4 +1,5 @@
-﻿using Emerald.Domain.Models.QuestVersionAggregate;
+﻿using Emerald.Domain.Models.PrototypeAggregate;
+using Emerald.Domain.Models.QuestVersionAggregate;
 using Emerald.Domain.Models.UserAggregate;
 using MongoDB.Bson;
 using System.Collections.Generic;
@@ -9,15 +10,15 @@ namespace Emerald.Domain.Models.QuestAggregate
 {
     public class Quest : Entity
     {
-        public ObjectId OwnerUserId { get; protected set; }
+        public ObjectId OwnerUserId { get; private set; }
+        public ObjectId PrototypeId { get; private set; }
         public List<QuestVersion> QuestVersions { get; private set; }
 
-        public Quest(User user, Location location, string title, string description, string image)
-            : this()
+        public Quest(User user, QuestPrototype questPrototype)
         {
+            QuestVersions = new List<QuestVersion>();
             OwnerUserId = user.Id;
-            QuestVersions.Add(new QuestVersion(
-                location, title, description, image, 1));
+            PrototypeId = questPrototype.Id;
         }
 
         private Quest()
@@ -25,7 +26,10 @@ namespace Emerald.Domain.Models.QuestAggregate
             QuestVersions = new List<QuestVersion>();
         }
 
-        public QuestVersion GetQuestVersion(long version)
+        public int GetNewestQuestVersion()
+            => QuestVersions.Max(qv => qv.Version);
+
+        public QuestVersion GetQuestVersion(int version)
         {
             QuestVersion? questVersion = QuestVersions
                 .Where(q => q.Version == version)
@@ -39,19 +43,19 @@ namespace Emerald.Domain.Models.QuestAggregate
             return questVersion;
         }
 
-        public QuestVersion? GetStableQuestVersion()
+        public QuestVersion? GetPrivateQuestVersion()
         {
             return QuestVersions
-                .Where(q => q.Published)
                 .OrderByDescending(q => q.Version)
                 .FirstOrDefault();
         }
 
-        public QuestVersion GetDevelopmentQuestVersion()
+        public QuestVersion? GetPublicQuestVersion()
         {
             return QuestVersions
+                .Where(q => q.Public)
                 .OrderByDescending(q => q.Version)
-                .First();
+                .FirstOrDefault();
         }
 
         public void RemoveQuestVersion(QuestVersion questVersion)
@@ -59,17 +63,14 @@ namespace Emerald.Domain.Models.QuestAggregate
             QuestVersions.Remove(questVersion);
         }
 
-        public QuestVersion PublishQuestVersion()
+        public QuestVersion PublishQuestVersion(QuestPrototype questPrototype)
         {
-            QuestVersion questVersion = GetDevelopmentQuestVersion();
-            questVersion.Publish();
-
             QuestVersion newQuestVersion = new QuestVersion(
-                questVersion.Location,
-                questVersion.Title,
-                questVersion.Description,
-                questVersion.Image,
-                questVersion.Version + 1);
+                questPrototype.Location,
+                questPrototype.Title,
+                questPrototype.Description,
+                questPrototype.Image,
+                GetNewestQuestVersion() + 1);
 
             QuestVersions.Add(newQuestVersion);
             return newQuestVersion;
