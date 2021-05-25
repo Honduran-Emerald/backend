@@ -25,17 +25,17 @@ namespace Emerald.Domain.Models.PrototypeAggregate
         public int FirstModuleId { get; }
         public List<ModulePrototype> Modules { get; }
 
-        public QuestPrototype(string title, string description, List<string> tags, Location location, string imageId, string approximateTime, string profileImageId, string profileName, int firstModuleId)
+        public QuestPrototype(string title, string description, List<string> tags, Location location, string imageId)
         {
             Title = title;
             Description = description;
             Tags = tags;
             Location = location;
             ImageId = imageId;
-            ApproximateTime = approximateTime;
-            ProfileImageId = profileImageId;
-            ProfileName = profileName;
-            FirstModuleId = firstModuleId;
+            ApproximateTime = default!;
+            ProfileImageId = default!;
+            ProfileName = default!;
+            FirstModuleId = default!;
             Modules = default!;
         }
 
