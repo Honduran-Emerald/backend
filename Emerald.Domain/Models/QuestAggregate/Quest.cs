@@ -27,7 +27,7 @@ namespace Emerald.Domain.Models.QuestAggregate
         }
 
         public int GetNewestQuestVersion()
-            => QuestVersions.Max(qv => qv.Version);
+            => QuestVersions.Count == 0 ? 1 : QuestVersions.Max(qv => qv.Version);
 
         public QuestVersion GetQuestVersion(int version)
         {

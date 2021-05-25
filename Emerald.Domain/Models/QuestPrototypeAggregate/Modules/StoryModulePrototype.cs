@@ -10,7 +10,7 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Modules
 {
     public class StoryModulePrototype : ModulePrototype
     {
-        public int NextModuleId { get; }
+        public int NextModuleId { get; private set; }
 
         private StoryModulePrototype(int nextModuleId)
         {
