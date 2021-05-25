@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Emerald.Application.Controllers.Quest
@@ -40,12 +41,16 @@ namespace Emerald.Application.Controllers.Quest
             [FromQuery] int offset)
         {
             return Ok(new QuestQueryResponse(
-                quests: await questModelFactory.Create(await questRepository.GetQueryable()
+                quests: await questModelFactory.Create(
+                    (await questRepository.GetQueryable()
                     .Skip(offset)
                     .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
-                    .Where(q => q.GetCurrentQuestVersion() != null)
-                    .Select(q => KeyValuePair.Create(q, q.GetCurrentQuestVersion()!.Version))
-                    .ToListAsync())));
+                    .Where(q => q.QuestVersions.Any(q => q.Public))
+                    .ToListAsync())
+                        .Select(q => KeyValuePair.Create(q, q.QuestVersions
+                            .Where(q => q.Public)
+                            .Max(q => q.Version)))
+                        .ToList())));
         }
     }
 }
