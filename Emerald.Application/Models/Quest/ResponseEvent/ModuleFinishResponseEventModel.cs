@@ -10,5 +10,10 @@ namespace Emerald.Application.Models.Quest.Events
         {
             Module = module;
         }
+
+        public ModuleFinishResponseEventModel()
+        {
+            Module = default!;
+        }
     }
 }

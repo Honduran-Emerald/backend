@@ -14,6 +14,7 @@ namespace Emerald.Application.Models.Quest
         public string Id { get; set; }
         public ObjectId OwnerId { get; set; }
 
+        public string LocationName { get; set; }
         public LocationModel Location { get; set; }
 
         public string Title { get; set; }
@@ -27,10 +28,11 @@ namespace Emerald.Application.Models.Quest
         public int Plays { get; set; }
         public int Finishs { get; set; }
 
-        public QuestModel(string id, ObjectId ownerId, LocationModel location, string title, string description, string image, long version, DateTime creationTime, int votes, int plays, int finishs)
+        public QuestModel(string id, ObjectId ownerId, string locationName, LocationModel location, string title, string description, string image, long version, DateTime creationTime, int votes, int plays, int finishs)
         {
             Id = id;
             OwnerId = ownerId;
+            LocationName = locationName;
             Location = location;
             Title = title;
             Description = description;
@@ -40,6 +42,22 @@ namespace Emerald.Application.Models.Quest
             Votes = votes;
             Plays = plays;
             Finishs = finishs;
+        }
+
+        private QuestModel()
+        {
+            Id = default!;
+            OwnerId = default!;
+            LocationName = default!;
+            Location = default!;
+            Title = default!;
+            Description = default!;
+            Image = default!;
+            Version = default!;
+            CreationTime = default!;
+            Votes = default!;
+            Plays = default!;
+            Finishs = default!;
         }
     }
 }

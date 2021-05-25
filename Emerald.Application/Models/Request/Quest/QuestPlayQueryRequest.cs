@@ -16,7 +16,7 @@ namespace Emerald.Application.Models.Request
 
         private QuestPlayQueryRequest()
         {
-            Unfinished = false;
+            Unfinished = default!;
         }
     }
 }

@@ -19,5 +19,12 @@ namespace Emerald.Application.Models.Quest.Tracker
             Module = module;
             CreationTime = creationTime;
         }
+
+        public TrackerNodeModel()
+        {
+            Memento = default!;
+            Module = default!;
+            CreationTime = default!;
+        }
     }
 }

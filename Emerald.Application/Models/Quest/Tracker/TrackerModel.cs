@@ -20,5 +20,13 @@ namespace Emerald.Application.Models.Quest.Tracker
             Vote = vote;
             CreationTime = creationTime;
         }
+
+        public TrackerModel()
+        {
+            NewestQuestVersion = default!;
+            Finished = default!;
+            Vote = default!;
+            CreationTime = default!;
+        }
     }
 }

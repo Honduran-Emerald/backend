@@ -6,5 +6,10 @@ namespace Emerald.Application.Models.Quest.Events
     {
         [Required]
         public int Choice { get; set; }
+
+        private ChoiceRequestEventModel()
+        {
+            Choice = default!;
+        }
     }
 }

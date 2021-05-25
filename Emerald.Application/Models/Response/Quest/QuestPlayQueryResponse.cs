@@ -17,7 +17,7 @@ namespace Emerald.Application.Models.Response.Quest
 
         private QuestPlayQueryResponse()
         {
-            Trackers = new List<TrackerModel>();
+            Trackers = default!;
         }
     }
 }

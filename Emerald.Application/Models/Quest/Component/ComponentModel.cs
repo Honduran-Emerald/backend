@@ -1,6 +1,6 @@
 ﻿namespace Emerald.Application.Models.Quest.Component
 {
-    public class ComponentModel
+    public abstract class ComponentModel
     {
         public string ComponentId { get; set; }
         public ComponentType ComponentType { get; set; }
@@ -9,6 +9,12 @@
         {
             ComponentId = componentId;
             ComponentType = componentType;
+        }
+
+        public ComponentModel()
+        {
+            ComponentId = default!;
+            ComponentType = default!;
         }
     }
 }

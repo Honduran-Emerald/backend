@@ -13,5 +13,10 @@ namespace Emerald.Application.Models.Response
         {
             User = user;
         }
+
+        private UserMeResponse()
+        {
+            User = default!;
+        }
     }
 }

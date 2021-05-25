@@ -14,5 +14,10 @@ namespace Emerald.Application.Models.Quest.ResponseEvent
         {
             Experience = experience;
         }
+
+        public ExperienceResponseEventModel()
+        {
+            Experience = default!;
+        }
     }
 }

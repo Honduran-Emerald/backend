@@ -13,5 +13,12 @@ namespace Emerald.Application.Models.Bindings
 
         [Required]
         public string Password { get; set; }
+
+        public AuthenticationRegisterRequest()
+        {
+            Username = default!;
+            Email = default!;
+            Password = default!;
+        }
     }
 }

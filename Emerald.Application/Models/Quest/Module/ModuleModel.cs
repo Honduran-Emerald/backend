@@ -3,20 +3,31 @@ using System.Collections.Generic;
 
 namespace Emerald.Application.Models.Quest.Module
 {
-    public class ModuleModel
+    public abstract class ModuleModel
     {
         public string ModuleId { get; set; }
 
+        public List<long> ModuleIds { get; set; }
         public string Objective { get; set; }
         public ModuleType Type { get; set; }
         public List<ComponentModel> Components { get; set; }
 
-        public ModuleModel(string moduleId, ModuleType type, string objective, List<ComponentModel> components)
+        protected ModuleModel(string moduleId, string objective, ModuleType type, List<long> moduleIds, List<ComponentModel> components)
         {
             ModuleId = moduleId;
-            Type = type;
             Objective = objective;
+            Type = type;
+            ModuleIds = moduleIds;
             Components = components;
+        }
+
+        public ModuleModel()
+        {
+            ModuleId = default!;
+            Type = default!;
+            Objective = default!;
+            ModuleIds = default!;
+            Components = default!;
         }
     }
 }
