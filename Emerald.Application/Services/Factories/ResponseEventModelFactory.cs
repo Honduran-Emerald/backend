@@ -26,12 +26,6 @@ namespace Emerald.Application.Services
             this.moduleModelFactory = moduleModelFactory;
         }
 
-        public ResponseEventModelFactory(IModuleRepository moduleRepository, ModuleModelFactory moduleModelFactory)
-        {
-            this.moduleRepository = moduleRepository;
-            this.moduleModelFactory = moduleModelFactory;
-        }
-
         public async Task<ResponseEventCollectionModel> Create(ResponseEventCollection responseEventCollection)
         {
             List<ResponseEventModel> responseEvents = new List<ResponseEventModel>();
@@ -56,11 +50,11 @@ namespace Emerald.Application.Services
                 }
             }
 
-            return new ResponseEventCollectionModel
-            {
-                ResponseEvents = responseEvents,
-                Memento = await mementoModelFactory.Create(responseEventCollection.Memento)
-            };
+            return new ResponseEventCollectionModel(
+                responseEvents: responseEvents,
+                memento: responseEventCollection.Memento == null
+                ? null
+                : await mementoModelFactory.Create(responseEventCollection.Memento));
         }
     }
 }

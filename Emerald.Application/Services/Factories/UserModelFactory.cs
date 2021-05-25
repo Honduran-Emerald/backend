@@ -11,17 +11,15 @@ namespace Emerald.Application.Services.Factories
     {
         public async Task<UserModel> Create(User user)
         {
-            return new UserModel
-            {
-                UserId = user.Id.ToString(),
-                UserName = user.UserName,
-                Image = user.Image,
-                Level = user.GetLevel(),
-                Experience = user.Experience,
-                Glory = user.Glory,
-                QuestCount = user.QuestIds.Count,
-                TrackerCount = user.TrackerIds.Count
-            };
+            return new UserModel(
+                userId: user.Id.ToString(),
+                userName: user.UserName,
+                image: user.Image,
+                level: user.GetLevel(),
+                experience: user.Experience,
+                glory: user.Glory,
+                questCount: user.QuestIds.Count,
+                trackerCount: user.TrackerIds.Count);
         }
     }
 }

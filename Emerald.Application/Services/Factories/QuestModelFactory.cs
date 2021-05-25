@@ -22,13 +22,19 @@ namespace Emerald.Application.Services.Factories
 
         public async Task<QuestModel> Create(Quest quest)
         {
-            QuestVersion version = quest.GetStableQuestVersion();
+            QuestVersion? version = quest.GetStableQuestVersion();
             QuestViewModel viewModel = await questStash.Get(quest.Id);
+
+            if (version == null)
+            {
+                throw new NullReferenceException();
+            }
 
             return new QuestModel(
                 id: quest.Id.ToString(),
                 ownerId: quest.OwnerUserId,
 
+                locationName: "",
                 location: new LocationModel(
                     version.Location.Longitude,
                     version.Location.Latitude),

@@ -34,11 +34,9 @@ namespace Emerald.Application.Services.Factories
                         choiceModule.Id.ToString(), 
                         module.Objective,
                         Enumerable.Range(0, choiceModule.Choices.Count)
-                            .Select(i => new ChoiceModuleModel.Choice
-                            {
-                                ModuleId = choiceModule.ChoiceModuleIds[i].ToString(),
-                                Text = choiceModule.Choices[i]
-                            })
+                            .Select(i => new ChoiceModuleModel.Choice(
+                                moduleId: choiceModule.Choices[i].ModuleId.GetHashCode(),
+                                text: choiceModule.Choices[i].Text))
                             .ToList(),
                         componentModels);
             }
