@@ -4,5 +4,46 @@
         <name>Emerald.Application</name>
     </assembly>
     <members>
+        <member name="M:Emerald.Application.Controllers.Quest.QuestController.Query(System.Int32)">
+            <summary>
+            Query quests based on specified settings without tracker information
+            </summary>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Query(MongoDB.Bson.ObjectId)">
+            <summary>
+            Queries all information about a single by the user created quest
+            </summary>
+            <param name="questId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Put(Emerald.Application.Models.Request.Quest.QuestCreatePutRequest)">
+            <summary>
+            Update a prototype of a quest. The Quest has to be queried before with create/query
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Publish(MongoDB.Bson.ObjectId)">
+            <summary>
+            Publish the development version of a quest to make it stable
+            </summary>
+            <param name="questId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.QuestPlayController.Query(Emerald.Application.Models.Request.QuestPlayQueryRequest)">
+            <summary>
+            Query based on specified settings already tracked quests
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.QuestPlayController.QueryTrackerNodes">
+            <summary>
+            Query trackernodes with all module and memento information for a single playing quest
+            </summary>
+            <returns></returns>
+        </member>
     </members>
 </doc>

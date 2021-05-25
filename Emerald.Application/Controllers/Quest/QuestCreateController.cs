@@ -1,7 +1,9 @@
 ﻿using Emerald.Application.Models.Quest.Module;
+using Emerald.Application.Models.Request.Quest;
 using Emerald.Application.Models.Response.Quest;
 using Emerald.Application.Services.Factories;
 using Emerald.Domain.Models.ModuleAggregate;
+using Emerald.Domain.Models.PrototypeAggregate;
 using Emerald.Domain.Models.QuestAggregate;
 using Emerald.Domain.Models.QuestVersionAggregate;
 using Emerald.Domain.Repositories;
@@ -19,21 +21,22 @@ namespace Emerald.Application.Controllers.Quest
     [Route("create")]
     public class QuestCreateController : ControllerBase
     {
-        private IQuestRepository questRepository;
         private IComponentRepository componentRepository;
-        private ITrackerRepository trackerRepository;
+        private IQuestRepository questRepository;
+        private IQuestPrototypeRepository questPrototypeRepository;
         private IModuleRepository moduleRepository;
+        private ITrackerRepository trackerRepository;
 
         private QuestCreateService questCreateService;
         private QuestModelFactory questModelFactory;
         private ModuleModelFactory moduleModelFactory;
-
-        public QuestCreateController(IQuestRepository questRepository, IComponentRepository componentRepository, ITrackerRepository trackerRepository, IModuleRepository moduleRepository, QuestCreateService questCreateService, QuestModelFactory questModelFactory, ModuleModelFactory moduleModelFactory)
+        public QuestCreateController(IComponentRepository componentRepository, IQuestRepository questRepository, IQuestPrototypeRepository questPrototypeRepository, IModuleRepository moduleRepository, ITrackerRepository trackerRepository, QuestCreateService questCreateService, QuestModelFactory questModelFactory, ModuleModelFactory moduleModelFactory)
         {
-            this.questRepository = questRepository;
             this.componentRepository = componentRepository;
-            this.trackerRepository = trackerRepository;
+            this.questRepository = questRepository;
+            this.questPrototypeRepository = questPrototypeRepository;
             this.moduleRepository = moduleRepository;
+            this.trackerRepository = trackerRepository;
             this.questCreateService = questCreateService;
             this.questModelFactory = questModelFactory;
             this.moduleModelFactory = moduleModelFactory;
@@ -48,25 +51,31 @@ namespace Emerald.Application.Controllers.Quest
         public async Task<ActionResult<QuestCreateQueryResponse>> Query(
             [FromQuery] ObjectId questId)
         {
-            try
-            {
-                Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(questId);
-                QuestVersion questVersion = quest.GetDevelopmentQuestVersion();
+            Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(questId);
 
-                return Ok(new QuestCreateQueryResponse
-                {
-                    Modules = await moduleModelFactory.Create(await moduleRepository.GetForQuest(questVersion)),
-                    Quest = await questModelFactory.Create(quest),
-                    FirstModuleId = questVersion.FirstModule.ToString()
-                });
-            }
-            catch (DomainException exception)
+            return Ok(new QuestCreateQueryResponse(
+                await questPrototypeRepository.Get(quest.PrototypeId)));
+        }
+
+        /// <summary>
+        /// Update a prototype of a quest. The Quest has to be queried before with create/query
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("put")]
+        public async Task<ActionResult<QuestCreateQueryResponse>> Put(
+            [FromBody] QuestCreatePutRequest request)
+        {
+            Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(request.QuestId);
+
+            if (quest.PrototypeId != request.QuestPrototype.Id)
             {
-                return BadRequest(new 
-                {
-                    Message = exception.Message
-                });
+                throw new DomainException("Got invalid prototype id");
             }
+
+            await questPrototypeRepository.Update(request.QuestPrototype);
+
+            return Ok();
         }
 
         /// <summary>
@@ -79,7 +88,7 @@ namespace Emerald.Application.Controllers.Quest
             [FromBody] ObjectId questId)
         {
             Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(questId);
-            QuestVersion? stableQuestVersion = quest.GetStableQuestVersion();
+            QuestVersion? stableQuestVersion = quest.GetCurrentPrivateQuestVersion();
 
             if (stableQuestVersion != null && 
                 await trackerRepository.HasAnyTrackerForQuest(quest) == false)

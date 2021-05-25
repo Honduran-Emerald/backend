@@ -43,6 +43,8 @@ namespace Emerald.Application.Controllers.Quest
                 quests: await questModelFactory.Create(await questRepository.GetQueryable()
                     .Skip(offset)
                     .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
+                    .Where(q => q.GetCurrentQuestVersion() != null)
+                    .Select(q => KeyValuePair.Create(q, q.GetCurrentQuestVersion()!.Version))
                     .ToListAsync())));
         }
     }
