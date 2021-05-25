@@ -11,7 +11,13 @@
             <param name="offset"></param>
             <returns></returns>
         </member>
-        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Query(MongoDB.Bson.ObjectId)">
+        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Query(System.Int32)">
+            <summary>
+            Queries meta information about all created quests by this user
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Get(MongoDB.Bson.ObjectId)">
             <summary>
             Queries all information about a single by the user created quest
             </summary>

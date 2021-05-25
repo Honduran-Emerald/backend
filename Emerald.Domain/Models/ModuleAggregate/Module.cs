@@ -10,7 +10,9 @@ namespace Emerald.Domain.Models.ModuleAggregate
 {
     [BsonDiscriminator(RootClass = true)]
     [BsonKnownTypes(
-        typeof(ChoiceModule))]
+        typeof(ChoiceModule),
+        typeof(EndingModule),
+        typeof(StoryModule))]
     public abstract class Module : Entity
     {
         public List<ObjectId> ComponentIds { get; private set; }
