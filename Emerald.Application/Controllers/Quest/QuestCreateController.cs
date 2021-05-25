@@ -11,6 +11,8 @@ using Emerald.Domain.Services;
 using Emerald.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Vitamin.Value.Domain.SeedWork;
@@ -43,17 +45,31 @@ namespace Emerald.Application.Controllers.Quest
         }
 
         /// <summary>
+        /// Queries meta information about all created quests by this user
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("query")]
+        public async Task<ActionResult> Query(
+            [FromQuery] int offset)
+        {
+            return Ok(new
+            {
+                Quests = await questRepository.GetQueryable().Select(q => q.Id).ToListAsync()
+            });
+        }
+
+        /// <summary>
         /// Queries all information about a single by the user created quest
         /// </summary>
         /// <param name="questId"></param>
         /// <returns></returns>
-        [HttpGet("query")]
-        public async Task<ActionResult<QuestCreateQueryResponse>> Query(
+        [HttpGet("get")]
+        public async Task<ActionResult<QuestCreateGetResponse>> Get(
             [FromQuery] ObjectId questId)
         {
             Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(questId);
 
-            return Ok(new QuestCreateQueryResponse(
+            return Ok(new QuestCreateGetResponse(
                 await questPrototypeRepository.Get(quest.PrototypeId)));
         }
 
@@ -63,7 +79,7 @@ namespace Emerald.Application.Controllers.Quest
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost("put")]
-        public async Task<ActionResult<QuestCreateQueryResponse>> Put(
+        public async Task<ActionResult<QuestCreateGetResponse>> Put(
             [FromBody] QuestCreatePutRequest request)
         {
             Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(request.QuestId);
