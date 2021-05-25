@@ -12,8 +12,8 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate
     {
         public int Id { get; set; }
 
-        public List<ComponentPrototype> Components { get; }
-        public string Objective { get; }
+        public List<ComponentPrototype> Components { get; private set; }
+        public string Objective { get; private set; }
 
         public ModulePrototype(int id, List<ComponentPrototype> components, string objective)
         {

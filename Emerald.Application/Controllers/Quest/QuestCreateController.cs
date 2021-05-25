@@ -69,8 +69,8 @@ namespace Emerald.Application.Controllers.Quest
         {
             Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(questId);
 
-            return Ok(new QuestCreateGetResponse(
-                await questPrototypeRepository.Get(quest.PrototypeId)));
+            QuestPrototype prototype = await questPrototypeRepository.Get(quest.PrototypeId);
+            return Ok(new QuestCreateGetResponse(prototype));
         }
 
         /// <summary>

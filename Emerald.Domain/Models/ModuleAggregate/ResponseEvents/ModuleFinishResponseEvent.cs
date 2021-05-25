@@ -7,7 +7,7 @@ namespace Emerald.Domain.Models.ModuleAggregate
 {
     public class ModuleFinishResponseEvent : IResponseEvent
     {
-        public ObjectId ModuleId { get; }
+        public ObjectId ModuleId { get; private set; }
 
         public ModuleFinishResponseEvent(ObjectId moduleId)
         {

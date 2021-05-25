@@ -14,16 +14,16 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
         public int Version { get; private set; }
         public bool Public { get; private set; }
 
-        public string Title { get; }
-        public string Description { get; }
-        public List<string> Tags { get; }
+        public string Title { get; private set; }
+        public string Description { get; private set; }
+        public List<string> Tags { get; private set; }
 
-        public Location Location { get; }
-        public string ImageId { get; }
-        public string ApproximateTime { get; }
+        public Location Location { get; private set; }
+        public string ImageId { get; private set; }
+        public string ApproximateTime { get; private set; }
 
-        public string ProfileImageId { get; }
-        public string ProfileName { get; }
+        public string ProfileImageId { get; private set; }
+        public string ProfileName { get; private set; }
 
         public DateTime CreationTime { get; private set; }
 
@@ -33,7 +33,7 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
         public QuestVersion(QuestPrototype questPrototype, int version)
         {
             Version = version;
-            Public = false;
+            Public = true;
 
             Title = questPrototype.Title;
             Description = questPrototype.Description;

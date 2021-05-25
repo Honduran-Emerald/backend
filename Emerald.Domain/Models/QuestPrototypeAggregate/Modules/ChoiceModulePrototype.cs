@@ -10,7 +10,7 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Modules
 {
     public class ChoiceModulePrototype : ModulePrototype
     {
-        public List<ChoiceModulePrototypeChoice> Choices { get; }
+        public List<ChoiceModulePrototypeChoice> Choices { get; private set; }
 
         private ChoiceModulePrototype()
         {
@@ -26,8 +26,8 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Modules
 
         public class ChoiceModulePrototypeChoice
         {
-            public string Text { get; }
-            public int NextModuleId { get; }
+            public string Text { get; private set; }
+            public int NextModuleId { get; private set; }
 
             public ChoiceModulePrototypeChoice(string text, int moduleId)
             {

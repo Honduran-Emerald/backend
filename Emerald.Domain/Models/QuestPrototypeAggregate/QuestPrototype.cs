@@ -7,23 +7,25 @@ using System.Text;
 using System.Threading.Tasks;
 using Vitamin.Value.Domain.SeedWork;
 
+#nullable disable
+
 namespace Emerald.Domain.Models.PrototypeAggregate
 {
     public class QuestPrototype : Entity
     {
-        public string Title { get; }
-        public string Description { get; }
-        public List<string> Tags { get; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public List<string> Tags { get; set; }
 
-        public Location Location { get; }
-        public string ImageId { get; }
-        public string ApproximateTime { get; }
+        public Location Location { get; set; }
+        public string ImageId { get; set; }
+        public string ApproximateTime { get; set; }
 
-        public string ProfileImageId { get; }
-        public string ProfileName { get; }
+        public string ProfileImageId { get; set; }
+        public string ProfileName { get; set; }
 
-        public int FirstModuleId { get; }
-        public List<ModulePrototype> Modules { get; }
+        public int FirstModuleId { get; set; }
+        public List<ModulePrototype> Modules { get; set; }
 
         public QuestPrototype(string title, string description, List<string> tags, Location location, string imageId)
         {
@@ -32,25 +34,11 @@ namespace Emerald.Domain.Models.PrototypeAggregate
             Tags = tags;
             Location = location;
             ImageId = imageId;
-            ApproximateTime = default!;
-            ProfileImageId = default!;
-            ProfileName = default!;
-            FirstModuleId = default!;
-            Modules = default!;
+            Modules = new List<ModulePrototype>();
         }
 
         private QuestPrototype()
         {
-            Title = default!;
-            Description = default!;
-            Tags = default!;
-            Location = default!;
-            ImageId = default!;
-            ApproximateTime = default!;
-            ProfileImageId = default!;
-            ProfileName = default!;
-            FirstModuleId = default!;
-            Modules = default!;
         }
     }
 }

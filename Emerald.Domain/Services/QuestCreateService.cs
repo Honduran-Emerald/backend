@@ -54,9 +54,13 @@ namespace Emerald.Domain.Services
                 await moduleRepository.Add(module);
             }
 
-            questVersion.PlaceModules(
-                moduleIds, 
-                context.ConvertModuleId(questPrototype.FirstModuleId));
+            if (moduleIds.Count > 0)
+            {
+                questVersion.PlaceModules(
+                    moduleIds,
+                    context.ConvertModuleId(questPrototype.FirstModuleId));
+            }
+
             await questRepository.Update(quest);
         }
     }

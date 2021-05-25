@@ -51,11 +51,12 @@ namespace Emerald.Application.Controllers
                     location.Latitude),
                 imageId);
 
+            await questPrototypeRepository.Add(questPrototype);
+
             Domain.Models.QuestAggregate.Quest quest = new Domain.Models.QuestAggregate.Quest(
                 user,
                 questPrototype);
 
-            await questPrototypeRepository.Add(questPrototype);
             await questRepository.Add(quest);
             /*
             Domain.Models.QuestAggregate.Quest quest = new Domain.Models.QuestAggregate.Quest(user);
