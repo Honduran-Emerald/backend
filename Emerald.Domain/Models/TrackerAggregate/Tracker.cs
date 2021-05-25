@@ -20,16 +20,9 @@ namespace Emerald.Domain.Models.TrackerAggregate
         public List<TrackerNode> Path { get; private set; }
         public bool Finished { get; private set; }
 
-        public Tracker(ObjectId userId, Quest quest)
+        public Tracker(ObjectId userId, Quest quest, QuestVersion questVersion)
             : this()
         {
-            QuestVersion? questVersion = quest.GetStableQuestVersion();
-
-            if (questVersion == null)
-            {
-                throw new DomainException("Unable to create tracker for unpublished quest");
-            }
-
             QuestId = quest.Id;
             QuestVersion = questVersion.Version;
 
