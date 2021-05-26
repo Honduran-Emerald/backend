@@ -101,7 +101,7 @@ namespace Emerald.Application.Controllers.Quest
         /// <returns></returns>
         [HttpPost("publish")]
         public async Task<IActionResult> Publish(
-            [FromQuery] ObjectId questId)
+            [FromBody] ObjectId questId)
         {
             Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(questId);
             QuestVersion? stableQuestVersion = quest.GetCurrentPrivateQuestVersion();
