@@ -13,15 +13,15 @@ namespace Emerald.Domain.Models.UserAggregate
 {
     public class User : MongoUser, IEntity
     {
-        public List<ObjectId> QuestIds { get; private set; }
-        public List<ObjectId> TrackerIds { get; private set; }
-        public ObjectId? ActiveTrackerId { get; private set; }
+        public List<ObjectId> QuestIds { get; set; }
+        public List<ObjectId> TrackerIds { get; set; }
+        public ObjectId? ActiveTrackerId { get; set; }
 
         public string? Image { get; set; }
-        public string SyncToken { get; private set; }
+        public string SyncToken { get; set; }
 
-        public long Experience { get; private set; }
-        public int Glory { get; private set; }
+        public long Experience { get; set; }
+        public int Glory { get; set; }
 
         private List<INotification> domainEvents;
         public IReadOnlyCollection<INotification> DomainEvents => domainEvents;

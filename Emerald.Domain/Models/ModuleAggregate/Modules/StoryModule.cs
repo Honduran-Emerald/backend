@@ -12,7 +12,7 @@ namespace Emerald.Domain.Models.ModuleAggregate.Modules
 {
     public class StoryModule : Module
     {
-        public ObjectId NextModuleId { get; private set; }
+        public ObjectId NextModuleId { get; set; }
 
         public StoryModule(ObjectId nextModuleId)
         {

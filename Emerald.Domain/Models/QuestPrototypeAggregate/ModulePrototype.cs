@@ -1,5 +1,7 @@
 ﻿using Emerald.Domain.Models.ComponentAggregate;
 using Emerald.Domain.Models.ModuleAggregate;
+using Emerald.Domain.Models.QuestPrototypeAggregate.Modules;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +10,17 @@ using System.Threading.Tasks;
 
 namespace Emerald.Domain.Models.QuestPrototypeAggregate
 {
+    [BsonDiscriminator(RootClass = true)]
+    [BsonKnownTypes(
+        typeof(ChoiceModulePrototype),
+        typeof(EndingModulePrototype),
+        typeof(StoryModulePrototype))]
     public abstract class ModulePrototype
     {
         public int Id { get; set; }
 
-        public List<ComponentPrototype> Components { get; private set; }
-        public string Objective { get; private set; }
+        public List<ComponentPrototype> Components { get; set; }
+        public string Objective { get; set; }
 
         public ModulePrototype(int id, List<ComponentPrototype> components, string objective)
         {

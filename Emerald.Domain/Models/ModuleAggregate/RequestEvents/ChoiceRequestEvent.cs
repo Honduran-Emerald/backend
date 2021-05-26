@@ -2,7 +2,7 @@
 {
     public class ChoiceRequestEvent : RequestEvent
     {
-        public int Choice { get; private set; }
+        public int Choice { get; set; }
 
         public ChoiceRequestEvent(int choice)
         {

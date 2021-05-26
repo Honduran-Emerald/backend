@@ -68,8 +68,8 @@ namespace Emerald.Domain.Models.ModuleAggregate.Modules
 
         public class Choice
         {
-            public ObjectId ModuleId { get; private set; }
-            public string Text { get; private set; }
+            public ObjectId ModuleId { get; set; }
+            public string Text { get; set; }
 
             public Choice(ObjectId moduleId, string text)
             {

@@ -10,7 +10,7 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Modules
 {
     public class EndingModulePrototype : ModulePrototype
     {
-        public float EndingFactor { get; private set; }
+        public float EndingFactor { get; set; }
 
         public EndingModulePrototype()
         {

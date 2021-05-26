@@ -9,16 +9,16 @@ namespace Emerald.Domain.Models.TrackerAggregate
 {
     public class Tracker : Entity
     {
-        public ObjectId UserId { get; private set; }
+        public ObjectId UserId { get; set; }
 
-        public ObjectId QuestId { get; private set; }
-        public int QuestVersion { get; private set; }
+        public ObjectId QuestId { get; set; }
+        public int QuestVersion { get; set; }
 
-        public VoteType Vote { get; private set; }
-        public DateTime CreatedAt { get; private set; }
+        public VoteType Vote { get; set; }
+        public DateTime CreatedAt { get; set; }
 
-        public List<TrackerNode> Path { get; private set; }
-        public bool Finished { get; private set; }
+        public List<TrackerNode> Path { get; set; }
+        public bool Finished { get; set; }
 
         public Tracker(ObjectId userId, Quest quest, QuestVersion questVersion)
             : this()

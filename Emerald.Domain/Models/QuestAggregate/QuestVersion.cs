@@ -11,24 +11,24 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
 {
     public class QuestVersion
     {
-        public int Version { get; private set; }
-        public bool Public { get; private set; }
+        public int Version { get; set; }
+        public bool Public { get; set; }
 
-        public string Title { get; private set; }
-        public string Description { get; private set; }
-        public List<string> Tags { get; private set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public List<string> Tags { get; set; }
 
-        public Location Location { get; private set; }
-        public string ImageId { get; private set; }
-        public string ApproximateTime { get; private set; }
+        public Location Location { get; set; }
+        public string ImageId { get; set; }
+        public string ApproximateTime { get; set; }
 
-        public string ProfileImageId { get; private set; }
-        public string ProfileName { get; private set; }
+        public string ProfileImageId { get; set; }
+        public string ProfileName { get; set; }
 
-        public DateTime CreationTime { get; private set; }
+        public DateTime CreationTime { get; set; }
 
-        public List<ObjectId> ModuleIds { get; private set; }
-        public ObjectId FirstModuleId { get; private set; }
+        public List<ObjectId> ModuleIds { get; set; }
+        public ObjectId FirstModuleId { get; set; }
 
         public QuestVersion(QuestPrototype questPrototype, int version)
         {
@@ -65,7 +65,7 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
             ProfileImageId = default!;
             ProfileName = default!;
 
-            ModuleIds = default!;
+            ModuleIds = new List<ObjectId>();
         }
 
         public void PlaceModules(List<ObjectId> moduleIds, ObjectId firstModuleId)
