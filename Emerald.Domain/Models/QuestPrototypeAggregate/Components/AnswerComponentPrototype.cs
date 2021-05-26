@@ -9,7 +9,7 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Components
 {
     public class AnswerComponentPrototype : ComponentPrototype
     {
-        public string Text { get; private set; }
+        public string Text { get; set; }
 
         private AnswerComponentPrototype()
         {

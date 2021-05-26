@@ -9,7 +9,7 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Components
 {
     public class ImageComponentPrototype : ComponentPrototype
     {
-        public string ImageId { get; private set; }
+        public string ImageId { get; set; }
 
         private ImageComponentPrototype()
         {

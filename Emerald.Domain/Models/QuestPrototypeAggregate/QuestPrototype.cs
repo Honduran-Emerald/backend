@@ -1,4 +1,6 @@
-﻿using Emerald.Domain.Models.QuestPrototypeAggregate;
+﻿using Emerald.Domain.Models.ModuleAggregate.Modules;
+using Emerald.Domain.Models.QuestPrototypeAggregate;
+using Emerald.Domain.Models.QuestPrototypeAggregate.Modules;
 using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
@@ -37,7 +39,7 @@ namespace Emerald.Domain.Models.PrototypeAggregate
             Modules = new List<ModulePrototype>();
         }
 
-        private QuestPrototype()
+        public QuestPrototype()
         {
         }
     }

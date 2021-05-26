@@ -15,8 +15,8 @@ namespace Emerald.Domain.Models.ModuleAggregate
         typeof(StoryModule))]
     public abstract class Module : Entity
     {
-        public List<ObjectId> ComponentIds { get; private set; }
-        public string Objective { get; private set; }
+        public List<ObjectId> ComponentIds { get; set; }
+        public string Objective { get; set; }
 
         public Module(ObjectId id, string objective)
             : base(id)
@@ -27,7 +27,7 @@ namespace Emerald.Domain.Models.ModuleAggregate
 
         public Module()
         {
-            ComponentIds = default!;
+            ComponentIds = new List<ObjectId>();
             Objective = default!;
         }
 

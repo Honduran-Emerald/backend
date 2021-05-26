@@ -6,8 +6,8 @@ namespace Emerald.Domain.Models.ModuleAggregate
 {
     public class ResponseEventCollection
     {
-        public TrackerNodeMemento? Memento { get; private set; }
-        public List<IResponseEvent> Events { get; private set; }
+        public TrackerNodeMemento? Memento { get; set; }
+        public List<IResponseEvent> Events { get; set; }
 
         public ResponseEventCollection(TrackerNodeMemento? memento, List<IResponseEvent> events)
         {

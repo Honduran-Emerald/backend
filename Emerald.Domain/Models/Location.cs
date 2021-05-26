@@ -5,8 +5,8 @@ namespace Emerald.Domain.Models
 {
     public class Location : ValueObject
     {
-        public double Longitude { get; private set; }
-        public double Latitude { get; private set; }
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
 
         public Location(double longitude, double latitude)
         {

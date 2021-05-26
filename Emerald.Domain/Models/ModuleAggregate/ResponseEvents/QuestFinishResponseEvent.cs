@@ -11,7 +11,7 @@ namespace Emerald.Domain.Models.ModuleAggregate.ResponseEvents
 {
     public class QuestFinishResponseEvent : IResponseEvent
     {
-        public float FinishFactor { get; private set; }
+        public float FinishFactor { get; set; }
 
         public QuestFinishResponseEvent(float finishFactor)
         {
