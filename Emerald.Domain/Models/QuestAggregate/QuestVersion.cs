@@ -77,7 +77,7 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
 
             ModuleIds.Clear();
             ModuleIds.AddRange(moduleIds);
-            ModuleIds.Add(firstModuleId);
+            FirstModuleId = firstModuleId;
         }
     }
 }

@@ -33,6 +33,7 @@ namespace Vitamin.Value.Domain.SeedWork
         public void ClearEvents()
             => domainEvents.Clear();
 
+        [JsonIgnore]
         public IReadOnlyCollection<INotification> DomainEvents
             => domainEvents;
 
