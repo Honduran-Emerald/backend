@@ -1,6 +1,7 @@
 using AspNetCore.Identity.Mongo;
 using Emerald.Application.Infrastructure;
 using Emerald.Application.Infrastructure.ActionFilter;
+using Emerald.Application.Infrastructure.Middleware;
 using Emerald.Application.Infrastructure.OperationFilter;
 using Emerald.Application.Models.Quest.Component;
 using Emerald.Application.Models.Quest.Module;
@@ -177,7 +178,9 @@ namespace Emerald.Application
                 });
             });
 
+            app.UseUserTokenValidationMiddleware();
             app.UseQuestSyncMiddleware();
+            app.UseDomainExceptionHandlerMiddleware();
 
             app.UseEndpoints(endpoints =>
             {
