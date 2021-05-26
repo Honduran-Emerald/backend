@@ -1,15 +1,21 @@
 using AspNetCore.Identity.Mongo;
+using Emerald.Application.Infrastructure;
 using Emerald.Application.Infrastructure.ActionFilter;
 using Emerald.Application.Infrastructure.OperationFilter;
+using Emerald.Application.Models.Quest.Component;
+using Emerald.Application.Models.Quest.Module;
 using Emerald.Application.Services;
 using Emerald.Application.Services.Factories;
 using Emerald.Domain.Models;
+using Emerald.Domain.Models.QuestPrototypeAggregate;
+using Emerald.Domain.Models.QuestPrototypeAggregate.Components;
 using Emerald.Domain.Models.UserAggregate;
 using Emerald.Domain.Repositories;
 using Emerald.Domain.Services;
 using Emerald.Infrastructure;
 using Emerald.Infrastructure.Repositories;
 using Emerald.Infrastructure.ViewModelHandlers;
+using JsonSubTypes;
 using KissLog;
 using KissLog.AspNetCore;
 using KissLog.CloudListeners.RequestLogsListener;
@@ -73,6 +79,9 @@ namespace Emerald.Application
                     .AddNewtonsoftJson(options =>
                     {
                         options.SerializerSettings.Converters.Add(new StringEnumConverter());
+                        options.SerializerSettings.Converters.Add(new ObjectIdJsonConverter());
+                        options.SerializerSettings.AddComponentPrototypeConverter();
+                        options.SerializerSettings.AddModulePrototypeConverter();
                     });
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
