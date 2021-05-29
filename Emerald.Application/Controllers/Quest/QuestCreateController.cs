@@ -32,6 +32,7 @@ namespace Emerald.Application.Controllers.Quest
         private QuestCreateService questCreateService;
         private QuestModelFactory questModelFactory;
         private ModuleModelFactory moduleModelFactory;
+
         public QuestCreateController(IComponentRepository componentRepository, IQuestRepository questRepository, IQuestPrototypeRepository questPrototypeRepository, IModuleRepository moduleRepository, ITrackerRepository trackerRepository, QuestCreateService questCreateService, QuestModelFactory questModelFactory, ModuleModelFactory moduleModelFactory)
         {
             this.componentRepository = componentRepository;
@@ -42,20 +43,6 @@ namespace Emerald.Application.Controllers.Quest
             this.questCreateService = questCreateService;
             this.questModelFactory = questModelFactory;
             this.moduleModelFactory = moduleModelFactory;
-        }
-
-        /// <summary>
-        /// Queries meta information about all created quests by this user
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("query")]
-        public async Task<ActionResult> Query(
-            [FromQuery] int offset)
-        {
-            return Ok(new
-            {
-                Quests = await questRepository.GetQueryable().Select(q => q.Id).ToListAsync()
-            });
         }
 
         /// <summary>
@@ -82,6 +69,7 @@ namespace Emerald.Application.Controllers.Quest
         public async Task<ActionResult<QuestCreateGetResponse>> Put(
             [FromBody] QuestCreatePutRequest request)
         {
+            questCreateService.Verify(request.QuestPrototype);
             Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(request.QuestId);
 
             if (quest.PrototypeId != request.QuestPrototype.Id)
@@ -97,14 +85,14 @@ namespace Emerald.Application.Controllers.Quest
         /// <summary>
         /// Publish the development version of a quest to make it stable
         /// </summary>
-        /// <param name="questId"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost("publish")]
         public async Task<IActionResult> Publish(
-            [FromBody] ObjectId questId)
+            [FromBody] QuestCreatePublishRequest request)
         {
-            Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(questId);
-            QuestVersion? stableQuestVersion = quest.GetCurrentPrivateQuestVersion();
+            Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(request.QuestId);
+            QuestVersion? stableQuestVersion = quest.GetCurrentQuestVersion();
 
             if (stableQuestVersion != null && 
                 await trackerRepository.HasAnyTrackerForQuest(quest) == false)

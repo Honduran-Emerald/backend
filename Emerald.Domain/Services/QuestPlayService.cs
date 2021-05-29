@@ -5,6 +5,7 @@ using Emerald.Domain.Models.UserAggregate;
 using Emerald.Domain.Repositories;
 using Emerald.Infrastructure.Repositories;
 using MediatR;
+using MongoDB.Bson;
 using System.Threading.Tasks;
 using Vitamin.Value.Domain.SeedWork;
 
@@ -23,14 +24,20 @@ namespace Emerald.Domain.Services
             this.mediator = mediator;
         }
 
-        public async Task<ResponseEventCollection> HandleEvent(User user, RequestEvent requestEvent)
+        public async Task<ResponseEventCollection> HandleEvent(User user, ObjectId trackerId, RequestEvent requestEvent)
         {
-            if (user.ActiveTrackerId == null)
+            if (user.TrackerIds.Contains(trackerId) == false)
             {
-                throw new DomainException("Can not handle event without active tracker");
+                throw new DomainException($"Tracker '{trackerId}' for user '{user.UserName}' not found");
             }
 
-            Tracker tracker = await trackerRepository.Get(user.ActiveTrackerId.Value);
+            Tracker tracker = await trackerRepository.Get(trackerId);
+
+            if (tracker.Finished)
+            {
+                throw new DomainException("Tracker is already finished");
+            }
+
             TrackerNode path = tracker.GetCurrentTrackerPath();
             Module module = await moduleRepository.Get(path.ModuleId);
 

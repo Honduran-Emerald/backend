@@ -37,6 +37,7 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -62,7 +63,8 @@ namespace Emerald.Application
                     .AddScoped<UserModelFactory>()
                     .AddScoped<QuestModelFactory>()
                     .AddScoped<ResponseEventModelFactory>()
-                    .AddScoped<TrackerModelFactory>();
+                    .AddScoped<TrackerModelFactory>()
+                    .AddScoped<TrackerNodeModelFactory>();
 
             services.AddScoped<IUserRepository, UserRepository>()
                     .AddScoped<IModuleRepository, ModuleRepository>()
@@ -85,7 +87,11 @@ namespace Emerald.Application
                         options.SerializerSettings.AddModulePrototypeConverter();
                     });
 
-            services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddMediatR(
+                Assembly.GetExecutingAssembly().GetReferencedAssemblies()
+                    .Select(a => Assembly.Load(a))
+                    .Concat(new[] { Assembly.GetExecutingAssembly() })
+                    .ToArray());
 
             services
                 .AddSwaggerGenNewtonsoftSupport()
@@ -108,7 +114,7 @@ namespace Emerald.Application
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                options.IncludeXmlComments(xmlPath);
+                options.IncludeXmlComments(xmlPath, true);
 
                 options.OperationFilter<AuthorizeCheckOperationFilter>();
                 options.OperationFilter<SyncTokenOperationFilter>();

@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Services
 {
@@ -33,8 +34,12 @@ namespace Emerald.Domain.Services
         public async Task Publish(Quest quest)
         {
             QuestPrototype questPrototype = await questPrototypeRepository.Get(quest.PrototypeId);
-            QuestVersion questVersion = quest.PublishQuestVersion(questPrototype);
             QuestPrototypeContext context = new QuestPrototypeContext(questPrototype);
+
+            if (questPrototype.Modules.Count == 0)
+            {
+                throw new DomainException("Quest needs at least 1 module to be published");
+            }
 
             List<ObjectId> moduleIds = new List<ObjectId>();
 
@@ -54,14 +59,17 @@ namespace Emerald.Domain.Services
                 await moduleRepository.Add(module);
             }
 
-            if (moduleIds.Count > 0)
-            {
-                questVersion.PlaceModules(
-                    moduleIds,
-                    context.ConvertModuleId(questPrototype.FirstModuleId));
-            }
+            quest.PublishQuestVersion(
+                questPrototype,
+                moduleIds,
+                context.ConvertModuleId(questPrototype.FirstModuleId));
 
             await questRepository.Update(quest);
+        }
+
+        public void Verify(QuestPrototype questPrototype)
+        {
+            questPrototype.Verify(new QuestPrototypeContext(questPrototype));
         }
     }
 
@@ -75,6 +83,9 @@ namespace Emerald.Domain.Services
             ModuleIds = questPrototype.Modules
                 .ToDictionary(m => m.Id, _ => ObjectId.GenerateNewId());
         }
+
+        public bool ContainsModuleId(int moduleId)
+            => ModuleIds.ContainsKey(moduleId);
 
         public ObjectId ConvertModuleId(int moduleId)
             => ModuleIds[moduleId];

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Emerald.Application.Services.Factories
 {
-    public class QuestModelFactory : IModelFactory<KeyValuePair<Quest, int>, QuestModel>
+    public class QuestModelFactory : IModelFactory<QuestPairModel, QuestModel>
     {
         private QuestViewModelStash questStash;
         private IUserRepository userRepository;
@@ -24,16 +24,11 @@ namespace Emerald.Application.Services.Factories
             this.userRepository = userRepository;
         }
 
-        public async Task<QuestModel> Create(KeyValuePair<Quest, int> questPair)
+        public async Task<QuestModel> Create(QuestPairModel questPair)
         {
-            Quest quest = questPair.Key;
-            QuestVersion? version = quest.GetQuestVersion(questPair.Value);
-
-            if (version == null)
-            {
-                throw new NullReferenceException();
-            }
-
+            Quest quest = questPair.Quest;
+            QuestVersion? version = questPair.QuestVersion;
+            
             QuestViewModel viewModel = await questStash.Get(quest.Id);
             User user = await userRepository.Get(quest.OwnerUserId);
 
@@ -43,24 +38,26 @@ namespace Emerald.Application.Services.Factories
                 ownerId: quest.OwnerUserId,
                 ownerName: user.UserName,
                 ownerImageId: user.Image,
+                @public: quest.Public,
 
-                @public: version.Public,
-                
+                approximateTime: version?.ApproximateTime,
                 locationName: "Darmstadt",
-                location: new LocationModel(
+                location: version == null
+                ? null
+                : new LocationModel(
                     version.Location.Longitude,
                     version.Location.Latitude),
 
-                title: version.Title,
-                description: version.Description,
-                tags: version.Tags,
-                imageId: version.ImageId,
-                version: version.Version,
+                title: version?.Title,
+                description: version?.Description,
+                tags: version?.Tags,
+                imageId: version?.ImageId,
+                version: version == null ? 1 : version.Version,
 
-                profileImageId: version.ProfileImageId,
-                profileName: version.ProfileName,
+                profileImageId: version?.ProfileImageId,
+                profileName: version?.ProfileName,
 
-                creationTime: version.CreationTime,
+                creationTime: quest.CreationTime,
 
                 votes: viewModel.Votes,
                 plays: viewModel.Plays,

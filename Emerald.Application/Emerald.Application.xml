@@ -4,17 +4,31 @@
         <name>Emerald.Application</name>
     </assembly>
     <members>
-        <member name="M:Emerald.Application.Controllers.Quest.QuestController.Query(System.Int32)">
+        <member name="M:Emerald.Application.Controllers.AuthenticationController.Login(Emerald.Application.Models.Bindings.AuthenticationLoginRequest)">
+            <summary>
+            Get a new token by credentials
+            </summary>
+            <param name="binding"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.AuthenticationController.Create(Emerald.Application.Models.Bindings.AuthenticationRegisterRequest)">
+            <summary>
+            Create a new user
+            </summary>
+            <param name="binding"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.AuthenticationController.Renew">
+            <summary>
+            Get new token by old token
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.Quest.QuestController.Query(Emerald.Application.Models.Response.Quest.QuestQueryRequest)">
             <summary>
             Query quests based on specified settings without tracker information
             </summary>
-            <param name="offset"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Query(System.Int32)">
-            <summary>
-            Queries meta information about all created quests by this user
-            </summary>
+            <param name="request"></param>
             <returns></returns>
         </member>
         <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Get(MongoDB.Bson.ObjectId)">
@@ -31,11 +45,11 @@
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Publish(MongoDB.Bson.ObjectId)">
+        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Publish(Emerald.Application.Models.Request.Quest.QuestCreatePublishRequest)">
             <summary>
             Publish the development version of a quest to make it stable
             </summary>
-            <param name="questId"></param>
+            <param name="request"></param>
             <returns></returns>
         </member>
         <member name="M:Emerald.Application.Controllers.QuestPlayController.Query(Emerald.Application.Models.Request.QuestPlayQueryRequest)">
@@ -45,7 +59,14 @@
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:Emerald.Application.Controllers.QuestPlayController.QueryTrackerNodes">
+        <member name="M:Emerald.Application.Controllers.QuestPlayController.Create(Emerald.Application.Models.Request.Quest.QuestPlayCreateRequest)">
+            <summary>
+            Create a quest tracker for a single quest. Use to start playing a quest
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.QuestPlayController.QueryTrackerNodes(MongoDB.Bson.ObjectId)">
             <summary>
             Query trackernodes with all module and memento information for a single playing quest
             </summary>

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.QuestPrototypeAggregate.Modules
 {
@@ -18,6 +19,14 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Modules
         }
 
         public override Module ConvertToModule(IPrototypeContext context)
-            => new StoryModule(context.ConvertModuleId(NextModuleId));
+            => new StoryModule(context.ConvertModuleId(Id), Objective, context.ConvertModuleId(NextModuleId));
+
+        public override void Verify(IPrototypeContext context)
+        {
+            if (context.ContainsModuleId(NextModuleId) == false)
+            {
+                throw new DomainException($"({Id}) NextModuleId in StoryModule not found got {NextModuleId}");
+            }
+        }
     }
 }

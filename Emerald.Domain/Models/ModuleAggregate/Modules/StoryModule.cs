@@ -14,7 +14,8 @@ namespace Emerald.Domain.Models.ModuleAggregate.Modules
     {
         public ObjectId NextModuleId { get; set; }
 
-        public StoryModule(ObjectId nextModuleId)
+        public StoryModule(ObjectId id, string objective, ObjectId nextModuleId)
+            : base(id, objective)
         {
             NextModuleId = nextModuleId;
         }

@@ -17,6 +17,12 @@ using MongoDB.Driver.Linq;
 using Emerald.Domain.Models.TrackerAggregate;
 using Microsoft.EntityFrameworkCore;
 using Emerald.Application.Services.Factories;
+using Emerald.Application.Models.Request.Quest;
+using Emerald.Domain.Models.QuestAggregate;
+using Emerald.Domain.Models.QuestVersionAggregate;
+using Emerald.Domain.Repositories;
+using MongoDB.Bson;
+using System.Linq;
 
 namespace Emerald.Application.Controllers
 {
@@ -25,21 +31,33 @@ namespace Emerald.Application.Controllers
     [Route("/play")]
     public class QuestPlayController : ControllerBase
     {
+        private IQuestRepository questRepository;
+        private IComponentRepository componentRepository;
+        private IModuleRepository moduleRepository;
         private ITrackerRepository trackerRepository;
         private IUserRepository userRepository;
 
+        private ModuleModelFactory moduleFactory;
+        private QuestPlayService questPlayService;
         private ResponseEventModelFactory responseEventFactory;
         private TrackerModelFactory trackerFactory;
-        private QuestPlayService questPlayService;
+        private TrackerNodeModelFactory trackerNodeFactory;
 
-        public QuestPlayController(ITrackerRepository trackerRepository, IUserRepository userRepository, ResponseEventModelFactory responseEventFactory, TrackerModelFactory trackerFactory, QuestPlayService questPlayService)
+        public QuestPlayController(IQuestRepository questRepository, IComponentRepository componentRepository, IModuleRepository moduleRepository, ITrackerRepository trackerRepository, IUserRepository userRepository, ModuleModelFactory moduleFactory, QuestPlayService questPlayService, ResponseEventModelFactory responseEventFactory, TrackerModelFactory trackerFactory, TrackerNodeModelFactory trackerNodeFactory)
         {
+            this.questRepository = questRepository;
+            this.componentRepository = componentRepository;
+            this.moduleRepository = moduleRepository;
             this.trackerRepository = trackerRepository;
             this.userRepository = userRepository;
+            this.moduleFactory = moduleFactory;
+            this.questPlayService = questPlayService;
             this.responseEventFactory = responseEventFactory;
             this.trackerFactory = trackerFactory;
-            this.questPlayService = questPlayService;
+            this.trackerNodeFactory = trackerNodeFactory;
         }
+
+
 
         /// <summary>
         /// Query based on specified settings already tracked quests
@@ -48,7 +66,7 @@ namespace Emerald.Application.Controllers
         /// <returns></returns>
         [HttpGet("query")]
         public async Task<ActionResult<QuestPlayQueryResponse>> Query(
-            [FromForm] QuestPlayQueryRequest request)
+            [FromQuery] QuestPlayQueryRequest request)
         {
             User user = await  userRepository.Get(User);
 
@@ -61,8 +79,48 @@ namespace Emerald.Application.Controllers
             }
 
             return Ok(new QuestPlayQueryResponse(
-                trackers: await trackerFactory.Create(await queryable.ToListAsync())
+                trackers: await trackerFactory.Create(queryable.ToList())
             ));
+        }
+
+        /// <summary>
+        /// Create a quest tracker for a single quest. Use to start playing a quest
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("create")]
+        public async Task<ActionResult<QuestPlayCreateRequest>> Create(
+            [FromBody] QuestPlayCreateRequest request)
+        {
+            User user = await userRepository.Get(User);
+            Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(request.QuestId);
+
+            QuestVersion? questVersion = quest.GetCurrentQuestVersion();
+
+            if (questVersion == null)
+            {
+                return BadRequest(new
+                {
+                    Message = "Tracker can not be created for unpublished quest"
+                });
+            }
+            
+            Tracker tracker = new Tracker(
+                user.Id,
+                quest,
+                questVersion);
+
+            Module module = await moduleRepository.Get(questVersion.FirstModuleId);
+            tracker.AddTrackerPath(new TrackerNode(module.Id));
+
+            user.AddTracker(tracker);
+
+            await trackerRepository.Add(tracker);
+            await userRepository.Update(user);
+
+            return Ok(new QuestPlayCreateResponse(
+                await trackerFactory.Create(tracker),
+                await trackerNodeFactory.Create(tracker.Path.First())));
         }
 
         /// <summary>
@@ -70,9 +128,13 @@ namespace Emerald.Application.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("querytrackernodes")]
-        public async Task<IActionResult> QueryTrackerNodes()
+        public async Task<ActionResult<QuestPlayQueryTrackerNodesResponse>> QueryTrackerNodes(
+            [FromQuery] ObjectId trackerId)
         {
-            return Ok();
+            Tracker tracker = await trackerRepository.Get(trackerId);
+
+            return Ok(new QuestPlayQueryTrackerNodesResponse(
+                await trackerNodeFactory.Create(tracker.Path)));
         }
 
         [HttpPost("event/position")]
@@ -87,24 +149,15 @@ namespace Emerald.Application.Controllers
         public async Task<ActionResult<QuestPlayEventResponse>> HandleEvent(
             [FromBody] ChoiceRequestEventModel choiceEvent)
         {
-            try
-            {
-                ResponseEventCollection responseEvent = await questPlayService.HandleEvent(
-                    await userRepository.Get(User),
-                    new ChoiceRequestEvent(choiceEvent.Choice));
+            ResponseEventCollection responseEvent = await questPlayService.HandleEvent(
+                await userRepository.Get(User),
+                choiceEvent.TrackerId,
+                new ChoiceRequestEvent(choiceEvent.Choice));
 
-                return Ok(new QuestPlayEventResponse
-                {
-                    ResponseEventCollection = await responseEventFactory.Create(responseEvent)
-                });
-            }
-            catch (DomainException e)
+            return Ok(new QuestPlayEventResponse
             {
-                return BadRequest(new
-                {
-                    message = e.Message
-                });
-            }
+                ResponseEventCollection = await responseEventFactory.Create(responseEvent)
+            });
         }
     }
 }

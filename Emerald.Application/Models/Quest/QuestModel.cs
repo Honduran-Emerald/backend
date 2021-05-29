@@ -20,17 +20,18 @@ namespace Emerald.Application.Models.Quest
         public bool Public { get; set; }
         public int Version { get; set; }
 
-        public string LocationName { get; set; }
+        public string? ApproximateTime { get; set; }
+        public string? LocationName { get; set; }
 
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public List<string> Tags { get; set; }
+        public string? Title { get; set; }
+        public string? Description { get; set; }
+        public List<string>? Tags { get; set; }
 
-        public LocationModel Location { get; set; }
-        public string ImageId { get; set; }
+        public LocationModel? Location { get; set; }
+        public string? ImageId { get; set; }
 
-        public string ProfileImageId { get; set; }
-        public string ProfileName { get; set; }
+        public string? ProfileImageId { get; set; }
+        public string? ProfileName { get; set; }
 
         public DateTime CreationTime { get; set; }
 
@@ -38,7 +39,7 @@ namespace Emerald.Application.Models.Quest
         public int Plays { get; set; }
         public int Finishes { get; set; }
 
-        public QuestModel(string id, ObjectId ownerId, string ownerName, string? ownerImageId, bool @public, int version, string locationName, string title, string description, List<string> tags, LocationModel location, string imageId, string profileImageId, string profileName, DateTime creationTime, int votes, int plays, int finishes)
+        public QuestModel(string id, ObjectId ownerId, string ownerName, string? ownerImageId, bool @public, int version, string? approximateTime, string? locationName, string? title, string? description, List<string>? tags, LocationModel? location, string? imageId, string? profileImageId, string? profileName, DateTime creationTime, int votes, int plays, int finishes)
         {
             Id = id;
             OwnerId = ownerId;
@@ -46,6 +47,7 @@ namespace Emerald.Application.Models.Quest
             OwnerImageId = ownerImageId;
             Public = @public;
             Version = version;
+            ApproximateTime = approximateTime;
             LocationName = locationName;
             Title = title;
             Description = description;

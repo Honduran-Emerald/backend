@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace Emerald.Application.Infrastructure.Middleware
             _next = next;
         }
 
-        public async Task Invoke(HttpContext httpContext)
+        public async Task Invoke(HttpContext httpContext, ILogger<DomainExceptionHandlerMiddleware> logger)
         {
             try
             {
@@ -27,6 +28,15 @@ namespace Emerald.Application.Infrastructure.Middleware
             }
             catch (DomainException domainException)
             {
+                if (httpContext.User.Identity != null && httpContext.User.Identity.IsAuthenticated)
+                {
+                    logger.LogWarning($"User '{httpContext.User.Identity.Name}' caused DomainException '{domainException.Message}'");
+                }
+                else
+                {
+                    logger.LogWarning($"Anonymous caused DomainException '{domainException.Message}'");
+                }
+
                 httpContext.Response.StatusCode = 400;
                 await httpContext.Response.WriteAsJsonAsync(new
                 {

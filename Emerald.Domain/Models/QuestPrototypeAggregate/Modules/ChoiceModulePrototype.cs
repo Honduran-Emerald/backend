@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.QuestPrototypeAggregate.Modules
 {
@@ -25,6 +26,19 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Modules
                 Choices.Select(c => new ChoiceModule.Choice(context.ConvertModuleId(c.NextModuleId), c.Text))
                        .ToList());
 
+        public override void Verify(IPrototypeContext context)
+        {
+            if (Choices.Count == 0)
+            {
+                throw new DomainException($"({Id}) Choicemodule missing any choices");
+            }
+
+            foreach (ChoiceModulePrototypeChoice choice in Choices)
+            {
+                if (context.ContainsModuleId(choice.NextModuleId) == false)
+                    throw new DomainException($"({Id}) Choice NextModuleId in ChoiceModule not found got {choice.NextModuleId}");
+            }
+        }
     }
     public class ChoiceModulePrototypeChoice
     {
