@@ -35,11 +35,11 @@ namespace Emerald.Infrastructure.Repositories
         public async Task<Tracker> Get(ObjectId id)
         {
             var tracker = await collection.Find(o => o.Id == id)
-                .FirstAsync();
+                .FirstOrDefaultAsync();
 
             if (tracker == null)
             {
-                throw new MissingElementException();
+                throw new MissingElementException($"Tracker '{id}' not found");
             }
 
             return tracker;

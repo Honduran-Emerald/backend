@@ -32,7 +32,7 @@ namespace Emerald.Infrastructure.Repositories
 
             if (user == null)
             {
-                throw new MissingElementException();
+                throw new MissingElementException($"User '{id}' not found");
             }
 
             return user;
