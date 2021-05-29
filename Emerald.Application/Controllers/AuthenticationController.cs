@@ -29,6 +29,11 @@ namespace Emerald.Application.Controllers
             this.authentication = authentication;
         }
 
+        /// <summary>
+        /// Get a new token by credentials
+        /// </summary>
+        /// <param name="binding"></param>
+        /// <returns></returns>
         [HttpPost("login")]
         public async Task<ActionResult<AuthenticationTokenResponse>> Login(
             [FromBody] AuthenticationLoginRequest binding)
@@ -49,6 +54,11 @@ namespace Emerald.Application.Controllers
             });
         }
 
+        /// <summary>
+        /// Create a new user
+        /// </summary>
+        /// <param name="binding"></param>
+        /// <returns></returns>
         [HttpPost("create")]
         public async Task<ActionResult<AuthenticationTokenResponse>> Create(
             [FromBody] AuthenticationRegisterRequest binding)
@@ -74,6 +84,10 @@ namespace Emerald.Application.Controllers
             }
         }
 
+        /// <summary>
+        /// Get new token by old token
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         [HttpPost("renew")]
         public async Task<ActionResult<AuthenticationTokenResponse>> Renew()

@@ -12,7 +12,6 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
     public class QuestVersion
     {
         public int Version { get; set; }
-        public bool Public { get; set; }
 
         public string Title { get; set; }
         public string Description { get; set; }
@@ -30,11 +29,15 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
         public List<ObjectId> ModuleIds { get; set; }
         public ObjectId FirstModuleId { get; set; }
 
-        public QuestVersion(QuestPrototype questPrototype, int version)
+        public QuestVersion(QuestPrototype questPrototype, int version, List<ObjectId> moduleIds, ObjectId firstModuleId)
         {
-            Version = version;
-            Public = true;
+            if (moduleIds.Contains(firstModuleId) == false)
+            {
+                throw new DomainException("First moduleid missing in modules");
+            }
 
+            Version = version;
+            
             Title = questPrototype.Title;
             Description = questPrototype.Description;
             Tags = questPrototype.Tags;
@@ -47,7 +50,10 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
             ProfileName = questPrototype.ProfileName;
 
             CreationTime = DateTime.UtcNow;
+
             ModuleIds = new List<ObjectId>();
+            ModuleIds.AddRange(moduleIds);
+            FirstModuleId = firstModuleId;
         }
 
         private QuestVersion()
@@ -68,7 +74,7 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
             ModuleIds = new List<ObjectId>();
         }
 
-        public void PlaceModules(List<ObjectId> moduleIds, ObjectId firstModuleId)
+        private void PlaceModules(List<ObjectId> moduleIds, ObjectId firstModuleId)
         {
             if (moduleIds.Contains(firstModuleId) == false)
             {

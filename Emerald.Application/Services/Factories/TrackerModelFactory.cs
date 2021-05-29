@@ -31,6 +31,7 @@ namespace Emerald.Application.Services.Factories
             }
 
             return new TrackerModel(
+                source.Id,
                 newestQuestVersion: questVersion.Version == stableQuestVersion.Version,
                 finished: source.Finished,
                 vote: source.Vote,

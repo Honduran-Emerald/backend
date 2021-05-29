@@ -37,6 +37,7 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate
         }
 
         public abstract Module ConvertToModule(IPrototypeContext context);
+        public abstract void Verify(IPrototypeContext context);
 
         public List<Component> ConvertToComponents()
             => Components.Select(c => c.ConvertToComponent())

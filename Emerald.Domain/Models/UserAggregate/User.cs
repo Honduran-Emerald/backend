@@ -15,7 +15,6 @@ namespace Emerald.Domain.Models.UserAggregate
     {
         public List<ObjectId> QuestIds { get; set; }
         public List<ObjectId> TrackerIds { get; set; }
-        public ObjectId? ActiveTrackerId { get; set; }
 
         public string? Image { get; set; }
         public string SyncToken { get; set; }
@@ -42,19 +41,24 @@ namespace Emerald.Domain.Models.UserAggregate
             SyncToken = Utility.RandomString(8);
         }
 
-        public void SetActiveTracker(Tracker tracker)
-        {
-            if (TrackerIds.Contains(tracker.Id) == false)
-            {
-                throw new DomainException("Can not set missing tracker as active");
-            }
-
-            ActiveTrackerId = tracker.Id;
-        }
-
         public void AddExperience(long experience)
         {
             Experience += experience;
+        }
+
+        public void AddTracker(Tracker tracker)
+        {
+            if (TrackerIds.Contains(tracker.Id))
+            {
+                throw new DomainException("Tracker already added to user");
+            }
+
+            if (tracker.UserId != Id)
+            {
+                throw new DomainException("Tracker already added to other user");
+            }
+
+            TrackerIds.Add(tracker.Id);
         }
 
         public void GenerateNewSyncToken()

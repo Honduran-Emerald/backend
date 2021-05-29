@@ -36,6 +36,7 @@ namespace Emerald.Application.Controllers
         [HttpPost("init")]
         public async Task<IActionResult> Init(
             [FromQuery] LocationModel location,
+            [FromQuery] string locationName,
             [FromQuery] string title,
             [FromQuery] string description,
             [FromQuery] List<string> tags,
@@ -46,6 +47,7 @@ namespace Emerald.Application.Controllers
                 title,
                 description,
                 tags,
+                locationName,
                 new Location(
                     location.Longitude,
                     location.Latitude),

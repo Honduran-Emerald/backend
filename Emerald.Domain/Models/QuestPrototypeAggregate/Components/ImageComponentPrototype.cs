@@ -18,5 +18,10 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Components
 
         public override Component ConvertToComponent()
             => new ImageComponent(ImageId);
+
+        public override void Verify()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

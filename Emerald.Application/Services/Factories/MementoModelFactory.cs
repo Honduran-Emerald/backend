@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace Emerald.Application.Services.Factories
 {
-    public class MementoModelFactory : IModelFactory<TrackerNodeMemento, MementoModel>
+    public class MementoModelFactory : IModelFactory<TrackerNodeMemento?, MementoModel?>
     {
-        public async Task<MementoModel> Create(TrackerNodeMemento memento)
+        public async Task<MementoModel?> Create(TrackerNodeMemento? memento)
         {
+            if (memento == null)
+                return null;
+
             switch (memento)
             {
                 case ChoiceModuleMemento choiceMemento:

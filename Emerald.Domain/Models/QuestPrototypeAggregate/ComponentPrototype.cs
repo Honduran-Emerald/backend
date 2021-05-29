@@ -17,5 +17,6 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate
     public abstract class ComponentPrototype
     {
         public abstract Component ConvertToComponent();
+        public abstract void Verify();
     }
 }

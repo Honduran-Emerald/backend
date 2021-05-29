@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Emerald.Application.Models.Quest.RequestEvent;
+using MongoDB.Bson;
+using System.ComponentModel.DataAnnotations;
 
 namespace Emerald.Application.Models.Quest.Events
 {
-    public class ChoiceRequestEventModel
+    public class ChoiceRequestEventModel : RequestEventModel
     {
         [Required]
         public int Choice { get; set; }
