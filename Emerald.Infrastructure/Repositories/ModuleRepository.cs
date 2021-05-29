@@ -42,7 +42,7 @@ namespace Emerald.Infrastructure.Repositories
 
             if (module == null)
             {
-                throw new MissingElementException();
+                throw new MissingElementException($"Module '{id}' not found");
             }
 
             return module;

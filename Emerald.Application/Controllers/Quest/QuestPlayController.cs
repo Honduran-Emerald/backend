@@ -104,6 +104,16 @@ namespace Emerald.Application.Controllers
                     Message = "Tracker can not be created for unpublished quest"
                 });
             }
+
+            if (await trackerRepository.GetQueryable()
+                    .Where(t => t.UserId == user.Id && t.QuestId == request.QuestId)
+                    .AnyAsync())
+            {
+                return BadRequest(new
+                {
+                    Message = "Tracker can not be created for already tracked quest"
+                });
+            }
             
             Tracker tracker = new Tracker(
                 user.Id,

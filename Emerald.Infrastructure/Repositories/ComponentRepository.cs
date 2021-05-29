@@ -30,7 +30,7 @@ namespace Emerald.Infrastructure.Repositories
 
             if (component == null)
             {
-                throw new MissingElementException();
+                throw new MissingElementException($"Component '{id}' not found");
             }
 
             return component;

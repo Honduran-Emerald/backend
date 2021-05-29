@@ -38,7 +38,7 @@ namespace Emerald.Infrastructure.Repositories
 
             if (quest == null)
             {
-                throw new MissingElementException();
+                throw new MissingElementException($"Quest '{questId}' not found");
             }
 
             return quest;
