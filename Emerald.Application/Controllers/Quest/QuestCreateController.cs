@@ -79,7 +79,7 @@ namespace Emerald.Application.Controllers.Quest
 
             await questRepository.Add(quest);
             
-            return Ok(new QuestCreateCreateResponse(questPrototype));
+            return Ok(new QuestCreateCreateResponse(quest.Id, questPrototype));
         }
 
         /// <summary>
