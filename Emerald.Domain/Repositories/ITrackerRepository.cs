@@ -10,6 +10,7 @@ namespace Emerald.Infrastructure.Repositories
     {
         Task Add(Tracker tracker);
         Task Update(Tracker tracker);
+        Task Remove(Tracker tracker);
 
         Task<bool> HasAnyTrackerForQuest(Quest quest);
         Task<Tracker> Get(ObjectId id);

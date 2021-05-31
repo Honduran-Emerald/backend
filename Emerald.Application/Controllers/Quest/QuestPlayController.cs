@@ -23,6 +23,7 @@ using Emerald.Domain.Models.QuestVersionAggregate;
 using Emerald.Domain.Repositories;
 using MongoDB.Bson;
 using System.Linq;
+using System.ComponentModel.DataAnnotations;
 
 namespace Emerald.Application.Controllers
 {
@@ -130,7 +131,77 @@ namespace Emerald.Application.Controllers
 
             return Ok(new QuestPlayCreateResponse(
                 await trackerFactory.Create(tracker),
-                await trackerNodeFactory.Create(tracker.Path.First())));
+                await trackerNodeFactory.Create(tracker.Nodes.First())));
+        }
+
+        /// <summary>
+        /// Set voting by tracker for a quest if not already done
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("vote")]
+        public async Task<IActionResult> Vote(
+            [FromBody] QuestPlayVoteRequest request)
+        {
+            User user = await userRepository.Get(User);
+            Tracker tracker = await trackerRepository.Get(request.TrackerId);
+            
+            if (tracker.UserId != user.Id)
+            {
+                return BadRequest(new
+                {
+                    Message = "Can not vote tracker of other players"
+                });
+            }
+
+            if (tracker.Vote != VoteType.None)
+            {
+                return BadRequest(new
+                {
+                    Message = "Quest already voted"
+                });
+            }
+
+            switch (request.Vote)
+            {
+                case VoteType.Up:
+                    tracker.Upvote();
+                    break;
+
+                case VoteType.Down:
+                    tracker.Downvote();
+                    break;
+            }
+
+            await trackerRepository.Update(tracker);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Deletes all trackernodes and updates tracker to newest quest version
+        /// </summary>
+        /// <param name="trackerId"></param>
+        /// <returns></returns>
+        [HttpPost("reset")]
+        public async Task<IActionResult> Reset(
+            [FromForm] [Required] ObjectId trackerId)
+        {
+            User user = await userRepository.Get(User);
+            Tracker tracker = await trackerRepository.Get(trackerId);
+
+            if (tracker.UserId != user.Id)
+            {
+                return BadRequest(new
+                {
+                    Message = "Can not reset tracker of other users"
+                });
+            }
+
+            tracker.Reset();
+            await trackerRepository.Update(tracker);
+
+            return Ok();
         }
 
         /// <summary>
@@ -144,9 +215,14 @@ namespace Emerald.Application.Controllers
             Tracker tracker = await trackerRepository.Get(trackerId);
 
             return Ok(new QuestPlayQueryTrackerNodesResponse(
-                await trackerNodeFactory.Create(tracker.Path)));
+                await trackerNodeFactory.Create(tracker.Nodes)));
         }
 
+        /// <summary>
+        /// Trigger position event with a location value
+        /// </summary>
+        /// <param name="positionRequest"></param>
+        /// <returns></returns>
         [HttpPost("event/position")]
         public async Task<IActionResult> HandleEvent(PositionRequestEventModel positionRequest)
         {
@@ -155,6 +231,11 @@ namespace Emerald.Application.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Trigger choice event with a integer choice value
+        /// </summary>
+        /// <param name="choiceEvent"></param>
+        /// <returns></returns>
         [HttpPost("event/choice")]
         public async Task<ActionResult<QuestPlayEventResponse>> HandleEvent(
             [FromBody] ChoiceRequestEventModel choiceEvent)

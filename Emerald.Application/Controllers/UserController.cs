@@ -24,6 +24,10 @@ namespace Emerald.Application.Controllers
             this.userManager = userManager;
         }
 
+        /// <summary>
+        /// Get profile information about current authorized user
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         [HttpGet("me")]
         public async Task<ActionResult<UserMeResponse>> Me()

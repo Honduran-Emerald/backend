@@ -48,6 +48,11 @@ namespace Emerald.Domain.Models.PrototypeAggregate
 
         public void Verify(IPrototypeContext context)
         {
+            if (context.ContainsModuleId(FirstModuleId) == false)
+            {
+                throw new DomainException("FirstModuleId is not found in modules");
+            }
+
             foreach (ModulePrototype module in Modules)
             {
                 module.Verify(context);

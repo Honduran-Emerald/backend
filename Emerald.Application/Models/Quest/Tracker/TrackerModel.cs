@@ -9,6 +9,7 @@ namespace Emerald.Application.Models.Quest.Tracker
 {
     public class TrackerModel
     {
+        public ObjectId QuestId { get; set; }
         public ObjectId TrackerId { get; set; }
 
         public bool NewestQuestVersion { get; set; }
@@ -20,8 +21,9 @@ namespace Emerald.Application.Models.Quest.Tracker
         public string Objective { get; set; }
         public string Author { get; set; }
 
-        public TrackerModel(ObjectId trackerId, bool newestQuestVersion, bool finished, VoteType vote, DateTime creationTime, string questName, string objective, string author)
+        public TrackerModel(ObjectId questId, ObjectId trackerId, bool newestQuestVersion, bool finished, VoteType vote, DateTime creationTime, string questName, string objective, string author)
         {
+            QuestId = questId;
             TrackerId = trackerId;
             NewestQuestVersion = newestQuestVersion;
             Finished = finished;

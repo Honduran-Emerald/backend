@@ -31,6 +31,13 @@
             <param name="request"></param>
             <returns></returns>
         </member>
+        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Create(Emerald.Application.Models.Request.Quest.QuestCreateCreateRequest)">
+            <summary>
+            Create new quest together with a new questprototype
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
         <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Get(MongoDB.Bson.ObjectId)">
             <summary>
             Queries all information about a single by the user created quest
@@ -66,9 +73,43 @@
             <param name="request"></param>
             <returns></returns>
         </member>
+        <member name="M:Emerald.Application.Controllers.QuestPlayController.Vote(Emerald.Application.Models.Request.Quest.QuestPlayVoteRequest)">
+            <summary>
+            Set voting by tracker for a quest if not already done
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.QuestPlayController.Reset(MongoDB.Bson.ObjectId)">
+            <summary>
+            Deletes all trackernodes and updates tracker to newest quest version
+            </summary>
+            <param name="trackerId"></param>
+            <returns></returns>
+        </member>
         <member name="M:Emerald.Application.Controllers.QuestPlayController.QueryTrackerNodes(MongoDB.Bson.ObjectId)">
             <summary>
             Query trackernodes with all module and memento information for a single playing quest
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.QuestPlayController.HandleEvent(Emerald.Application.Models.Quest.Events.PositionRequestEventModel)">
+            <summary>
+            Trigger position event with a location value
+            </summary>
+            <param name="positionRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.QuestPlayController.HandleEvent(Emerald.Application.Models.Quest.Events.ChoiceRequestEventModel)">
+            <summary>
+            Trigger choice event with a integer choice value
+            </summary>
+            <param name="choiceEvent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.UserController.Me">
+            <summary>
+            Get profile information about current authorized user
             </summary>
             <returns></returns>
         </member>
