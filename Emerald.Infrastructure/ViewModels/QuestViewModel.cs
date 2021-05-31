@@ -4,7 +4,7 @@ namespace Emerald.Infrastructure.ViewModels
 {
     public class QuestViewModel
     {
-        public ObjectId QuestId { get; set; }
+        public ObjectId Id { get; set; }
 
         public int Votes { get; set; }
         public int Finishes { get; set; }
@@ -12,7 +12,7 @@ namespace Emerald.Infrastructure.ViewModels
 
         public QuestViewModel(ObjectId questId, int votes, int finishs, int plays)
         {
-            QuestId = questId;
+            Id = questId;
             Votes = votes;
             Finishes = finishs;
             Plays = plays;

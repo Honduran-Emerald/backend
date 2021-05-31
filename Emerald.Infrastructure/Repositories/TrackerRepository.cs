@@ -56,5 +56,10 @@ namespace Emerald.Infrastructure.Repositories
         {
             return collection.AsQueryable();
         }
+
+        public async Task Remove(Tracker tracker)
+        {
+            await collection.DeleteOneAsync(t => t.Id == tracker.Id);
+        }
     }
 }

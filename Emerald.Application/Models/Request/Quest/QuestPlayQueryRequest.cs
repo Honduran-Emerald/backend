@@ -8,16 +8,6 @@ namespace Emerald.Application.Models.Request
 {
     public class QuestPlayQueryRequest
     {
-        public bool Unfinished { get; set; }
-
-        public QuestPlayQueryRequest(bool unfinished)
-        {
-            Unfinished = unfinished;
-        }
-
-        public QuestPlayQueryRequest()
-        {
-            Unfinished = false;
-        }
+        public bool Unfinished { get; set; } = false;
     }
 }

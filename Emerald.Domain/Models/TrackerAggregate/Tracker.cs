@@ -1,4 +1,5 @@
-﻿using Emerald.Domain.Models.QuestAggregate;
+﻿using Emerald.Domain.Events;
+using Emerald.Domain.Models.QuestAggregate;
 using Emerald.Domain.Models.QuestVersionAggregate;
 using MongoDB.Bson;
 using System;
@@ -17,7 +18,7 @@ namespace Emerald.Domain.Models.TrackerAggregate
         public VoteType Vote { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public List<TrackerNode> Path { get; set; }
+        public List<TrackerNode> Nodes { get; set; }
         public bool Finished { get; set; }
 
         public Tracker(ObjectId userId, Quest quest, QuestVersion questVersion)
@@ -29,21 +30,23 @@ namespace Emerald.Domain.Models.TrackerAggregate
             UserId = userId;
             CreatedAt = DateTime.UtcNow;
             Finished = false;
+
+            AddDomainEvent(new QuestStartedDomainEvent(QuestId, UserId));
         }
 
         private Tracker()
         {
-            Path = new List<TrackerNode>();
+            Nodes = new List<TrackerNode>();
         }
 
         public void AddTrackerPath(TrackerNode trackerPath)
         {
-            Path.Add(trackerPath);
+            Nodes.Add(trackerPath);
         }
 
         public TrackerNode GetCurrentTrackerPath()
         {
-            return Path[Path.Count - 1];
+            return Nodes[Nodes.Count - 1];
         }
 
         public void Upvote()
@@ -54,6 +57,7 @@ namespace Emerald.Domain.Models.TrackerAggregate
             }
 
             Vote = VoteType.Up;
+            AddDomainEvent(new QuestVotedDomainEvent(QuestId, UserId, Vote));
         }
 
         public void Downvote()
@@ -64,11 +68,24 @@ namespace Emerald.Domain.Models.TrackerAggregate
             }
 
             Vote = VoteType.Down;
+            AddDomainEvent(new QuestVotedDomainEvent(QuestId, UserId, Vote));
         }
 
         public void Finish()
         {
             Finished = true;
+            AddDomainEvent(new QuestFinishDomainEvent(QuestId, UserId));
+        }
+
+        public void Reset()
+        {
+            TrackerNode firstNode = Nodes[0];
+            Nodes.Clear();
+            Nodes.Add(firstNode);
+
+            AddDomainEvent(new QuestResetDomainEvent(QuestId, Vote, Finished));
+            Finished = false;
+            Vote = VoteType.None;
         }
     }
 }
