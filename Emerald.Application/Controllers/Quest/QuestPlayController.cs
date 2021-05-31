@@ -198,7 +198,12 @@ namespace Emerald.Application.Controllers
                 });
             }
 
-            tracker.Reset();
+            var quest = await questRepository.Get(tracker.QuestId);
+
+            tracker.Reset(quest.GetCurrentQuestVersionNumber());
+            var questVersion = quest.GetQuestVersion(tracker.QuestVersion);
+            tracker.AddTrackerPath(new TrackerNode(questVersion.FirstModuleId));
+
             await trackerRepository.Update(tracker);
 
             return Ok();
