@@ -31,7 +31,7 @@ namespace Emerald.Application.Services.Factories
             Quest quest = await questRepository.Get(source.QuestId);
             QuestVersion questVersion = quest.GetQuestVersion(source.QuestVersion);
             QuestVersion? stableQuestVersion = quest.GetCurrentQuestVersion();
-            Module module = await moduleRepository.Get(source.Path.Last().ModuleId);
+            Module module = await moduleRepository.Get(source.Nodes.Last().ModuleId);
             User owner = await userRepository.Get(quest.OwnerUserId);
 
             if (stableQuestVersion == null)
@@ -40,6 +40,7 @@ namespace Emerald.Application.Services.Factories
             }
 
             return new TrackerModel(
+                source.QuestId,
                 source.Id,
                 newestQuestVersion: questVersion.Version == stableQuestVersion.Version,
                 finished: source.Finished,

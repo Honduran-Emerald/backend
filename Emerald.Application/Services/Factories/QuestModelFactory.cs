@@ -4,7 +4,7 @@ using Emerald.Domain.Models.QuestAggregate;
 using Emerald.Domain.Models.QuestVersionAggregate;
 using Emerald.Domain.Models.UserAggregate;
 using Emerald.Infrastructure.Repositories;
-using Emerald.Infrastructure.ViewModelHandlers;
+using Emerald.Infrastructure.ViewModelStash;
 using Emerald.Infrastructure.ViewModels;
 using System;
 using System.Collections.Generic;

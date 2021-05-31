@@ -31,49 +31,5 @@ namespace Emerald.Application.Controllers
             this.questRepository = questRepository;
             this.userManager = userManager;
         }
-
-        [Authorize]
-        [HttpPost("init")]
-        public async Task<IActionResult> Init(
-            [FromQuery] LocationModel location,
-            [FromQuery] string locationName,
-            [FromQuery] string title,
-            [FromQuery] string description,
-            [FromQuery] List<string> tags,
-            [FromQuery] string imageId)
-        {
-            User user = await userManager.GetUserAsync(User);
-            QuestPrototype questPrototype = new QuestPrototype(
-                title,
-                description,
-                tags,
-                locationName,
-                new Location(
-                    location.Longitude,
-                    location.Latitude),
-                imageId);
-
-            await questPrototypeRepository.Add(questPrototype);
-
-            Domain.Models.QuestAggregate.Quest quest = new Domain.Models.QuestAggregate.Quest(
-                user,
-                questPrototype);
-
-            await questRepository.Add(quest);
-            /*
-            Domain.Models.QuestAggregate.Quest quest = new Domain.Models.QuestAggregate.Quest(user);
-            quest.AddQuestVersion(new Domain.Models.QuestVersionAggregate.QuestVersion(
-                new Domain.Models.Location(
-                    location.Longitude,
-                    location.Latitude),
-                title,
-                description,
-                imageName,
-                1));
-            await questRepository.Add(quest);
-            */
-
-            return Ok(quest.Id);
-        }
     }
 }

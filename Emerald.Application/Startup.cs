@@ -15,7 +15,7 @@ using Emerald.Domain.Repositories;
 using Emerald.Domain.Services;
 using Emerald.Infrastructure;
 using Emerald.Infrastructure.Repositories;
-using Emerald.Infrastructure.ViewModelHandlers;
+using Emerald.Infrastructure.ViewModelStash;
 using JsonSubTypes;
 using KissLog;
 using KissLog.AspNetCore;
