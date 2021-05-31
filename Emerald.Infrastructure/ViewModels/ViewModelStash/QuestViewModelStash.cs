@@ -4,7 +4,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Threading.Tasks;
 
-namespace Emerald.Infrastructure.ViewModelHandlers
+namespace Emerald.Infrastructure.ViewModelStash
 {
     public class QuestViewModelStash
     {
@@ -12,18 +12,19 @@ namespace Emerald.Infrastructure.ViewModelHandlers
 
         public QuestViewModelStash(IMongoDbContext context)
         {
-            collection = context.Emerald.GetCollection<QuestViewModel>("questviewmodel");
+            collection = context.Emerald.GetCollection<QuestViewModel>("QuestViewModel");
         }
 
         public async Task<QuestViewModel> Get(ObjectId questId)
         {
             var viewModel = await collection
-                .Find(m => m.QuestId == questId)
+                .Find(m => m.Id == questId)
                 .FirstOrDefaultAsync();
 
             if (viewModel == null)
             {
                 viewModel = new QuestViewModel(questId, 0, 0, 0);
+                await collection.InsertOneAsync(viewModel);
             }
 
             return viewModel;
@@ -60,9 +61,9 @@ namespace Emerald.Infrastructure.ViewModelHandlers
             await Update(model);
         }
 
-        private async Task Update(QuestViewModel model)
+        public async Task Update(QuestViewModel model)
         {
-            await collection.ReplaceOneAsync(m => m.QuestId == model.QuestId, model);
+            await collection.ReplaceOneAsync(m => m.Id == model.Id, model);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Emerald.Domain.Events;
-using Emerald.Infrastructure.ViewModelHandlers;
+using Emerald.Infrastructure.ViewModelStash;
 using MediatR;
 using System;
 using System.Collections.Generic;
