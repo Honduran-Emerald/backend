@@ -77,12 +77,11 @@ namespace Emerald.Domain.Models.TrackerAggregate
             AddDomainEvent(new QuestFinishDomainEvent(QuestId, UserId));
         }
 
-        public void Reset()
+        public void Reset(int questVersion)
         {
-            TrackerNode firstNode = Nodes[0];
-            Nodes.Clear();
-            Nodes.Add(firstNode);
+            QuestVersion = questVersion;
 
+            Nodes.Clear();
             AddDomainEvent(new QuestResetDomainEvent(QuestId, Vote, Finished));
             Finished = false;
             Vote = VoteType.None;
