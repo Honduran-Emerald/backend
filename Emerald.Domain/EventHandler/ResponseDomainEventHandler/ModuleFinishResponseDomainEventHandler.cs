@@ -1,13 +1,8 @@
 ﻿using Emerald.Domain.Events;
 using Emerald.Domain.Models.ModuleAggregate;
 using Emerald.Domain.Models.TrackerAggregate;
-using Emerald.Domain.Repositories;
 using Emerald.Infrastructure.Repositories;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

@@ -1,6 +1,4 @@
-﻿using Emerald.Application.Models.Quest.Component;
-using Emerald.Domain.Models.QuestPrototypeAggregate;
-using Emerald.Domain.Models.QuestPrototypeAggregate.Components;
+﻿using Emerald.Domain.Models.QuestPrototypeAggregate;
 using Emerald.Domain.Models.QuestPrototypeAggregate.Modules;
 using JsonSubTypes;
 using Newtonsoft.Json;

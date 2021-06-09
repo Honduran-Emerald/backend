@@ -1,11 +1,6 @@
 ﻿using Emerald.Domain.Models.ComponentAggregate;
 using Emerald.Domain.Models.QuestPrototypeAggregate.Components;
 using MongoDB.Bson.Serialization.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Emerald.Domain.Models.QuestPrototypeAggregate
 {

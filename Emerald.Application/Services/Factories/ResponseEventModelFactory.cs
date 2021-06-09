@@ -1,5 +1,4 @@
 ﻿using Emerald.Application.Models.Quest.Events;
-using Emerald.Application.Models.Quest.Module;
 using Emerald.Application.Models.Quest.ResponseEvent;
 using Emerald.Application.Models.Response;
 using Emerald.Application.Services.Factories;

@@ -31,7 +31,7 @@ namespace Emerald.Application.Services.Factories
             {
                 case ChoiceModule choiceModule:
                     return new ChoiceModuleModel(
-                        module.Id.ToString(), 
+                        module.Id.ToString(),
                         module.Objective,
                         Enumerable.Range(0, choiceModule.Choices.Count)
                             .Select(i => new ChoiceModuleModel.ChoiceModuleModelChoice(

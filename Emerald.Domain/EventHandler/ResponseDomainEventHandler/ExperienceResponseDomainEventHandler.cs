@@ -3,17 +3,12 @@ using Emerald.Domain.Models.ModuleAggregate.ResponseEvents;
 using Emerald.Domain.Models.UserAggregate;
 using Emerald.Infrastructure.Repositories;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Emerald.Domain.EventHandler
 {
-    public class ExperienceResponseDomainEventHandler 
+    public class ExperienceResponseDomainEventHandler
         : INotificationHandler<QuestResponseDomainEvent<ExperienceResponseEvent>>
     {
         private IUserRepository userRepository;

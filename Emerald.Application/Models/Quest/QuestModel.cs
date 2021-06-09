@@ -1,12 +1,7 @@
 ﻿using Emerald.Application.Models.Quest.Tracker;
-using Emerald.Domain.Models.QuestAggregate;
-using Emerald.Domain.Models.QuestVersionAggregate;
-using Emerald.Domain.Models.TrackerAggregate;
 using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Emerald.Application.Models.Quest
 {

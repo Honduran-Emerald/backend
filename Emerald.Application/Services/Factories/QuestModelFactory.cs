@@ -1,17 +1,14 @@
 ﻿using Emerald.Application.Models;
 using Emerald.Application.Models.Quest;
+using Emerald.Application.Models.Quest.Tracker;
 using Emerald.Domain.Models.QuestAggregate;
 using Emerald.Domain.Models.QuestVersionAggregate;
+using Emerald.Domain.Models.TrackerAggregate;
 using Emerald.Domain.Models.UserAggregate;
 using Emerald.Infrastructure.Repositories;
-using Emerald.Infrastructure.ViewModelStash;
 using Emerald.Infrastructure.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Emerald.Infrastructure.ViewModelStash;
 using System.Threading.Tasks;
-using Emerald.Application.Models.Quest.Tracker;
-using Emerald.Domain.Models.TrackerAggregate;
 
 namespace Emerald.Application.Services.Factories
 {
@@ -81,7 +78,7 @@ namespace Emerald.Application.Services.Factories
                 current.Id, questPair.Quest.Id);
 
             return await Create(
-                questPair, 
+                questPair,
                 await trackerModelFactory.CreateNullable(tracker));
         }
     }

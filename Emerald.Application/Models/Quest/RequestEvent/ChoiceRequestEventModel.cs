@@ -1,5 +1,4 @@
 ﻿using Emerald.Application.Models.Quest.RequestEvent;
-using MongoDB.Bson;
 using System.ComponentModel.DataAnnotations;
 
 namespace Emerald.Application.Models.Quest.Events

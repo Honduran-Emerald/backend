@@ -1,9 +1,4 @@
-﻿using Emerald.Application.Models.Quest.Module;
-using Emerald.Application.Models.Quest.Tracker;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Emerald.Application.Models.Quest.Tracker;
 
 namespace Emerald.Application.Models.Response.Quest
 {

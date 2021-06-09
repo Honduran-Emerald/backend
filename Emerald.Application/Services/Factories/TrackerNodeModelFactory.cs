@@ -1,9 +1,6 @@
 ﻿using Emerald.Application.Models.Quest.Tracker;
 using Emerald.Domain.Models.TrackerAggregate;
 using Emerald.Domain.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Emerald.Application.Services.Factories

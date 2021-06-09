@@ -1,29 +1,25 @@
-﻿using Emerald.Application.Models.Response;
-using Emerald.Application.Models.Quest.Events;
+﻿using Emerald.Application.Models.Quest.Events;
+using Emerald.Application.Models.Request;
+using Emerald.Application.Models.Request.Quest;
+using Emerald.Application.Models.Response.Quest;
 using Emerald.Application.Services;
+using Emerald.Application.Services.Factories;
 using Emerald.Domain.Models.ModuleAggregate;
 using Emerald.Domain.Models.ModuleAggregate.RequestEvents;
-using Emerald.Domain.Models.UserAggregate;
-using Emerald.Domain.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Vitamin.Value.Domain.SeedWork;
-using Emerald.Application.Models.Response.Quest;
-using Emerald.Application.Models.Request;
-using Emerald.Infrastructure.Repositories;
-using MongoDB.Driver.Linq;
-using Emerald.Domain.Models.TrackerAggregate;
-using Microsoft.EntityFrameworkCore;
-using Emerald.Application.Services.Factories;
-using Emerald.Application.Models.Request.Quest;
-using Emerald.Domain.Models.QuestAggregate;
 using Emerald.Domain.Models.QuestVersionAggregate;
+using Emerald.Domain.Models.TrackerAggregate;
+using Emerald.Domain.Models.UserAggregate;
 using Emerald.Domain.Repositories;
+using Emerald.Domain.Services;
+using Emerald.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
-using System.Linq;
+using MongoDB.Driver.Linq;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Emerald.Application.Controllers
 {
@@ -69,7 +65,7 @@ namespace Emerald.Application.Controllers
         public async Task<ActionResult<QuestPlayQueryResponse>> Query(
             [FromQuery] QuestPlayQueryRequest request)
         {
-            User user = await  userRepository.Get(User);
+            User user = await userRepository.Get(User);
 
             IMongoQueryable<Tracker> queryable = trackerRepository.GetQueryable()
                 .Where(t => t.UserId == user.Id);
@@ -115,7 +111,7 @@ namespace Emerald.Application.Controllers
                     Message = "Tracker can not be created for already tracked quest"
                 });
             }
-            
+
             Tracker tracker = new Tracker(
                 user.Id,
                 quest,
@@ -145,7 +141,7 @@ namespace Emerald.Application.Controllers
         {
             User user = await userRepository.Get(User);
             Tracker tracker = await trackerRepository.Get(request.TrackerId);
-            
+
             if (tracker.UserId != user.Id)
             {
                 return BadRequest(new
@@ -185,7 +181,7 @@ namespace Emerald.Application.Controllers
         /// <returns></returns>
         [HttpPost("reset")]
         public async Task<IActionResult> Reset(
-            [FromForm] [Required] ObjectId trackerId)
+            [FromForm][Required] ObjectId trackerId)
         {
             User user = await userRepository.Get(User);
             Tracker tracker = await trackerRepository.Get(trackerId);

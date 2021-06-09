@@ -1,11 +1,7 @@
 ﻿using Emerald.Domain.Models.ModuleAggregate;
 using Emerald.Domain.Models.ModuleAggregate.Modules;
-using Emerald.Domain.Models.QuestPrototypeAggregate.Components;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.QuestPrototypeAggregate.Modules
@@ -23,7 +19,7 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Modules
             => new ChoiceModule(
                 context.ConvertModuleId(Id),
                 Objective,
-                Choices.Select(c => new ChoiceModule.Choice(context.ConvertModuleId((int) c.NextModuleId!), c.Text))
+                Choices.Select(c => new ChoiceModule.Choice(context.ConvertModuleId((int)c.NextModuleId!), c.Text))
                        .ToList());
 
         public override void Verify(IPrototypeContext context)

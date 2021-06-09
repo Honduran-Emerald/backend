@@ -42,7 +42,7 @@ namespace Emerald.Domain.Services
             Module module = await moduleRepository.Get(path.ModuleId);
 
             ResponseEventCollection responseEventCollection = module.ProcessEvent(
-                path.Memento, 
+                path.Memento,
                 requestEvent);
             path.UpdateMemento(responseEventCollection.Memento);
             await trackerRepository.Update(tracker);

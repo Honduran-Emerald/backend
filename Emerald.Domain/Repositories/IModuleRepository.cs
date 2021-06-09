@@ -1,5 +1,4 @@
 ﻿using Emerald.Domain.Models.ModuleAggregate;
-using Emerald.Domain.Models.QuestAggregate;
 using Emerald.Domain.Models.QuestVersionAggregate;
 using MongoDB.Bson;
 using MongoDB.Driver.Linq;

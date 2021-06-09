@@ -31,6 +31,13 @@
             <param name="request"></param>
             <returns></returns>
         </member>
+        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Query(System.Int32)">
+            <summary>
+            Query all quests created by the authorized user with special creator information
+            </summary>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
         <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Create(Emerald.Application.Models.Request.Quest.QuestCreateCreateRequest)">
             <summary>
             Create new quest together with a new questprototype
@@ -40,7 +47,7 @@
         </member>
         <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Get(MongoDB.Bson.ObjectId)">
             <summary>
-            Queries all information about a single by the user created quest
+            Query all information about a single by the authorized user created quest
             </summary>
             <param name="questId"></param>
             <returns></returns>
@@ -110,6 +117,12 @@
         <member name="M:Emerald.Application.Controllers.UserController.Me">
             <summary>
             Get profile information about current authorized user
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.UserController.Get(MongoDB.Bson.ObjectId)">
+            <summary>
+            Get profile information about another user
             </summary>
             <returns></returns>
         </member>
