@@ -11,7 +11,7 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Modules
 {
     public class StoryModulePrototype : ModulePrototype
     {
-        public int NextModuleId { get; set; }
+        public int? NextModuleId { get; set; }
 
         private StoryModulePrototype()
         {
@@ -19,13 +19,18 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Modules
         }
 
         public override Module ConvertToModule(IPrototypeContext context)
-            => new StoryModule(context.ConvertModuleId(Id), Objective, context.ConvertModuleId(NextModuleId));
+            => new StoryModule(context.ConvertModuleId(Id), Objective, context.ConvertModuleId(NextModuleId!.Value));
 
         public override void Verify(IPrototypeContext context)
         {
-            if (context.ContainsModuleId(NextModuleId) == false)
+            if (NextModuleId == null)
             {
-                throw new DomainException($"({Id}) NextModuleId in StoryModule not found got {NextModuleId}");
+                throw new DomainException($"({Id}) NextModuleId can not be null");
+            }
+
+            if (context.ContainsModuleId(NextModuleId.Value) == false)
+            {
+                throw new DomainException($"({Id}) NextModuleId in StoryModule not found got {NextModuleId.Value}");
             }
         }
     }

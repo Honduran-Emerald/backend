@@ -14,6 +14,7 @@ namespace Emerald.Infrastructure.Repositories
 
         Task<bool> HasAnyTrackerForQuest(Quest quest);
         Task<Tracker> Get(ObjectId id);
+        Task<Tracker?> FindByUserAndQuest(ObjectId userId, ObjectId questId);
         IMongoQueryable<Tracker> GetQueryable();
     }
 }

@@ -23,7 +23,7 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Modules
             => new ChoiceModule(
                 context.ConvertModuleId(Id),
                 Objective,
-                Choices.Select(c => new ChoiceModule.Choice(context.ConvertModuleId(c.NextModuleId), c.Text))
+                Choices.Select(c => new ChoiceModule.Choice(context.ConvertModuleId((int) c.NextModuleId!), c.Text))
                        .ToList());
 
         public override void Verify(IPrototypeContext context)
@@ -35,7 +35,12 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Modules
 
             foreach (ChoiceModulePrototypeChoice choice in Choices)
             {
-                if (context.ContainsModuleId(choice.NextModuleId) == false)
+                if (choice.NextModuleId == null)
+                {
+                    throw new DomainException($"({Id}) NextModuleId in choice can not be null");
+                }
+
+                if (context.ContainsModuleId(choice.NextModuleId.Value) == false)
                     throw new DomainException($"({Id}) Choice NextModuleId in ChoiceModule not found got {choice.NextModuleId}");
             }
         }
@@ -43,9 +48,9 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Modules
     public class ChoiceModulePrototypeChoice
     {
         public string Text { get; set; }
-        public int NextModuleId { get; set; }
+        public int? NextModuleId { get; set; }
 
-        public ChoiceModulePrototypeChoice(string text, int moduleId)
+        public ChoiceModulePrototypeChoice(string text, int? moduleId)
         {
             Text = text;
             NextModuleId = moduleId;

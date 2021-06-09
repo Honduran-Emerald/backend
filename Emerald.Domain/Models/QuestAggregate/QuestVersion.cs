@@ -38,16 +38,16 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
 
             Version = version;
             
-            Title = questPrototype.Title;
-            Description = questPrototype.Description;
+            Title = questPrototype.Title!;
+            Description = questPrototype.Description!;
             Tags = questPrototype.Tags;
 
-            Location = questPrototype.Location;
-            ImageId = questPrototype.ImageId;
-            ApproximateTime = questPrototype.ApproximateTime;
+            Location = questPrototype.Location!;
+            ImageId = questPrototype.ImageId!;
+            ApproximateTime = questPrototype.ApproximateTime!;
 
-            ProfileImageId = questPrototype.ProfileImageId;
-            ProfileName = questPrototype.ProfileName;
+            ProfileImageId = questPrototype.ProfileImageId!;
+            ProfileName = questPrototype.ProfileName!;
 
             CreationTime = DateTime.UtcNow;
 
