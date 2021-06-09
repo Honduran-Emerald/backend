@@ -3,14 +3,11 @@ using Emerald.Domain.Models.ModuleAggregate;
 using Emerald.Domain.Models.PrototypeAggregate;
 using Emerald.Domain.Models.QuestAggregate;
 using Emerald.Domain.Models.QuestPrototypeAggregate;
-using Emerald.Domain.Models.QuestVersionAggregate;
 using Emerald.Domain.Repositories;
 using Emerald.Infrastructure.Repositories;
 using MongoDB.Bson;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Vitamin.Value.Domain.SeedWork;
 
@@ -62,7 +59,7 @@ namespace Emerald.Domain.Services
             quest.PublishQuestVersion(
                 questPrototype,
                 moduleIds,
-                context.ConvertModuleId((int) questPrototype.FirstModuleId!));
+                context.ConvertModuleId((int)questPrototype.FirstModuleId!));
 
             await questRepository.Update(quest);
         }

@@ -1,15 +1,10 @@
 ﻿using Emerald.Domain.Models;
 using MediatR;
 using MongoDB.Bson;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Emerald.Domain.Events
 {
-    public class QuestResponseDomainEvent<ResponseEvent> 
+    public class QuestResponseDomainEvent<ResponseEvent>
         : INotification where ResponseEvent : IResponseEvent
     {
         public ObjectId TrackerId { get; set; }

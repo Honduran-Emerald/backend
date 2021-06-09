@@ -1,5 +1,4 @@
 ﻿using Emerald.Domain.Models.TrackerAggregate;
-using MediatR;
 using System.Collections.Generic;
 
 namespace Emerald.Domain.Models.ModuleAggregate

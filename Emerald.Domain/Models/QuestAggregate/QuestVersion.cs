@@ -1,10 +1,7 @@
-﻿using Emerald.Domain.Models.ModuleAggregate;
-using Emerald.Domain.Models.PrototypeAggregate;
-using Emerald.Domain.Models.QuestAggregate;
+﻿using Emerald.Domain.Models.PrototypeAggregate;
 using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.QuestVersionAggregate
@@ -37,7 +34,7 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
             }
 
             Version = version;
-            
+
             Title = questPrototype.Title!;
             Description = questPrototype.Description!;
             Tags = questPrototype.Tags;

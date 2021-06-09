@@ -1,6 +1,5 @@
 ﻿using Emerald.Application.Models.Quest.Component;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Emerald.Application.Models.Quest.Module
 {

@@ -13,7 +13,7 @@ namespace Emerald.Application.Services.Factories
             {
                 case TextComponent textComponent:
                     return new TextComponentModel(
-                        component.Id.ToString(), 
+                        component.Id.ToString(),
                         textComponent.Text);
 
                 case ImageComponent imageComponent:

@@ -1,13 +1,5 @@
-﻿using Emerald.Domain.Models.ModuleAggregate;
-using Emerald.Domain.Models.ModuleAggregate.Modules;
-using Emerald.Domain.Models.QuestPrototypeAggregate;
-using Emerald.Domain.Models.QuestPrototypeAggregate.Modules;
-using MongoDB.Bson;
-using System;
+﻿using Emerald.Domain.Models.QuestPrototypeAggregate;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.PrototypeAggregate

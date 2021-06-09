@@ -12,7 +12,7 @@ namespace Emerald.Domain.Models.ModuleAggregate.Modules
     {
         public List<Choice> Choices { get; set; }
 
-        public ChoiceModule(ObjectId id, string objective, List<Choice> choices) 
+        public ChoiceModule(ObjectId id, string objective, List<Choice> choices)
             : base(id, objective)
         {
             Choices = choices;

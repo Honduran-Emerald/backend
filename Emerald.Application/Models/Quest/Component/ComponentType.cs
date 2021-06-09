@@ -2,7 +2,6 @@
 using Emerald.Domain.Models.QuestPrototypeAggregate.Components;
 using JsonSubTypes;
 using Newtonsoft.Json;
-using System;
 
 namespace Emerald.Application.Models.Quest.Component
 {

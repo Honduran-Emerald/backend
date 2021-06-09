@@ -1,5 +1,4 @@
 ﻿using Emerald.Domain.Events;
-using Emerald.Domain.Models.TrackerAggregate;
 using MediatR;
 using MongoDB.Bson;
 

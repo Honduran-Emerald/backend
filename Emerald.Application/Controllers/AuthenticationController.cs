@@ -1,13 +1,13 @@
-﻿using Emerald.Application.Models.Response;
-using Emerald.Application.Models.Bindings;
+﻿using Emerald.Application.Models.Bindings;
+using Emerald.Application.Models.Response;
 using Emerald.Application.Services;
 using Emerald.Domain.Models.UserAggregate;
+using Emerald.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
-using Emerald.Infrastructure.Repositories;
 
 namespace Emerald.Application.Controllers
 {

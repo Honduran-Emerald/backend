@@ -1,13 +1,10 @@
-﻿using Emerald.Application.Models.Quest;
-using Emerald.Application.Models.Quest.Module;
-using Emerald.Application.Models.Request.Quest;
+﻿using Emerald.Application.Models.Request.Quest;
 using Emerald.Application.Models.Response.Quest;
 using Emerald.Application.Services;
 using Emerald.Application.Services.Factories;
 using Emerald.Domain.Models;
 using Emerald.Domain.Models.ModuleAggregate;
 using Emerald.Domain.Models.PrototypeAggregate;
-using Emerald.Domain.Models.QuestAggregate;
 using Emerald.Domain.Models.QuestVersionAggregate;
 using Emerald.Domain.Models.UserAggregate;
 using Emerald.Domain.Repositories;
@@ -19,7 +16,6 @@ using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Vitamin.Value.Domain.SeedWork;
@@ -108,7 +104,7 @@ namespace Emerald.Application.Controllers.Quest
                 user, questPrototype);
 
             await questRepository.Add(quest);
-            
+
             return Ok(new QuestCreateCreateResponse(quest.Id, questPrototype));
         }
 
@@ -160,7 +156,7 @@ namespace Emerald.Application.Controllers.Quest
             Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(request.QuestId);
             QuestVersion? stableQuestVersion = quest.GetCurrentQuestVersion();
 
-            if (stableQuestVersion != null && 
+            if (stableQuestVersion != null &&
                 await trackerRepository.HasAnyTrackerForQuest(quest) == false)
             {
                 foreach (Module module in await moduleRepository.GetForQuest(stableQuestVersion))

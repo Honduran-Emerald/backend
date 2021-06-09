@@ -1,9 +1,6 @@
 ﻿using MongoDB.Bson;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Emerald.Application.Infrastructure
 {
@@ -11,7 +8,7 @@ namespace Emerald.Application.Infrastructure
     {
         public override ObjectId ReadJson(JsonReader reader, Type objectType, ObjectId existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            string? value = (string?) reader.Value;
+            string? value = (string?)reader.Value;
             return string.IsNullOrEmpty(value) ? ObjectId.Empty : new ObjectId(value);
         }
 

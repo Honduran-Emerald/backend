@@ -8,7 +8,7 @@
         {
             Text = text;
         }
-        
+
         private TextComponentModel()
         {
             Text = default!;

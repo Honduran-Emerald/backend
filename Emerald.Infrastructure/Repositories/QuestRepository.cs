@@ -1,4 +1,4 @@
-﻿     using Emerald.Domain.Models.QuestAggregate;
+﻿using Emerald.Domain.Models.QuestAggregate;
 using Emerald.Infrastructure.Exceptions;
 using MediatR;
 using MongoDB.Bson;

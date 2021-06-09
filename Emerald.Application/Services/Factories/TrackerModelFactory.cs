@@ -7,7 +7,6 @@ using Emerald.Domain.Models.UserAggregate;
 using Emerald.Domain.Repositories;
 using Emerald.Infrastructure.Repositories;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
