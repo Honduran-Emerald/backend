@@ -1,4 +1,5 @@
-﻿using Emerald.Domain.Models.QuestAggregate;
+﻿using AspNetCore.Identity.Mongo.Mongo;
+using Emerald.Domain.Models.QuestAggregate;
 using Emerald.Domain.Models.TrackerAggregate;
 using Emerald.Infrastructure.Exceptions;
 using MediatR;
@@ -60,6 +61,14 @@ namespace Emerald.Infrastructure.Repositories
         public async Task Remove(Tracker tracker)
         {
             await collection.DeleteOneAsync(t => t.Id == tracker.Id);
+        }
+
+        public async Task<Tracker?> FindByUserAndQuest(ObjectId userId, ObjectId questId)
+        {
+            return await collection.AsQueryable()
+                .Where(t => t.UserId == userId)
+                .Where(t => t.QuestId == questId)
+                .FirstOrDefaultAsync();
         }
     }
 }
