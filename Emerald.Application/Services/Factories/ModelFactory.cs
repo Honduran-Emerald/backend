@@ -25,5 +25,10 @@ namespace Emerald.Application.Services.Factories
 
             return targets;
         }
+
+        public static async Task<Target?> CreateNullable<Source, Target>(
+            this IModelFactory<Source, Target> modelFactory,
+            Source? source)
+            => source == null ? default(Target) : await modelFactory.Create(source);
     }
 }
