@@ -2,6 +2,7 @@
 using Emerald.Application.Models.Quest.Module;
 using Emerald.Application.Models.Request.Quest;
 using Emerald.Application.Models.Response.Quest;
+using Emerald.Application.Services;
 using Emerald.Application.Services.Factories;
 using Emerald.Domain.Models;
 using Emerald.Domain.Models.ModuleAggregate;
@@ -14,10 +15,12 @@ using Emerald.Domain.Services;
 using Emerald.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Vitamin.Value.Domain.SeedWork;
 
@@ -35,11 +38,15 @@ namespace Emerald.Application.Controllers.Quest
         private ITrackerRepository trackerRepository;
         private IUserRepository userRepository;
 
+        private IConfiguration configuration;
+        private IUserService userService;
+
         private QuestCreateService questCreateService;
+        private QuestPrototypeModelFactory questPrototypeModelFactory;
         private QuestModelFactory questModelFactory;
         private ModuleModelFactory moduleModelFactory;
 
-        public QuestCreateController(IComponentRepository componentRepository, IQuestRepository questRepository, IQuestPrototypeRepository questPrototypeRepository, IModuleRepository moduleRepository, ITrackerRepository trackerRepository, IUserRepository userRepository, QuestCreateService questCreateService, QuestModelFactory questModelFactory, ModuleModelFactory moduleModelFactory)
+        public QuestCreateController(IComponentRepository componentRepository, IQuestRepository questRepository, IQuestPrototypeRepository questPrototypeRepository, IModuleRepository moduleRepository, ITrackerRepository trackerRepository, IUserRepository userRepository, IConfiguration configuration, IUserService userService, QuestCreateService questCreateService, QuestPrototypeModelFactory questPrototypeModelFactory, QuestModelFactory questModelFactory, ModuleModelFactory moduleModelFactory)
         {
             this.componentRepository = componentRepository;
             this.questRepository = questRepository;
@@ -47,9 +54,32 @@ namespace Emerald.Application.Controllers.Quest
             this.moduleRepository = moduleRepository;
             this.trackerRepository = trackerRepository;
             this.userRepository = userRepository;
+            this.configuration = configuration;
+            this.userService = userService;
             this.questCreateService = questCreateService;
+            this.questPrototypeModelFactory = questPrototypeModelFactory;
             this.questModelFactory = questModelFactory;
             this.moduleModelFactory = moduleModelFactory;
+        }
+
+        /// <summary>
+        /// Query all quests created by the authorized user with special creator information
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        [HttpGet("query")]
+        public async Task<ActionResult<QuestCreateQueryResponse>> Query(
+            [FromQuery] int offset = 0)
+        {
+            User user = await userService.CurrentUser();
+
+            var quests = await questRepository.GetQueryable()
+                .Where(q => q.OwnerUserId == user.Id)
+                .Skip(offset)
+                .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
+                .ToListAsync();
+
+            return Ok(new QuestCreateQueryResponse(await questPrototypeModelFactory.Create(quests)));
         }
 
         /// <summary>
@@ -83,7 +113,7 @@ namespace Emerald.Application.Controllers.Quest
         }
 
         /// <summary>
-        /// Queries all information about a single by the user created quest
+        /// Query all information about a single by the authorized user created quest
         /// </summary>
         /// <param name="questId"></param>
         /// <returns></returns>
@@ -106,7 +136,6 @@ namespace Emerald.Application.Controllers.Quest
         public async Task<ActionResult<QuestCreateGetResponse>> Put(
             [FromBody] QuestCreatePutRequest request)
         {
-            questCreateService.Verify(request.QuestPrototype);
             Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(request.QuestId);
 
             if (quest.PrototypeId != request.QuestPrototype.Id)
@@ -124,7 +153,7 @@ namespace Emerald.Application.Controllers.Quest
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPost("publish")]
+        [HttpPost("release")]
         public async Task<IActionResult> Publish(
             [FromBody] QuestCreatePublishRequest request)
         {
