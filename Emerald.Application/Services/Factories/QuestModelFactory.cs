@@ -10,34 +10,43 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Emerald.Application.Models.Quest.Tracker;
+using Emerald.Domain.Models.TrackerAggregate;
 
 namespace Emerald.Application.Services.Factories
 {
     public class QuestModelFactory : IModelFactory<QuestPairModel, QuestModel>
     {
         private QuestViewModelStash questStash;
+        private TrackerModelFactory trackerModelFactory;
         private IUserRepository userRepository;
+        private IUserService userService;
+        private ITrackerRepository trackerRepository;
 
-        public QuestModelFactory(QuestViewModelStash questStash, IUserRepository userRepository)
+        public QuestModelFactory(QuestViewModelStash questStash, TrackerModelFactory trackerModelFactory, IUserRepository userRepository, IUserService userService, ITrackerRepository trackerRepository)
         {
             this.questStash = questStash;
+            this.trackerModelFactory = trackerModelFactory;
             this.userRepository = userRepository;
+            this.userService = userService;
+            this.trackerRepository = trackerRepository;
         }
 
-        public async Task<QuestModel> Create(QuestPairModel questPair)
+        public async Task<QuestModel> Create(QuestPairModel questPair, TrackerModel? tracker)
         {
             Quest quest = questPair.Quest;
             QuestVersion? version = questPair.QuestVersion;
-            
+
             QuestViewModel viewModel = await questStash.Get(quest.Id);
-            User user = await userRepository.Get(quest.OwnerUserId);
+            User owner = await userRepository.Get(quest.OwnerUserId);
 
             return new QuestModel(
                 id: quest.Id.ToString(),
+                tracker: tracker,
 
                 ownerId: quest.OwnerUserId,
-                ownerName: user.UserName,
-                ownerImageId: user.Image,
+                ownerName: owner.UserName,
+                ownerImageId: owner.Image,
                 @public: quest.Public,
 
                 approximateTime: version?.ApproximateTime,
@@ -62,6 +71,18 @@ namespace Emerald.Application.Services.Factories
                 votes: viewModel.Votes,
                 plays: viewModel.Plays,
                 finishes: viewModel.Finishes);
+        }
+
+        public async Task<QuestModel> Create(QuestPairModel questPair)
+        {
+            User current = await userService.CurrentUser();
+
+            Tracker? tracker = await trackerRepository.FindByUserAndQuest(
+                current.Id, questPair.Quest.Id);
+
+            return await Create(
+                questPair, 
+                await trackerModelFactory.CreateNullable(tracker));
         }
     }
 }
