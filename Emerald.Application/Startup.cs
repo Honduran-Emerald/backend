@@ -64,7 +64,8 @@ namespace Emerald.Application
                     .AddScoped<QuestModelFactory>()
                     .AddScoped<ResponseEventModelFactory>()
                     .AddScoped<TrackerModelFactory>()
-                    .AddScoped<TrackerNodeModelFactory>();
+                    .AddScoped<TrackerNodeModelFactory>()
+                    .AddScoped<QuestPrototypeModelFactory>();
 
             services.AddScoped<IUserRepository, UserRepository>()
                     .AddScoped<IModuleRepository, ModuleRepository>()
@@ -76,6 +77,7 @@ namespace Emerald.Application
             services.AddScoped<QuestViewModelStash>();
 
             services.AddScoped<IJwtAuthentication, JwtAuthentication>()
+                    .AddScoped<IUserService, UserService>()
                     .AddSingleton<IMongoDbContext, MongoDbContext>();
 
             services.AddControllers()
