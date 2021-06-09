@@ -26,9 +26,8 @@ namespace Emerald.Application.Services.Factories
             this.userRepository = userRepository;
         }
 
-        public async Task<TrackerModel> Create(Tracker source)
+        public async Task<TrackerModel> Create(Tracker source, Quest quest)
         {
-            Quest quest = await questRepository.Get(source.QuestId);
             QuestVersion questVersion = quest.GetQuestVersion(source.QuestVersion);
             QuestVersion? stableQuestVersion = quest.GetCurrentQuestVersion();
             Module module = await moduleRepository.Get(source.Nodes.Last().ModuleId);
@@ -49,6 +48,11 @@ namespace Emerald.Application.Services.Factories
                 questVersion.Title,
                 module.Objective,
                 owner.UserName);
+        }
+
+        public async Task<TrackerModel> Create(Tracker source)
+        {
+            return await Create(source, await questRepository.Get(source.QuestId));
         }
     }
 }
