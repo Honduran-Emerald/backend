@@ -1,4 +1,5 @@
-﻿using Emerald.Domain.Models.QuestAggregate;
+﻿using Emerald.Application.Models.Quest.Tracker;
+using Emerald.Domain.Models.QuestAggregate;
 using Emerald.Domain.Models.QuestVersionAggregate;
 using Emerald.Domain.Models.TrackerAggregate;
 using MongoDB.Bson;
@@ -13,6 +14,8 @@ namespace Emerald.Application.Models.Quest
     {
         public string Id { get; set; }
         public ObjectId OwnerId { get; set; }
+
+        public TrackerModel? Tracker { get; set; }
 
         public string OwnerName { get; set; }
         public string? OwnerImageId { get; set; }
@@ -39,10 +42,11 @@ namespace Emerald.Application.Models.Quest
         public int Plays { get; set; }
         public int Finishes { get; set; }
 
-        public QuestModel(string id, ObjectId ownerId, string ownerName, string? ownerImageId, bool @public, int version, string? approximateTime, string? locationName, string? title, string? description, List<string>? tags, LocationModel? location, string? imageId, string? profileImageId, string? profileName, DateTime creationTime, int votes, int plays, int finishes)
+        public QuestModel(string id, ObjectId ownerId, TrackerModel? tracker, string ownerName, string? ownerImageId, bool @public, int version, string? approximateTime, string? locationName, string? title, string? description, List<string>? tags, LocationModel? location, string? imageId, string? profileImageId, string? profileName, DateTime creationTime, int votes, int plays, int finishes)
         {
             Id = id;
             OwnerId = ownerId;
+            Tracker = tracker;
             OwnerName = ownerName;
             OwnerImageId = ownerImageId;
             Public = @public;
