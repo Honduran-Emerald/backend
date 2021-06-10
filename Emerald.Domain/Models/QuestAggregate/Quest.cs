@@ -1,4 +1,5 @@
-﻿using Emerald.Domain.Models.PrototypeAggregate;
+﻿using Emerald.Domain.Models.LockAggregate;
+using Emerald.Domain.Models.PrototypeAggregate;
 using Emerald.Domain.Models.QuestVersionAggregate;
 using Emerald.Domain.Models.UserAggregate;
 using MongoDB.Bson;
@@ -9,7 +10,7 @@ using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.QuestAggregate
 {
-    public class Quest : Entity
+    public class Quest : LockableEntity
     {
         public ObjectId OwnerUserId { get; set; }
         public ObjectId PrototypeId { get; set; }

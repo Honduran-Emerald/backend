@@ -1,4 +1,5 @@
 ﻿using AspNetCore.Identity.Mongo.Model;
+using Emerald.Domain.Models.LockAggregate;
 using Emerald.Domain.Models.TrackerAggregate;
 using Emerald.Domain.SeedWork;
 using MediatR;
@@ -15,6 +16,8 @@ namespace Emerald.Domain.Models.UserAggregate
         public List<ObjectId> QuestIds { get; set; }
         public List<ObjectId> TrackerIds { get; set; }
 
+        public List<Lock> Locks { get;set; }
+
         public string? Image { get; set; }
         public string SyncToken { get; set; }
 
@@ -26,6 +29,7 @@ namespace Emerald.Domain.Models.UserAggregate
 
         public User() : base()
         {
+            Locks = new List<Lock>();
             QuestIds = new List<ObjectId>();
             TrackerIds = new List<ObjectId>();
             domainEvents = new List<INotification>();
@@ -34,6 +38,7 @@ namespace Emerald.Domain.Models.UserAggregate
 
         public User(string userName) : base(userName)
         {
+            Locks = new List<Lock>();
             QuestIds = new List<ObjectId>();
             TrackerIds = new List<ObjectId>();
             domainEvents = new List<INotification>();

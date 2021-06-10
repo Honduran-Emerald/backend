@@ -23,15 +23,13 @@ namespace Emerald.Domain.Services
             this.trackerRepository = trackerRepository;
             this.mediator = mediator;
         }
-
-        public async Task<ResponseEventCollection> HandleEvent(User user, ObjectId trackerId, RequestEvent requestEvent)
+        
+        public async Task<ResponseEventCollection> HandleEvent(User user, Tracker tracker, RequestEvent requestEvent)
         {
-            if (user.TrackerIds.Contains(trackerId) == false)
+            if (user.TrackerIds.Contains(tracker.Id) == false)
             {
-                throw new DomainException($"Tracker '{trackerId}' for user '{user.UserName}' not found");
+                throw new DomainException($"Tracker '{tracker.Id}' for user '{user.UserName}' not found");
             }
-
-            Tracker tracker = await trackerRepository.Get(trackerId);
 
             if (tracker.Finished)
             {
