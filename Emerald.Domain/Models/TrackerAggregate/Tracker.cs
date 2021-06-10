@@ -1,4 +1,5 @@
 ﻿using Emerald.Domain.Events;
+using Emerald.Domain.Models.LockAggregate;
 using Emerald.Domain.Models.QuestAggregate;
 using Emerald.Domain.Models.QuestVersionAggregate;
 using MongoDB.Bson;
@@ -8,7 +9,7 @@ using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.TrackerAggregate
 {
-    public class Tracker : Entity
+    public class Tracker : LockableEntity
     {
         public ObjectId UserId { get; set; }
 
