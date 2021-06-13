@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace Emerald.Application.Infrastructure.Middleware
 {
     // You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
-    public class UserTokenValidationMiddleware
+    public class UserValidationMiddleware
     {
         private readonly RequestDelegate _next;
 
-        public UserTokenValidationMiddleware(RequestDelegate next)
+        public UserValidationMiddleware(RequestDelegate next)
         {
             _next = next;
         }
@@ -20,12 +20,27 @@ namespace Emerald.Application.Infrastructure.Middleware
         {
             if (httpContext.User.Identity != null && httpContext.User.Identity.IsAuthenticated)
             {
-                if (await userManager.GetUserAsync(httpContext.User) == null)
+                User user = await userManager.GetUserAsync(httpContext.User);
+
+                if (user == null)
                 {
                     httpContext.Response.StatusCode = 401;
+
                     await httpContext.Response.WriteAsJsonAsync(new
                     {
                         Message = "Unable to find user"
+                    });
+
+                    return;
+                }
+
+                if (user.Locks.Count > 0)
+                {
+                    httpContext.Response.StatusCode = 251;
+
+                    await httpContext.Response.WriteAsJsonAsync(new
+                    {
+                        Message = "User is locked"
                     });
 
                     return;
@@ -36,11 +51,11 @@ namespace Emerald.Application.Infrastructure.Middleware
         }
     }
 
-    public static class UserTokenValidationMiddlewareExtensions
+    public static class UserValidationMiddlewareExtensions
     {
-        public static IApplicationBuilder UseUserTokenValidationMiddleware(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseUserValidation(this IApplicationBuilder builder)
         {
-            return builder.UseMiddleware<UserTokenValidationMiddleware>();
+            return builder.UseMiddleware<UserValidationMiddleware>();
         }
     }
 }
