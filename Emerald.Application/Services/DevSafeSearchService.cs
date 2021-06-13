@@ -1,4 +1,5 @@
-﻿using Google.Cloud.Vision.V1;
+﻿using Emerald.Infrastructure.Services;
+using Google.Cloud.Vision.V1;
 using System;
 using System.Collections.Generic;
 using System.Linq;
