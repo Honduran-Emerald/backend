@@ -40,7 +40,7 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
             Tags = questPrototype.Tags;
 
             Location = questPrototype.Location!;
-            ImageId = questPrototype.ImageId!;
+            ImageId = questPrototype.ImageIdByReference(questPrototype.ImageReference)!;
             ApproximateTime = questPrototype.ApproximateTime!;
 
             ProfileImageId = questPrototype.ProfileImageId!;

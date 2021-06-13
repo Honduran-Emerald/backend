@@ -1,4 +1,5 @@
-﻿using Emerald.Domain.Models.LockAggregate;
+﻿using Emerald.Domain.Events;
+using Emerald.Domain.Models.LockAggregate;
 using Emerald.Domain.Models.PrototypeAggregate;
 using Emerald.Domain.Models.QuestVersionAggregate;
 using Emerald.Domain.Models.UserAggregate;
@@ -19,6 +20,8 @@ namespace Emerald.Domain.Models.QuestAggregate
         public List<QuestVersion> QuestVersions { get; set; }
         public DateTime CreationTime { get; set; }
 
+        public List<string> ImagesReferenced { get; set; }
+
         public Quest(User user, QuestPrototype questPrototype)
         {
             Public = true;
@@ -26,6 +29,7 @@ namespace Emerald.Domain.Models.QuestAggregate
             OwnerUserId = user.Id;
             PrototypeId = questPrototype.Id;
             CreationTime = DateTime.UtcNow;
+            ImagesReferenced = new List<string>();
         }
 
         private Quest()
@@ -33,6 +37,7 @@ namespace Emerald.Domain.Models.QuestAggregate
             Public = true;
             QuestVersions = new List<QuestVersion>();
             CreationTime = DateTime.UtcNow;
+            ImagesReferenced = new List<string>();
         }
 
         public int GetCurrentQuestVersionNumber()
@@ -67,6 +72,7 @@ namespace Emerald.Domain.Models.QuestAggregate
         public void RemoveQuestVersion(QuestVersion questVersion)
         {
             QuestVersions.Remove(questVersion);
+            AddDomainEvent(new QuestVersionRemovedDomainEvent(questVersion));
         }
 
         public QuestVersion PublishQuestVersion(QuestPrototype questPrototype, List<ObjectId> moduleIds, ObjectId firstModuleId)
@@ -78,6 +84,7 @@ namespace Emerald.Domain.Models.QuestAggregate
                 firstModuleId);
 
             QuestVersions.Add(newQuestVersion);
+            AddDomainEvent(new QuestVersionAddedDomainEvent(newQuestVersion));
             return newQuestVersion;
         }
     }
