@@ -51,7 +51,7 @@ namespace Emerald.Application.Services.Factories
                 source.Id,
                 questModel,
                 questPrototype.Title,
-                questPrototype.ImageId,
+                questPrototype.ImageIdByReference(questPrototype.ImageReference),
                 questPrototype.Description,
                 questPrototype.Location,
                 questPrototype.LocationName,

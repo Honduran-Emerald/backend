@@ -45,6 +45,8 @@ namespace Emerald.Application.Services.Factories
                 vote: source.Vote,
                 creationTime: source.CreatedAt,
                 questVersion.Title,
+                questVersion.ProfileImageId,
+                questVersion.ProfileName,
                 module.Objective,
                 owner.UserName);
         }
