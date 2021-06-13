@@ -1,5 +1,6 @@
 ﻿using Emerald.Application.Services;
 using Emerald.Infrastructure;
+using Emerald.Infrastructure.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
