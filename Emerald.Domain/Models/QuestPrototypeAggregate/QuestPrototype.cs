@@ -105,11 +105,6 @@ namespace Emerald.Domain.Models.PrototypeAggregate
                 throw new DomainException("Quest Description can not be null");
             }
 
-            if (LocationName == null)
-            {
-                throw new DomainException("Quest LocationName can not be null");
-            }
-
             if (ReferenceEquals(Location, null))
             {
                 throw new DomainException("Quest Location can not be null");
