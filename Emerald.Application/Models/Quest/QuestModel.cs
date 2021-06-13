@@ -28,8 +28,8 @@ namespace Emerald.Application.Models.Quest
         public LocationModel? Location { get; set; }
         public string? ImageId { get; set; }
 
-        public string? ProfileImageId { get; set; }
-        public string? ProfileName { get; set; }
+        public string? AgentProfileImageId { get; set; }
+        public string? AgentProfileName { get; set; }
 
         public DateTime CreationTime { get; set; }
 
@@ -53,8 +53,8 @@ namespace Emerald.Application.Models.Quest
             Tags = tags;
             Location = location;
             ImageId = imageId;
-            ProfileImageId = profileImageId;
-            ProfileName = profileName;
+            AgentProfileImageId = profileImageId;
+            AgentProfileName = profileName;
             CreationTime = creationTime;
             Votes = votes;
             Plays = plays;
@@ -76,8 +76,8 @@ namespace Emerald.Application.Models.Quest
             Tags = default!;
             Location = default!;
             ImageId = default!;
-            ProfileImageId = default!;
-            ProfileName = default!;
+            AgentProfileImageId = default!;
+            AgentProfileName = default!;
             CreationTime = default!;
             Votes = default!;
             Plays = default!;
