@@ -4,9 +4,10 @@ using System.Collections.Generic;
 
 namespace Emerald.Domain.SeedWork
 {
-    public interface IEntity
+    public interface IEntity<T>
     {
-        ObjectId Id { get; set; }
+        T Id { get; set; }
+
         void ClearEvents();
         IReadOnlyCollection<INotification> DomainEvents { get; }
     }
