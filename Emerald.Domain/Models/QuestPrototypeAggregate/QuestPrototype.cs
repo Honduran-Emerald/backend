@@ -117,7 +117,7 @@ namespace Emerald.Domain.Models.PrototypeAggregate
 
             if (FirstModuleReference == null)
             {
-                throw new DomainException($"Quest FirstModuleId can not be null");
+                throw new DomainException($"Quest FirstModuleReference can not be null");
             }
         }
     }
