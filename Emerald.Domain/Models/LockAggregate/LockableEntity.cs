@@ -8,7 +8,7 @@ using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.LockAggregate
 {
-    public class LockableEntity : Entity, ILockableEntity
+    public class LockableEntity : Entity, ILockableEntity<ObjectId>
     {
         public List<Lock> Locks { get; set; }
 
