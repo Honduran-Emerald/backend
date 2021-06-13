@@ -18,8 +18,10 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Components
 
         public override void Verify()
         {
+            /*
             if (Text.Length == 0)
                 throw new DomainException("AnswerComponent text can not be empty");
+            */
         }
 
         public override void AggregateImageReferences(List<int> imageReferences)
