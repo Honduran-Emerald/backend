@@ -6,7 +6,7 @@ namespace Emerald.Infrastructure
 {
     public static class MediatorExtensions
     {
-        public static async Task PublishEntity(this IMediator mediator, IEntity entity)
+        public static async Task PublishEntity<T>(this IMediator mediator, IEntity<T> entity)
         {
             if (entity.DomainEvents != null)
             {
