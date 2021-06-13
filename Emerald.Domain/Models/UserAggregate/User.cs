@@ -11,12 +11,15 @@ using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.UserAggregate
 {
-    public class User : MongoUser, IEntity
+    public class User : MongoUser, IEntity<ObjectId>
     {
         public List<ObjectId> QuestIds { get; set; }
         public List<ObjectId> TrackerIds { get; set; }
 
-        public List<Lock> Locks { get;set; }
+        public List<Lock> Locks { get; set; }
+
+        public List<ObjectId> Following { get; set; }
+        public List<ObjectId> Followers { get; set; }
 
         public string? Image { get; set; }
         public string SyncToken { get; set; }
@@ -34,6 +37,8 @@ namespace Emerald.Domain.Models.UserAggregate
             TrackerIds = new List<ObjectId>();
             domainEvents = new List<INotification>();
             SyncToken = Utility.RandomString(8);
+            Followers = new List<ObjectId>();
+            Following = new List<ObjectId>();
         }
 
         public User(string userName) : base(userName)
@@ -43,6 +48,8 @@ namespace Emerald.Domain.Models.UserAggregate
             TrackerIds = new List<ObjectId>();
             domainEvents = new List<INotification>();
             SyncToken = Utility.RandomString(8);
+            Followers = new List<ObjectId>();
+            Following = new List<ObjectId>();
         }
 
         public void AddExperience(long experience)
@@ -86,6 +93,17 @@ namespace Emerald.Domain.Models.UserAggregate
                 domainEvents = new List<INotification>();
 
             domainEvents.Add(domainEvent);
+        }
+
+        public void Follow(User user)
+        {
+            if (Following.Contains(user.Id))
+            {
+                throw new DomainException($"Already following {user.UserName}");
+            }
+
+            Followers.Add(user.Id);
+            user.Followers.Add(Id);
         }
     }
 }
