@@ -4,6 +4,7 @@ using Emerald.Application.Models.Request.Quest;
 using Emerald.Application.Models.Response.Quest;
 using Emerald.Application.Services;
 using Emerald.Application.Services.Factories;
+using Emerald.Domain.Models.LockAggregate;
 using Emerald.Domain.Models.ModuleAggregate;
 using Emerald.Domain.Models.ModuleAggregate.RequestEvents;
 using Emerald.Domain.Models.QuestVersionAggregate;
@@ -68,7 +69,8 @@ namespace Emerald.Application.Controllers
             User user = await userRepository.Get(User);
 
             IMongoQueryable<Tracker> queryable = trackerRepository.GetQueryable()
-                .Where(t => t.UserId == user.Id);
+                .Where(t => t.UserId == user.Id)
+                .Where(t => t.Locks.Count == 0);
 
             if (request.Unfinished)
             {
@@ -91,6 +93,11 @@ namespace Emerald.Application.Controllers
         {
             User user = await userRepository.Get(User);
             Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(request.QuestId);
+
+            if (quest.IsLocked())
+            {
+                return StatusCode(252);
+            }
 
             QuestVersion? questVersion = quest.GetCurrentQuestVersion();
 
@@ -141,6 +148,11 @@ namespace Emerald.Application.Controllers
         {
             User user = await userRepository.Get(User);
             Tracker tracker = await trackerRepository.Get(request.TrackerId);
+            
+            if (tracker.IsLocked())
+            {
+                return StatusCode(252);
+            }
 
             if (tracker.UserId != user.Id)
             {
@@ -186,6 +198,11 @@ namespace Emerald.Application.Controllers
             User user = await userRepository.Get(User);
             Tracker tracker = await trackerRepository.Get(trackerId);
 
+            if (tracker.IsLocked())
+            {
+                return StatusCode(252);
+            }
+
             if (tracker.UserId != user.Id)
             {
                 return BadRequest(new
@@ -215,6 +232,11 @@ namespace Emerald.Application.Controllers
         {
             Tracker tracker = await trackerRepository.Get(trackerId);
 
+            if (tracker.IsLocked())
+            {
+                return StatusCode(252);
+            }
+
             return Ok(new QuestPlayQueryTrackerNodesResponse(
                 await trackerNodeFactory.Create(tracker.Nodes)));
         }
@@ -227,8 +249,6 @@ namespace Emerald.Application.Controllers
         [HttpPost("event/position")]
         public async Task<IActionResult> HandleEvent(PositionRequestEventModel positionRequest)
         {
-
-
             return Ok();
         }
 
@@ -241,9 +261,16 @@ namespace Emerald.Application.Controllers
         public async Task<ActionResult<QuestPlayEventResponse>> HandleEvent(
             [FromBody] ChoiceRequestEventModel choiceEvent)
         {
+            Tracker tracker = await trackerRepository.Get(choiceEvent.TrackerId);
+
+            if (tracker.IsLocked())
+            {
+                return StatusCode(252);
+            }
+
             ResponseEventCollection responseEvent = await questPlayService.HandleEvent(
                 await userRepository.Get(User),
-                choiceEvent.TrackerId,
+                tracker,
                 new ChoiceRequestEvent(choiceEvent.Choice));
 
             return Ok(new QuestPlayEventResponse

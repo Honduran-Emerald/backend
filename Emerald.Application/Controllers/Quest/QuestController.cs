@@ -46,7 +46,8 @@ namespace Emerald.Application.Controllers.Quest
                     .Skip(request.Offset)
                     .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
                     .Where(q => q.Public || q.OwnerUserId == user.Id)
-                    .Where(q => q.QuestVersions.Count > 0);
+                    .Where(q => q.QuestVersions.Count > 0)
+                    .Where(q => q.Locks.Count == 0);
 
             if (request.OwnerId != null)
             {
