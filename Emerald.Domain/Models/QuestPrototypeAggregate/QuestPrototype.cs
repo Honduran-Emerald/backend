@@ -120,16 +120,6 @@ namespace Emerald.Domain.Models.PrototypeAggregate
                 throw new DomainException("ApproximateTime can not be null");
             }
 
-            if (ApproximateTime == null)
-            {
-                throw new DomainException("ApproximateTime can not be null");
-            }
-
-            if (AgentProfileName == null)
-            {
-                throw new DomainException($"Quest ProfileName can not be null");
-            }
-
             if (FirstModuleReference == null)
             {
                 throw new DomainException($"Quest FirstModuleId can not be null");
