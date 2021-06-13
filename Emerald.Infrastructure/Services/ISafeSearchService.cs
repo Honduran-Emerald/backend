@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Emerald.Application.Services
+namespace Emerald.Infrastructure.Services
 {
     /// <summary>
     /// Detect explicit content with google cloud vision api
