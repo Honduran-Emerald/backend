@@ -16,28 +16,18 @@ namespace Emerald.Domain.Models.QuestAggregate
         public ObjectId OwnerUserId { get; set; }
         public ObjectId PrototypeId { get; set; }
 
-        public bool Public { get; set; }
-        public List<QuestVersion> QuestVersions { get; set; }
-        public DateTime CreationTime { get; set; }
-
-        public List<string> ImagesReferenced { get; set; }
-
         public Quest(User user, QuestPrototype questPrototype)
         {
             Public = true;
             QuestVersions = new List<QuestVersion>();
             OwnerUserId = user.Id;
             PrototypeId = questPrototype.Id;
-            CreationTime = DateTime.UtcNow;
-            ImagesReferenced = new List<string>();
         }
 
         private Quest()
         {
             Public = true;
             QuestVersions = new List<QuestVersion>();
-            CreationTime = DateTime.UtcNow;
-            ImagesReferenced = new List<string>();
         }
 
         public int GetCurrentQuestVersionNumber()

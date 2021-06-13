@@ -1,5 +1,5 @@
 ﻿using AspNetCore.Identity.Mongo.Model;
-using Emerald.Domain.Models.LockAggregate;
+using Emerald.Domain.Events;
 using Emerald.Domain.Models.TrackerAggregate;
 using Emerald.Domain.SeedWork;
 using MediatR;
@@ -16,13 +16,8 @@ namespace Emerald.Domain.Models.UserAggregate
         public List<ObjectId> QuestIds { get; set; }
         public List<ObjectId> TrackerIds { get; set; }
 
-        public List<Lock> Locks { get; set; }
-
-        public List<ObjectId> Following { get; set; }
-        public List<ObjectId> Followers { get; set; }
-
-        public string? Image { get; set; }
-        public string SyncToken { get; set; }
+        public string? ImageId { get; set; }
+        public string SyncToken { get; private set; }
 
         public long Experience { get; set; }
         public int Glory { get; set; }
@@ -57,7 +52,7 @@ namespace Emerald.Domain.Models.UserAggregate
             Experience += experience;
         }
 
-        public void AddTracker(Tracker tracker)
+        public void SetActiveTracker(Tracker tracker)
         {
             if (TrackerIds.Contains(tracker.Id))
             {

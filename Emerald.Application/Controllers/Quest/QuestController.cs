@@ -38,24 +38,8 @@ namespace Emerald.Application.Controllers.Quest
         [Authorize]
         [HttpGet("query")]
         public async Task<ActionResult<QuestQueryResponse>> Query(
-            [FromQuery] QuestQueryRequest request)
+            [FromQuery] int offset)
         {
-            User user = await userRepository.Get(User);
-
-            var queryable = questRepository.GetQueryable()
-                    .Skip(request.Offset)
-                    .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
-                    .Where(q => q.Public || q.OwnerUserId == user.Id)
-                    .Where(q => q.QuestVersions.Count > 0)
-                    .Where(q => q.Locks.Count == 0);
-
-            if (request.OwnerId != null)
-            {
-                queryable = queryable.Where(q => q.OwnerUserId == request.OwnerId);
-            }
-
-            var quests = await queryable.ToListAsync();
-
             return Ok(new QuestQueryResponse(
                 quests: await questModelFactory.Create(
                     quests.Select(q => new QuestPairModel(q, q.QuestVersions
