@@ -115,11 +115,6 @@ namespace Emerald.Domain.Models.PrototypeAggregate
                 throw new DomainException("Quest Location can not be null");
             }
 
-            if (ImageReference == null)
-            {
-                throw new DomainException("Quest ImageReference can not be null");
-            }
-
             if (ApproximateTime == null)
             {
                 throw new DomainException("ApproximateTime can not be null");

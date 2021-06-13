@@ -15,7 +15,7 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
         public List<string> Tags { get; set; }
 
         public Location Location { get; set; }
-        public string ImageId { get; set; }
+        public string? ImageId { get; set; }
         public string ApproximateTime { get; set; }
 
         public string ProfileImageId { get; set; }

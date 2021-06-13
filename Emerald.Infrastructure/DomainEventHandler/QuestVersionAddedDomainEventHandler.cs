@@ -21,7 +21,10 @@ namespace Emerald.Infrastructure.DomainEventHandler
 
         public async Task Handle(QuestVersionAddedDomainEvent notification, CancellationToken cancellationToken)
         {
-            await imageIndexService.IncreaseImageReference(notification.QuestVersion.ImageId);
+            if (notification.QuestVersion.ImageId != null)
+            {
+                await imageIndexService.IncreaseImageReference(notification.QuestVersion.ImageId);
+            }
         }
     }
 }

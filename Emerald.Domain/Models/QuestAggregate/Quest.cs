@@ -20,8 +20,6 @@ namespace Emerald.Domain.Models.QuestAggregate
         public List<QuestVersion> QuestVersions { get; set; }
         public DateTime CreationTime { get; set; }
 
-        public List<string> ImagesReferenced { get; set; }
-
         public Quest(User user, QuestPrototype questPrototype)
         {
             Public = true;
@@ -29,7 +27,6 @@ namespace Emerald.Domain.Models.QuestAggregate
             OwnerUserId = user.Id;
             PrototypeId = questPrototype.Id;
             CreationTime = DateTime.UtcNow;
-            ImagesReferenced = new List<string>();
         }
 
         private Quest()
@@ -37,7 +34,6 @@ namespace Emerald.Domain.Models.QuestAggregate
             Public = true;
             QuestVersions = new List<QuestVersion>();
             CreationTime = DateTime.UtcNow;
-            ImagesReferenced = new List<string>();
         }
 
         public int GetCurrentQuestVersionNumber()
