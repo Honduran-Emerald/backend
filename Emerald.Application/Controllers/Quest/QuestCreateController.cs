@@ -1,22 +1,31 @@
-﻿using Emerald.Application.Models.Request.Quest;
+﻿using Emerald.Application.Models;
+using Emerald.Application.Models.Prototype;
+using Emerald.Application.Models.Request.Quest;
 using Emerald.Application.Models.Response.Quest;
 using Emerald.Application.Services;
 using Emerald.Application.Services.Factories;
 using Emerald.Domain.Models;
+using Emerald.Domain.Models.LockAggregate;
 using Emerald.Domain.Models.ModuleAggregate;
 using Emerald.Domain.Models.PrototypeAggregate;
+using Emerald.Domain.Models.QuestPrototypeAggregate;
 using Emerald.Domain.Models.QuestVersionAggregate;
 using Emerald.Domain.Models.UserAggregate;
 using Emerald.Domain.Repositories;
 using Emerald.Domain.Services;
 using Emerald.Infrastructure.Repositories;
+using Emerald.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Vitamin.Value.Domain.SeedWork;
 
@@ -27,37 +36,6 @@ namespace Emerald.Application.Controllers.Quest
     [Route("create")]
     public class QuestCreateController : ControllerBase
     {
-        private IComponentRepository componentRepository;
-        private IQuestRepository questRepository;
-        private IQuestPrototypeRepository questPrototypeRepository;
-        private IModuleRepository moduleRepository;
-        private ITrackerRepository trackerRepository;
-        private IUserRepository userRepository;
-
-        private IConfiguration configuration;
-        private IUserService userService;
-
-        private QuestCreateService questCreateService;
-        private QuestPrototypeModelFactory questPrototypeModelFactory;
-        private QuestModelFactory questModelFactory;
-        private ModuleModelFactory moduleModelFactory;
-
-        public QuestCreateController(IComponentRepository componentRepository, IQuestRepository questRepository, IQuestPrototypeRepository questPrototypeRepository, IModuleRepository moduleRepository, ITrackerRepository trackerRepository, IUserRepository userRepository, IConfiguration configuration, IUserService userService, QuestCreateService questCreateService, QuestPrototypeModelFactory questPrototypeModelFactory, QuestModelFactory questModelFactory, ModuleModelFactory moduleModelFactory)
-        {
-            this.componentRepository = componentRepository;
-            this.questRepository = questRepository;
-            this.questPrototypeRepository = questPrototypeRepository;
-            this.moduleRepository = moduleRepository;
-            this.trackerRepository = trackerRepository;
-            this.userRepository = userRepository;
-            this.configuration = configuration;
-            this.userService = userService;
-            this.questCreateService = questCreateService;
-            this.questPrototypeModelFactory = questPrototypeModelFactory;
-            this.questModelFactory = questModelFactory;
-            this.moduleModelFactory = moduleModelFactory;
-        }
-
         /// <summary>
         /// Query all quests created by the authorized user with special creator information
         /// </summary>
@@ -65,7 +43,11 @@ namespace Emerald.Application.Controllers.Quest
         /// <returns></returns>
         [HttpGet("query")]
         public async Task<ActionResult<QuestCreateQueryResponse>> Query(
-            [FromQuery] int offset = 0)
+            [FromQuery] int offset,
+            [FromServices] IConfiguration configuration,
+            [FromServices] IUserService userService,
+            [FromServices] IQuestRepository questRepository,
+            [FromServices] QuestPrototypeModelFactory questPrototypeModelFactory)
         {
             User user = await userService.CurrentUser();
 
@@ -85,18 +67,13 @@ namespace Emerald.Application.Controllers.Quest
         /// <returns></returns>
         [HttpPost("create")]
         public async Task<ActionResult<QuestCreateCreateResponse>> Create(
-            [FromBody] QuestCreateCreateRequest request)
+            [FromBody] QuestCreateCreateRequest request,
+            [FromServices] IUserService userService,
+            [FromServices] IQuestRepository questRepository,
+            [FromServices] IQuestPrototypeRepository questPrototypeRepository)
         {
-            User user = await userRepository.Get(User);
-            QuestPrototype questPrototype = new QuestPrototype(
-                request.Title,
-                request.Description,
-                request.Tags,
-                request.LocationName,
-                new Location(
-                    request.Location.Longitude,
-                    request.Location.Latitude),
-                request.ImageId);
+            User user = await userService.CurrentUser();
+            QuestPrototype questPrototype = new QuestPrototype();
 
             await questPrototypeRepository.Add(questPrototype);
 
@@ -115,7 +92,9 @@ namespace Emerald.Application.Controllers.Quest
         /// <returns></returns>
         [HttpGet("get")]
         public async Task<ActionResult<QuestCreateGetResponse>> Get(
-            [FromQuery] ObjectId questId)
+            [FromQuery] ObjectId questId,
+            [FromServices] IQuestRepository questRepository,
+            [FromServices] IQuestPrototypeRepository questPrototypeRepository)
         {
             Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(questId);
 
@@ -130,7 +109,11 @@ namespace Emerald.Application.Controllers.Quest
         /// <returns></returns>
         [HttpPost("put")]
         public async Task<ActionResult<QuestCreateGetResponse>> Put(
-            [FromBody] QuestCreatePutRequest request)
+            [FromBody] QuestCreatePutRequest request,
+            [FromServices] IQuestRepository questRepository,
+            [FromServices] IQuestPrototypeRepository questPrototypeRepository,
+            [FromServices] IImageIndexService imageIndexService,
+            [FromServices] IImageService imageService)
         {
             Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(request.QuestId);
 
@@ -139,9 +122,31 @@ namespace Emerald.Application.Controllers.Quest
                 throw new DomainException("Got invalid prototype id");
             }
 
-            await questPrototypeRepository.Update(request.QuestPrototype);
+            QuestPrototype questPrototype = await questPrototypeRepository.Get(quest.PrototypeId);
 
-            return Ok();
+            // ensure user has not added new images by himself
+            if (request.QuestPrototype.Images.Any(i1 => questPrototype.Images.Any(i2 => i2.ImageId == i1.ImageId) == false))
+            {
+                return BadRequest(new
+                {
+                    Message = "QuestPrototype contains invalid images"
+                });
+            }
+
+            List<ImagePrototype> newImages = new List<ImagePrototype>();
+
+            foreach (ImageModel image in request.NewImages)
+            {
+                byte[] binary = Convert.FromBase64String(image.Image);
+                string imageId = await imageService.Upload(new MemoryStream(binary));
+
+                ImagePrototype prototype = new ImagePrototype(image.Reference, imageId);
+                newImages.Add(prototype);
+                request.QuestPrototype.Images.Add(prototype);
+            }
+
+            await questPrototypeRepository.Update(request.QuestPrototype);
+            return Ok(new QuestCreatePutResponse(newImages));
         }
 
         /// <summary>
@@ -151,10 +156,30 @@ namespace Emerald.Application.Controllers.Quest
         /// <returns></returns>
         [HttpPost("release")]
         public async Task<IActionResult> Publish(
-            [FromBody] QuestCreatePublishRequest request)
+            [FromBody] QuestCreatePublishRequest request,
+            [FromServices] IModuleRepository moduleRepository,
+            [FromServices] ITrackerRepository trackerRepository,
+            [FromServices] IComponentRepository componentRepository,
+            [FromServices] IQuestRepository questRepository,
+            [FromServices] IQuestPrototypeRepository questPrototypeRepository,
+            [FromServices] QuestCreateService questCreateService)
         {
             Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(request.QuestId);
             QuestVersion? stableQuestVersion = quest.GetCurrentQuestVersion();
+
+            if (quest.IsLocked())
+            {
+                return StatusCode(252);
+            }
+
+            QuestPrototype questPrototype = await questPrototypeRepository.Get(quest.PrototypeId);
+
+            await questCreateService.Publish(
+                questPrototype, 
+                quest, 
+                new QuestPrototypeContext(
+                    questPrototype.Modules.ToDictionary(m => m.Id, _ => ObjectId.GenerateNewId()),
+                    questPrototype.Images.ToDictionary(i => i.Reference, i => i.ImageId)));
 
             if (stableQuestVersion != null &&
                 await trackerRepository.HasAnyTrackerForQuest(quest) == false)
@@ -168,8 +193,29 @@ namespace Emerald.Application.Controllers.Quest
                 quest.RemoveQuestVersion(stableQuestVersion);
             }
 
-            await questCreateService.Publish(quest);
             return Ok();
+        }
+    }
+
+    internal class QuestPrototypeContext : IPrototypeContext
+    {
+        private Dictionary<int, ObjectId> modules;
+        private Dictionary<int, string> images;
+
+        public QuestPrototypeContext(Dictionary<int, ObjectId> modules, Dictionary<int, string> images)
+        {
+            this.modules = modules;
+            this.images = images;
+        }
+
+        public string ConvertImageId(int reference)
+        {
+            return images[reference];
+        }
+
+        public ObjectId ConvertModuleId(int moduleId)
+        {
+            return modules[moduleId];
         }
     }
 }
