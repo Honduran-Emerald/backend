@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Emerald.Application.Services
+namespace Emerald.Infrastructure.Services
 {
     public class SafeSearchService : ISafeSearchService
     {
