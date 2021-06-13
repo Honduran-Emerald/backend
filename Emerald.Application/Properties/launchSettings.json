@@ -22,6 +22,8 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "google-cloud-key.json",
+        "GRPC_DNS_RESOLVER": "native",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": "true",
