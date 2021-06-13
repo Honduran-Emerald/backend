@@ -12,6 +12,7 @@ using Emerald.Domain.Repositories;
 using Emerald.Domain.Services;
 using Emerald.Infrastructure;
 using Emerald.Infrastructure.Repositories;
+using Emerald.Infrastructure.Services;
 using Emerald.Infrastructure.ViewModelStash;
 using KissLog;
 using KissLog.AspNetCore;
@@ -40,12 +41,14 @@ namespace Emerald.Application
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            this.env = env;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment env { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -67,13 +70,24 @@ namespace Emerald.Application
                     .AddScoped<IComponentRepository, ComponentRepository>()
                     .AddScoped<IQuestRepository, QuestRepository>()
                     .AddScoped<ITrackerRepository, TrackerRepository>()
-                    .AddScoped<IQuestPrototypeRepository, QuestPrototypeRepository>();
+                    .AddScoped<IQuestPrototypeRepository, QuestPrototypeRepository>()
+                    .AddScoped<IImageIndexService, ImageIndexService>();
 
             services.AddScoped<QuestViewModelStash>();
 
             services.AddScoped<IJwtAuthentication, JwtAuthentication>()
                     .AddScoped<IUserService, UserService>()
-                    .AddSingleton<IMongoDbContext, MongoDbContext>();
+                    .AddSingleton<IMongoDbContext, MongoDbContext>()
+                    .AddSingleton<IImageService, ImageService>();
+
+            if (env.IsProduction())
+            {
+                services.AddSingleton<ISafeSearchService, SafeSearchService>();
+            }
+            else
+            {
+                services.AddSingleton<ISafeSearchService, DevSafeSearchService>();
+            }
 
             services.AddControllers()
                     .AddNewtonsoftJson(options =>
@@ -156,7 +170,7 @@ namespace Emerald.Application
                     .AddLogging(logging => logging.AddKissLog());
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
+        public void Configure(IApplicationBuilder app, ILogger<Startup> logger)
         {
             logger.LogCritical(env.EnvironmentName);
 
@@ -181,7 +195,7 @@ namespace Emerald.Application
                 });
             });
 
-            app.UseUserTokenValidationMiddleware();
+            app.UseUserValidation();
             app.UseQuestSyncMiddleware();
             app.UseDomainExceptionHandlerMiddleware();
 
