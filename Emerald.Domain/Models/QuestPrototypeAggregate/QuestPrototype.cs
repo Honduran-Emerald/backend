@@ -125,11 +125,6 @@ namespace Emerald.Domain.Models.PrototypeAggregate
                 throw new DomainException("ApproximateTime can not be null");
             }
 
-            if (AgentProfileImageId == null)
-            {
-                throw new DomainException($"Quest ProfileImageId can not be null");
-            }
-
             if (AgentProfileName == null)
             {
                 throw new DomainException($"Quest ProfileName can not be null");
