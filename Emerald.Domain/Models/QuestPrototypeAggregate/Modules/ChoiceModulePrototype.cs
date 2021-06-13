@@ -19,10 +19,10 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Modules
             => new ChoiceModule(
                 context.ConvertModuleId(Id),
                 Objective,
-                Choices.Select(c => new ChoiceModule.Choice(context.ConvertModuleId((int)c.NextModuleId!), c.Text))
+                Choices.Select(c => new ChoiceModule.Choice(context.ConvertModuleId((int)c.NextModuleReference!), c.Text))
                        .ToList());
 
-        public override void Verify(IPrototypeContext context)
+        public override void Verify()
         {
             if (Choices.Count == 0)
             {
@@ -31,31 +31,37 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Modules
 
             foreach (ChoiceModulePrototypeChoice choice in Choices)
             {
-                if (choice.NextModuleId == null)
-                {
+                if (choice.NextModuleReference == null)
                     throw new DomainException($"({Id}) NextModuleId in choice can not be null");
-                }
-
-                if (context.ContainsModuleId(choice.NextModuleId.Value) == false)
-                    throw new DomainException($"({Id}) Choice NextModuleId in ChoiceModule not found got {choice.NextModuleId}");
             }
+        }
+
+        public override void AggregateImageReferences(List<int> imageReferences)
+        {
+        }
+
+        public override void AggregateModuleReferences(List<int> moduleReferences)
+        {
+            moduleReferences.AddRange(Choices
+                .Where(c => c.NextModuleReference != null)
+                .Select(c => c.NextModuleReference!.Value));
         }
     }
     public class ChoiceModulePrototypeChoice
     {
         public string Text { get; set; }
-        public int? NextModuleId { get; set; }
+        public int? NextModuleReference { get; set; }
 
         public ChoiceModulePrototypeChoice(string text, int? moduleId)
         {
             Text = text;
-            NextModuleId = moduleId;
+            NextModuleReference = moduleId;
         }
 
         private ChoiceModulePrototypeChoice()
         {
             Text = default!;
-            NextModuleId = default!;
+            NextModuleReference = default!;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Emerald.Domain.Models.ComponentAggregate;
+using System.Collections.Generic;
 using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.QuestPrototypeAggregate.Components
@@ -17,7 +18,7 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Components
             Text = default!;
         }
 
-        public override Component ConvertToComponent()
+        public override Component ConvertToComponent(IPrototypeContext context)
             => new TextComponent(Text);
 
         public override void Verify()
@@ -26,6 +27,10 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Components
             {
                 throw new DomainException("TextComponent text can not be empty");
             }
+        }
+
+        public override void AggregateImageReferences(List<int> imageReferences)
+        {
         }
     }
 }

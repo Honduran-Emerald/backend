@@ -28,10 +28,9 @@ namespace Emerald.Domain.Services
             this.questPrototypeRepository = questPrototypeRepository;
         }
 
-        public async Task Publish(Quest quest)
+        public async Task Publish(QuestPrototype questPrototype, Quest quest, IPrototypeContext prototypeContext)
         {
-            QuestPrototype questPrototype = await questPrototypeRepository.Get(quest.PrototypeId);
-            QuestPrototypeContext context = new QuestPrototypeContext(questPrototype);
+            Verify(questPrototype);
 
             if (questPrototype.Modules.Count == 0)
             {
@@ -42,11 +41,11 @@ namespace Emerald.Domain.Services
 
             foreach (ModulePrototype modulePrototype in questPrototype.Modules)
             {
-                Module module = modulePrototype.ConvertToModule(context);
+                Module module = modulePrototype.ConvertToModule(prototypeContext);
 
                 foreach (ComponentPrototype componentPrototype in modulePrototype.Components)
                 {
-                    Component component = componentPrototype.ConvertToComponent();
+                    Component component = componentPrototype.ConvertToComponent(prototypeContext);
 
                     module.AddComponent(component);
                     await componentRepository.Add(component);
@@ -59,32 +58,14 @@ namespace Emerald.Domain.Services
             quest.PublishQuestVersion(
                 questPrototype,
                 moduleIds,
-                context.ConvertModuleId((int)questPrototype.FirstModuleId!));
+                prototypeContext.ConvertModuleId((int)questPrototype.FirstModuleReference!));
 
             await questRepository.Update(quest);
         }
 
         public void Verify(QuestPrototype questPrototype)
         {
-            questPrototype.Verify(new QuestPrototypeContext(questPrototype));
+            questPrototype.Verify();
         }
-    }
-
-    internal class QuestPrototypeContext : IPrototypeContext
-    {
-        private Dictionary<int, ObjectId> ModuleIds;
-
-        public QuestPrototypeContext(QuestPrototype questPrototype)
-        {
-            ModuleIds = new Dictionary<int, ObjectId>();
-            ModuleIds = questPrototype.Modules
-                .ToDictionary(m => m.Id, _ => ObjectId.GenerateNewId());
-        }
-
-        public bool ContainsModuleId(int moduleId)
-            => ModuleIds.ContainsKey(moduleId);
-
-        public ObjectId ConvertModuleId(int moduleId)
-            => ModuleIds[moduleId];
     }
 }

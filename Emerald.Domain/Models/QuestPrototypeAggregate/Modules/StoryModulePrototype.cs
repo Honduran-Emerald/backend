@@ -1,31 +1,39 @@
 ﻿using Emerald.Domain.Models.ModuleAggregate;
 using Emerald.Domain.Models.ModuleAggregate.Modules;
+using System.Collections.Generic;
 using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.QuestPrototypeAggregate.Modules
 {
     public class StoryModulePrototype : ModulePrototype
     {
-        public int? NextModuleId { get; set; }
+        public int? NextModuleReference { get; set; }
 
         private StoryModulePrototype()
         {
-            NextModuleId = default!;
+            NextModuleReference = default!;
         }
 
         public override Module ConvertToModule(IPrototypeContext context)
-            => new StoryModule(context.ConvertModuleId(Id), Objective, context.ConvertModuleId(NextModuleId!.Value));
+            => new StoryModule(context.ConvertModuleId(Id), Objective, context.ConvertModuleId(NextModuleReference!.Value));
 
-        public override void Verify(IPrototypeContext context)
+        public override void Verify()
         {
-            if (NextModuleId == null)
+            if (NextModuleReference == null)
             {
                 throw new DomainException($"({Id}) NextModuleId can not be null");
             }
+        }
 
-            if (context.ContainsModuleId(NextModuleId.Value) == false)
+        public override void AggregateImageReferences(List<int> imageReferences)
+        {
+        }
+
+        public override void AggregateModuleReferences(List<int> moduleReferences)
+        {
+            if (NextModuleReference != null)
             {
-                throw new DomainException($"({Id}) NextModuleId in StoryModule not found got {NextModuleId.Value}");
+                moduleReferences.Add(NextModuleReference.Value);
             }
         }
     }
