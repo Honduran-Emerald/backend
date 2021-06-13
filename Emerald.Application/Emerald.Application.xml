@@ -24,6 +24,18 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Emerald.Application.Controllers.ImageController.Get(System.String)">
+            <summary>
+            Retrive images by imageid
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.ImageController.Test(Microsoft.AspNetCore.Http.IFormFile,Emerald.Infrastructure.Services.ISafeSearchService)">
+            <summary>
+            Upload a image for testing purposes
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Emerald.Application.Controllers.Quest.QuestController.Query(Emerald.Application.Models.Response.Quest.QuestQueryRequest)">
             <summary>
             Query quests based on specified settings without tracker information
@@ -31,35 +43,35 @@
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Query(System.Int32)">
+        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Query(System.Int32,Microsoft.Extensions.Configuration.IConfiguration,Emerald.Application.Services.IUserService,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Application.Services.Factories.QuestPrototypeModelFactory)">
             <summary>
             Query all quests created by the authorized user with special creator information
             </summary>
             <param name="offset"></param>
             <returns></returns>
         </member>
-        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Create(Emerald.Application.Models.Request.Quest.QuestCreateCreateRequest)">
+        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Create(Emerald.Application.Models.Request.Quest.QuestCreateCreateRequest,Emerald.Application.Services.IUserService,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Domain.Repositories.IQuestPrototypeRepository)">
             <summary>
             Create new quest together with a new questprototype
             </summary>
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Get(MongoDB.Bson.ObjectId)">
+        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Get(MongoDB.Bson.ObjectId,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Domain.Repositories.IQuestPrototypeRepository)">
             <summary>
             Query all information about a single by the authorized user created quest
             </summary>
             <param name="questId"></param>
             <returns></returns>
         </member>
-        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Put(Emerald.Application.Models.Request.Quest.QuestCreatePutRequest)">
+        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Put(Emerald.Application.Models.Request.Quest.QuestCreatePutRequest,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Domain.Repositories.IQuestPrototypeRepository,Emerald.Infrastructure.Services.IImageIndexService,Emerald.Infrastructure.Services.IImageService)">
             <summary>
             Update a prototype of a quest. The Quest has to be queried before with create/query
             </summary>
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Publish(Emerald.Application.Models.Request.Quest.QuestCreatePublishRequest)">
+        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Publish(Emerald.Application.Models.Request.Quest.QuestCreatePublishRequest,Emerald.Domain.Repositories.IModuleRepository,Emerald.Infrastructure.Repositories.ITrackerRepository,Emerald.Infrastructure.Repositories.IComponentRepository,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Domain.Repositories.IQuestPrototypeRepository,Emerald.Domain.Services.QuestCreateService)">
             <summary>
             Publish the development version of a quest to make it stable
             </summary>
