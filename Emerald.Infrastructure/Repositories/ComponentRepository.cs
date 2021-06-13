@@ -1,6 +1,7 @@
 ﻿using AspNetCore.Identity.Mongo.Mongo;
 using Emerald.Domain.Models.ComponentAggregate;
 using Emerald.Infrastructure.Exceptions;
+using Emerald.Infrastructure.Services;
 using MediatR;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -15,11 +16,13 @@ namespace Emerald.Infrastructure.Repositories
     {
         private IMongoCollection<Component> collection;
         private IMediator mediator;
+        private IImageIndexService imageIndexService;
 
-        public ComponentRepository(IMongoDbContext dbContext, IMediator mediator)
+        public ComponentRepository(IMongoDbContext dbContext, IMediator mediator, IImageIndexService imageIndexService)
         {
             collection = dbContext.Emerald.GetCollection<Component>("Components");
             this.mediator = mediator;
+            this.imageIndexService = imageIndexService;
         }
 
         public async Task<Component> Get(ObjectId id)
@@ -46,6 +49,11 @@ namespace Emerald.Infrastructure.Repositories
         {
             await collection.InsertOneAsync(component);
             await mediator.PublishEntity(component);
+
+            if (component is ImageComponent imageComponent)
+            {
+                await imageIndexService.IncreaseImageReference(imageComponent.ImageId);
+            }
         }
 
         public async Task<IEnumerable<Component>> GetAll()
@@ -64,6 +72,12 @@ namespace Emerald.Infrastructure.Repositories
         public async Task Remove(Component component)
         {
             await collection.DeleteOneAsync(c => c.Id == component.Id);
+            await mediator.PublishEntity(component);
+
+            if (component is ImageComponent imageComponent)
+            {
+                await imageIndexService.DecreaseImageReference(imageComponent.ImageId);
+            }
         }
 
         public async Task RemoveAll(List<ObjectId> components)
