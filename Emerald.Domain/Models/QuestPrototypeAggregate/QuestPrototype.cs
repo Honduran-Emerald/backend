@@ -16,8 +16,8 @@ namespace Emerald.Domain.Models.PrototypeAggregate
         public int? ImageReference { get; set; }
         public string? ApproximateTime { get; set; }
 
-        public string? ProfileImageId { get; set; }
-        public string? ProfileName { get; set; }
+        public string? AgentProfileImageId { get; set; }
+        public string? AgentProfileName { get; set; }
 
         public int? FirstModuleReference { get; set; }
         public List<ModulePrototype> Modules { get; set; }
@@ -130,12 +130,12 @@ namespace Emerald.Domain.Models.PrototypeAggregate
                 throw new DomainException("ApproximateTime can not be null");
             }
 
-            if (ProfileImageId == null)
+            if (AgentProfileImageId == null)
             {
                 throw new DomainException($"Quest ProfileImageId can not be null");
             }
 
-            if (ProfileName == null)
+            if (AgentProfileName == null)
             {
                 throw new DomainException($"Quest ProfileName can not be null");
             }

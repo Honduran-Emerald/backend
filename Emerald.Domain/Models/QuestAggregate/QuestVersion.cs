@@ -43,8 +43,8 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
             ImageId = questPrototype.ImageIdByReference(questPrototype.ImageReference)!;
             ApproximateTime = questPrototype.ApproximateTime!;
 
-            ProfileImageId = questPrototype.ProfileImageId!;
-            ProfileName = questPrototype.ProfileName!;
+            ProfileImageId = questPrototype.AgentProfileImageId!;
+            ProfileName = questPrototype.AgentProfileName!;
 
             CreationTime = DateTime.UtcNow;
 
