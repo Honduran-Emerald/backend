@@ -4,7 +4,7 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate
 {
     public interface IPrototypeContext
     {
+        string ConvertImageId(int reference);
         ObjectId ConvertModuleId(int moduleId);
-        bool ContainsModuleId(int moduleId);
     }
 }

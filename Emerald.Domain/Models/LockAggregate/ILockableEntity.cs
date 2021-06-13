@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Emerald.Domain.Models.LockAggregate
 {
-    public interface ILockableEntity : IEntity
+    public interface ILockableEntity<T> : IEntity<T>
     {
         List<Lock> Locks { get; set; }
     }
 
     public static class LocalableEntityExtensions
     {
-        public static bool IsLocked(this ILockableEntity entity)
+        public static bool IsLocked<T>(this ILockableEntity<T> entity)
             => entity.Locks.Count > 0;
     }
 }
