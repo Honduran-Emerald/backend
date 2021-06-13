@@ -3,7 +3,10 @@ using Emerald.Application.Services;
 using Emerald.Application.Services.Factories;
 using Emerald.Domain.Models.UserAggregate;
 using Emerald.Infrastructure.Repositories;
+using Emerald.Infrastructure.Services;
+using Google.Cloud.Vision.V1;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
@@ -28,7 +31,25 @@ namespace Emerald.Application.Controllers
             this.userService = userService;
         }
 
+        [HttpPost("updateimage")]
+        public async Task<IActionResult> UpdateProfileImage(
+            [FromForm] IFormFile image,
+            [FromServices] IImageService imageService,
+            [FromServices] ISafeSearchService safeSearchService,
+            [FromServices] IUserService userService)
+        {
+            if (await safeSearchService.Detect(
+                    await Image.FromStreamAsync(image.OpenReadStream())))
+            {
+                return BadRequest(new
+                {
+                    Message = "Bad Image"
+                });
+            }
 
+            return Ok(new UserUpdateImageResponse(
+                await imageService.Upload(image.OpenReadStream())));
+        }
 
         /// <summary>
         /// Get profile information about current authorized user
