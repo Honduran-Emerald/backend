@@ -7,43 +7,16 @@ using System.Collections.Generic;
 
 namespace Vitamin.Value.Domain.SeedWork
 {
-    public class Entity : IEntity
+    public class Entity : GenericEntity<ObjectId>
     {
-        public ObjectId Id { get; set; }
-
         public Entity(ObjectId id)
+            : base(id)
         {
-            Id = id;
-            domainEvents = new List<INotification>();
         }
 
         public Entity()
+            : base(ObjectId.GenerateNewId())
         {
-            Id = ObjectId.GenerateNewId();
-            domainEvents = new List<INotification>();
         }
-
-        public override bool Equals(object? obj)
-            => obj is Entity entity
-            && Id.Equals(entity.Id);
-
-        public override int GetHashCode()
-            => Id.GetHashCode();
-
-        public void ClearEvents()
-            => domainEvents.Clear();
-
-        [JsonIgnore]
-        public IReadOnlyCollection<INotification> DomainEvents
-            => domainEvents;
-
-        protected void AddDomainEvent(INotification domainEvent)
-        {
-            domainEvents.Add(domainEvent);
-        }
-
-        [JsonIgnore]
-        [BsonIgnore]
-        private List<INotification> domainEvents;
     }
 }
