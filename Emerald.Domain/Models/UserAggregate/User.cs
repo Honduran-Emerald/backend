@@ -21,7 +21,7 @@ namespace Emerald.Domain.Models.UserAggregate
         public List<ObjectId> Following { get; set; }
         public List<ObjectId> Followers { get; set; }
 
-        public string? Image { get; set; }
+        public string? ImageId { get; set; }
         public string SyncToken { get; set; }
 
         public long Experience { get; set; }
