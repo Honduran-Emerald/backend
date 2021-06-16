@@ -25,6 +25,11 @@ namespace Emerald.Infrastructure.DomainEventHandler
             {
                 await imageIndexService.IncreaseImageReference(notification.QuestVersion.ImageId);
             }
+
+            if (notification.QuestVersion.AgentProfileImageId != null)
+            {
+                await imageIndexService.IncreaseImageReference(notification.QuestVersion.AgentProfileImageId);
+            }
         }
     }
 }

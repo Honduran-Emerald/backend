@@ -18,8 +18,8 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
         public string? ImageId { get; set; }
         public string ApproximateTime { get; set; }
 
-        public string ProfileImageId { get; set; }
-        public string ProfileName { get; set; }
+        public string AgentProfileImageId { get; set; }
+        public string AgentProfileName { get; set; }
 
         public DateTime CreationTime { get; set; }
 
@@ -43,8 +43,8 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
             ImageId = questPrototype.ImageIdByReference(questPrototype.ImageReference)!;
             ApproximateTime = questPrototype.ApproximateTime!;
 
-            ProfileImageId = questPrototype.AgentProfileImageId!;
-            ProfileName = questPrototype.AgentProfileName!;
+            AgentProfileImageId = questPrototype.ImageIdByReference(questPrototype.AgentProfileReference)!;
+            AgentProfileName = questPrototype.AgentProfileName!;
 
             CreationTime = DateTime.UtcNow;
 
@@ -65,8 +65,8 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
             ImageId = default!;
             ApproximateTime = default!;
 
-            ProfileImageId = default!;
-            ProfileName = default!;
+            AgentProfileImageId = default!;
+            AgentProfileName = default!;
 
             ModuleIds = new List<ObjectId>();
         }

@@ -16,7 +16,7 @@ namespace Emerald.Domain.Models.PrototypeAggregate
         public int? ImageReference { get; set; }
         public string? ApproximateTime { get; set; }
 
-        public string? AgentProfileImageId { get; set; }
+        public int? AgentProfileReference { get; set; }
         public string? AgentProfileName { get; set; }
 
         public int? FirstModuleReference { get; set; }
@@ -56,6 +56,9 @@ namespace Emerald.Domain.Models.PrototypeAggregate
 
             if (ImageReference != null)
                 imageReferences.Add(ImageReference.Value);
+
+            if (AgentProfileReference != null)
+                imageReferences.Add(AgentProfileReference.Value);
 
             foreach (ModulePrototype module in Modules)
             {

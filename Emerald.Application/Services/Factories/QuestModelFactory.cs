@@ -60,8 +60,8 @@ namespace Emerald.Application.Services.Factories
                 imageId: version?.ImageId,
                 version: version == null ? 1 : version.Version,
 
-                profileImageId: version?.ProfileImageId,
-                profileName: version?.ProfileName,
+                profileImageId: version?.AgentProfileImageId,
+                profileName: version?.AgentProfileName,
 
                 creationTime: quest.CreationTime,
 

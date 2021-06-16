@@ -58,7 +58,7 @@ namespace Emerald.Domain.Services
             quest.PublishQuestVersion(
                 questPrototype,
                 moduleIds,
-                prototypeContext.ConvertModuleId((int)questPrototype.FirstModuleReference!));
+                prototypeContext.ConvertModuleId((int) questPrototype.FirstModuleReference!));
 
             await questRepository.Update(quest);
         }
