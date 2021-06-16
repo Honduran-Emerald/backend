@@ -63,7 +63,8 @@ namespace Emerald.Application
                     .AddScoped<ResponseEventModelFactory>()
                     .AddScoped<TrackerModelFactory>()
                     .AddScoped<TrackerNodeModelFactory>()
-                    .AddScoped<QuestPrototypeModelFactory>();
+                    .AddScoped<QuestPrototypeModelFactory>()
+                    .AddScoped<ChatMessageModelFactory>();
 
             services.AddScoped<IUserRepository, UserRepository>()
                     .AddScoped<IModuleRepository, ModuleRepository>()
@@ -71,7 +72,8 @@ namespace Emerald.Application
                     .AddScoped<IQuestRepository, QuestRepository>()
                     .AddScoped<ITrackerRepository, TrackerRepository>()
                     .AddScoped<IQuestPrototypeRepository, QuestPrototypeRepository>()
-                    .AddScoped<IImageIndexService, ImageIndexService>();
+                    .AddScoped<IImageIndexService, ImageIndexService>()
+                    .AddScoped<IChatMessageRepository, ChatMessageRepository>();
 
             services.AddScoped<QuestViewModelStash>();
 
