@@ -154,6 +154,20 @@
             <param name="choiceEvent"></param>
             <returns></returns>
         </member>
+        <member name="M:Emerald.Application.Controllers.UserController.UpdateMessagingToken(System.String,Emerald.Infrastructure.Repositories.IUserRepository,Emerald.Application.Services.IUserService)">
+            <summary>
+            Set FCM cloud messaging token
+            </summary>
+            <param name="messagingToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.UserController.UpdateProfileImage(Microsoft.AspNetCore.Http.IFormFile,Emerald.Infrastructure.Services.IImageService,Emerald.Infrastructure.Services.ISafeSearchService,Emerald.Application.Services.IUserService)">
+            <summary>
+            Change profile picture of authorized user
+            </summary>
+            <param name="image"></param>
+            <returns></returns>
+        </member>
         <member name="M:Emerald.Application.Controllers.UserController.Me">
             <summary>
             Get profile information about current authorized user

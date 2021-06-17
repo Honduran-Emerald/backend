@@ -14,6 +14,7 @@ using Emerald.Infrastructure;
 using Emerald.Infrastructure.Repositories;
 using Emerald.Infrastructure.Services;
 using Emerald.Infrastructure.ViewModelStash;
+using Expo.Server.Client;
 using FirebaseAdmin;
 using KissLog;
 using KissLog.AspNetCore;
@@ -87,14 +88,18 @@ namespace Emerald.Application
 
             if (env.IsProduction())
             {
-                services.AddSingleton<ISafeSearchService, SafeSearchService>()
-                        .AddSingleton<IMessagingService, FirebaseMessagingService>()
-                        .AddSingleton(FirebaseApp.Create());
+                services.AddSingleton<ISafeSearchService, SafeSearchService>();
+
+                services.AddSingleton<IMessagingService, ExpoMessagingService>()
+                        .AddSingleton<PushApiClient>();
+
+                // services.AddSingleton<IMessagingService, FirebaseMessagingService>()
+                //         .AddSingleton(FirebaseApp.Create());
             }
             else
             {
-                services.AddSingleton<ISafeSearchService, DevelopmentSafeSearchService>()
-                        .AddScoped<IMessagingService, DevelopmentMessagingService>();
+                services.AddSingleton<ISafeSearchService, DevelopmentSafeSearchService>();
+                services.AddSingleton<IMessagingService, ExpoMessagingService>();
             }
 
             services.AddControllers()
