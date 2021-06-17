@@ -2,6 +2,7 @@
 using Emerald.Domain.Models.ChatAggregate;
 using Emerald.Domain.Models.ChatMessageAggregate;
 using Emerald.Domain.Models.UserAggregate;
+using Emerald.Domain.Repositories;
 using Emerald.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
@@ -11,58 +12,38 @@ using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Application.Services.Factories
 {
-    public class ChatMessageModelFactory : IModelFactory<ChatMessageForUser, ChatMessageModel>
+    public class ChatMessageModelFactory : IModelFactory<ChatMessage, ChatMessageModel>
     {
-        private IUserRepository userRepository;
+        private IChatRepository chatRepository;
 
-        public ChatMessageModelFactory(IUserRepository userRepository)
+        public ChatMessageModelFactory(IChatRepository chatRepository)
         {
-            this.userRepository = userRepository;
+            this.chatRepository = chatRepository;
         }
 
-        public async Task<ChatMessageModel> Create(ChatMessageForUser source)
+        public async Task<ChatMessageModel> Create(ChatMessage source)
         {
-            User user = await userRepository.Get(
-                source.Type == ChatMessageUserType.Receiver
-                ? source.ChatMessage.ReceiverId
-                : source.ChatMessage.SenderId);
+            Chat chat = await chatRepository.EmplaceGet(
+                source.SenderId,
+                source.ReceiverId);
 
-            switch (source.ChatMessage)
+            switch (source)
             {
                 case TextChatMessage message:
                     return new TextChatMessageModel(
-                            user.Id,
-                            user.UserName,
-                            user.ImageId,
+                            source.CreationTime,
+                            chat.LastTimeReceived > source.CreationTime,
                             message.Text);
 
                 case ImageChatMessage message:
                     return new ImageChatMessageModel(
-                            user.Id,
-                            user.UserName,
-                            user.ImageId,
+                            source.CreationTime,
+                            chat.LastTimeReceived > source.CreationTime,
                             message.ImageId);
 
                 default:
                     throw new DomainException("Got invalid chatmessage tye");
             }
-        }
-    }
-    public enum ChatMessageUserType
-    {
-        Sender,
-        Receiver
-    }
-
-    public class ChatMessageForUser
-    {
-        public ChatMessage ChatMessage { get; set; }
-        public ChatMessageUserType Type { get; set; }
-
-        public ChatMessageForUser(ChatMessage chatMessage, ChatMessageUserType type)
-        {
-            ChatMessage = chatMessage;
-            Type = type;
         }
     }
 }

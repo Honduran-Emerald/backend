@@ -11,7 +11,7 @@ namespace Emerald.Application.Services.Factories
             return new UserModel(
                 userId: user.Id.ToString(),
                 userName: user.UserName,
-                image: user.Image,
+                image: user.ImageId,
                 level: user.GetLevel(),
                 experience: user.Experience,
                 glory: user.Glory,

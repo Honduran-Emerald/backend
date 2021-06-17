@@ -43,7 +43,7 @@ namespace Emerald.Application.Services.Factories
 
                 ownerId: quest.OwnerUserId,
                 ownerName: owner.UserName,
-                ownerImageId: owner.Image,
+                ownerImageId: owner.ImageId,
                 @public: quest.Public,
 
                 approximateTime: version?.ApproximateTime,
