@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Emerald.Application.Services
 {
-    public class DevSafeSearchService : ISafeSearchService
+    public class DevelopmentSafeSearchService : ISafeSearchService
     {
         public Task<bool> Detect(string imageId)
         {
