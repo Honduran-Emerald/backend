@@ -24,6 +24,34 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Emerald.Application.Controllers.ChatController.Get(MongoDB.Bson.ObjectId,System.Int32,Microsoft.Extensions.Configuration.IConfiguration,Emerald.Application.Services.IUserService,Emerald.Domain.Repositories.IChatMessageRepository,Emerald.Domain.Repositories.IChatRepository,Emerald.Application.Services.Factories.ChatMessageModelFactory,Emerald.Application.Services.Factories.ChatModelFactory)">
+            <summary>
+            Get a pack of messages between the authorized user and a another user
+            </summary>
+            <param name="userId"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.ChatController.Query(Emerald.Domain.Repositories.IChatRepository,Emerald.Application.Services.IUserService,Emerald.Application.Services.Factories.ChatModelFactory)">
+            <summary>
+            Query information about all active chats
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.ChatController.SendText(Emerald.Application.Models.Request.Chat.ChatSendTextRequest,Emerald.Domain.Repositories.IChatMessageRepository,Emerald.Application.Services.IUserService,Emerald.Infrastructure.Repositories.IUserRepository,Emerald.Application.Services.Factories.ChatMessageModelFactory,Emerald.Domain.Repositories.IChatRepository)">
+            <summary>
+            Send a text chat message to a user
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.ChatController.SendImage(Emerald.Application.Models.Request.Chat.ChatSendImageRequest,Emerald.Infrastructure.Services.IImageService,Emerald.Infrastructure.Services.ISafeSearchService,Emerald.Domain.Repositories.IChatMessageRepository,Emerald.Application.Services.IUserService,Emerald.Infrastructure.Repositories.IUserRepository,Emerald.Application.Services.Factories.ChatMessageModelFactory,Emerald.Domain.Repositories.IChatRepository)">
+            <summary>
+            Send a image chat message to a user
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
         <member name="M:Emerald.Application.Controllers.ImageController.Get(System.String)">
             <summary>
             Retrive images by imageid

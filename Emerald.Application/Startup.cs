@@ -64,7 +64,8 @@ namespace Emerald.Application
                     .AddScoped<TrackerModelFactory>()
                     .AddScoped<TrackerNodeModelFactory>()
                     .AddScoped<QuestPrototypeModelFactory>()
-                    .AddScoped<ChatMessageModelFactory>();
+                    .AddScoped<ChatMessageModelFactory>()
+                    .AddScoped<ChatModelFactory>();
 
             services.AddScoped<IUserRepository, UserRepository>()
                     .AddScoped<IModuleRepository, ModuleRepository>()
@@ -73,7 +74,8 @@ namespace Emerald.Application
                     .AddScoped<ITrackerRepository, TrackerRepository>()
                     .AddScoped<IQuestPrototypeRepository, QuestPrototypeRepository>()
                     .AddScoped<IImageIndexService, ImageIndexService>()
-                    .AddScoped<IChatMessageRepository, ChatMessageRepository>();
+                    .AddScoped<IChatMessageRepository, ChatMessageRepository>()
+                    .AddScoped<IChatRepository, ChatRepository>();
 
             services.AddScoped<QuestViewModelStash>();
 
@@ -84,11 +86,13 @@ namespace Emerald.Application
 
             if (env.IsProduction())
             {
-                services.AddSingleton<ISafeSearchService, SafeSearchService>();
+                services.AddSingleton<ISafeSearchService, SafeSearchService>()
+                        .AddScoped<IMessagingService, FirebaseMessagingService>();
             }
             else
             {
-                services.AddSingleton<ISafeSearchService, DevSafeSearchService>();
+                services.AddSingleton<ISafeSearchService, DevelopmentSafeSearchService>()
+                        .AddScoped<IMessagingService, DevelopmentMessagingService>();
             }
 
             services.AddControllers()
@@ -167,9 +171,13 @@ namespace Emerald.Application
                     options.Password.RequireUppercase = false;
                 });
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
-                    .AddScoped(context => Logger.Factory.Get())
-                    .AddLogging(logging => logging.AddKissLog());
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            if (env.IsDevelopment() == false)
+            {
+                services.AddScoped(context => Logger.Factory.Get())
+                        .AddLogging(logging => logging.AddKissLog());
+            }
         }
 
         public void Configure(IApplicationBuilder app, ILogger<Startup> logger)
