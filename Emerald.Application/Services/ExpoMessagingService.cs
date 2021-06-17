@@ -27,6 +27,7 @@ namespace Emerald.Application.Services
             PushTicketRequest request = new PushTicketRequest
             {
                 PushTo = new List<string> { token },
+                PushBadgeCount = 1,
                 PushTitle = title,
                 PushBody = body,
                 PushData = @object
