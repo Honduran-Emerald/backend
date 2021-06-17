@@ -14,6 +14,7 @@ using Emerald.Infrastructure;
 using Emerald.Infrastructure.Repositories;
 using Emerald.Infrastructure.Services;
 using Emerald.Infrastructure.ViewModelStash;
+using FirebaseAdmin;
 using KissLog;
 using KissLog.AspNetCore;
 using KissLog.CloudListeners.RequestLogsListener;
@@ -87,7 +88,8 @@ namespace Emerald.Application
             if (env.IsProduction())
             {
                 services.AddSingleton<ISafeSearchService, SafeSearchService>()
-                        .AddScoped<IMessagingService, FirebaseMessagingService>();
+                        .AddSingleton<IMessagingService, FirebaseMessagingService>()
+                        .AddSingleton(FirebaseApp.Create());
             }
             else
             {

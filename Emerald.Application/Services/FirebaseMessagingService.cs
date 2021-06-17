@@ -19,9 +19,8 @@ namespace Emerald.Application.Services
         private IImageService imageService;
         private IUserRepository userRepository;
 
-        public FirebaseMessagingService(IImageService imageService, IUserRepository userRepository)
+        public FirebaseMessagingService(IImageService imageService, IUserRepository userRepository, FirebaseApp app)
         {
-            var app = FirebaseApp.Create();
             firebaseMessaging = FirebaseMessaging.GetMessaging(app);
 
             this.imageService = imageService;
