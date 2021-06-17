@@ -15,7 +15,6 @@ using Emerald.Domain.Services;
 using Emerald.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
 using MongoDB.Driver.Linq;
 using System.ComponentModel.DataAnnotations;
