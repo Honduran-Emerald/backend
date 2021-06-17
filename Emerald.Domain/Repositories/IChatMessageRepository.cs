@@ -11,7 +11,7 @@ namespace Emerald.Domain.Repositories
 {
     public interface IChatMessageRepository
     {
-        Task Get(ObjectId id);
+        Task<ChatMessage> Get(ObjectId id);
         Task Add(ChatMessage message);
         Task Remove(ChatMessage message);
 

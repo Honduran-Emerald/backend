@@ -13,7 +13,7 @@ namespace Emerald.Domain.Models.ChatAggregate
     [BsonKnownTypes(
         typeof(TextChatMessage),
         typeof(ImageChatMessage))]
-    public class ChatMessage : Entity
+    public abstract class ChatMessage : Entity
     {
         public ObjectId SenderId { get; set; }
         public ObjectId ReceiverId { get; set; }
@@ -24,6 +24,9 @@ namespace Emerald.Domain.Models.ChatAggregate
         {
             SenderId = senderId;
             ReceiverId = receiverId;
+            CreationTime = DateTime.UtcNow;
         }
+
+        public abstract string ToPreviewMessage();
     }
 }

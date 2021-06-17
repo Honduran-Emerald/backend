@@ -17,5 +17,10 @@ namespace Emerald.Domain.Models.ChatMessageAggregate
         {
             ImageId = imageId;
         }
+
+        public override string ToPreviewMessage()
+        {
+            return "Image";
+        }
     }
 }

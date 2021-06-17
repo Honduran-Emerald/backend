@@ -17,5 +17,12 @@ namespace Emerald.Domain.Models.ChatMessageAggregate
         {
             Text = message;
         }
+
+        public override string ToPreviewMessage()
+        {
+            return Text.Length > 50
+                ? Text.Substring(0, 50)
+                : Text;
+        }
     }
 }

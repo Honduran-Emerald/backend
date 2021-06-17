@@ -23,6 +23,7 @@ namespace Emerald.Domain.Models.UserAggregate
 
         public string? ImageId { get; set; }
         public string SyncToken { get; set; }
+        public string? MessagingToken { get; set; }
 
         public long Experience { get; set; }
         public int Glory { get; set; }

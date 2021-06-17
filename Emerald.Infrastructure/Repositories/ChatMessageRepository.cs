@@ -20,7 +20,12 @@ namespace Emerald.Infrastructure.Repositories
 
         public ChatMessageRepository(IMongoDbContext dbContext, IMediator mediator)
         {
-            collection = dbContext.Emerald.GetCollection<ChatMessage>("chatmessages");
+            collection = dbContext.Emerald.GetCollection<ChatMessage>("ChatMessages");
+            collection.Indexes.CreateOneAsync(new CreateIndexModel<ChatMessage>(
+                Builders<ChatMessage>.IndexKeys
+                    .Ascending(c => c.ReceiverId)
+                    .Ascending(c => c.SenderId)));
+
             this.mediator = mediator;
         }
         public async Task<ChatMessage> Get(ObjectId id)
@@ -41,7 +46,6 @@ namespace Emerald.Infrastructure.Repositories
             await collection.InsertOneAsync(chatMessage);
             await mediator.PublishEntity(chatMessage);
         }
-
 
         public async Task Update(ChatMessage chatMessage)
         {
