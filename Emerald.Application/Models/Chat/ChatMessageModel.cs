@@ -8,15 +8,16 @@ namespace Emerald.Application.Models.Chat
 {
     public class ChatMessageModel
     {
-        public ObjectId UserId { get; set; }
-        public string Username { get; set; }
-        public string? UserImageId { get; set; }
+        public DateTime CreationTime { get; set; }
+        public bool Received { get; set; }
 
-        public ChatMessageModel(ObjectId userId, string username, string? userImageId)
+        public ChatType Type { get; set; }
+
+        public ChatMessageModel(DateTime creationTime, bool received, ChatType type)
         {
-            UserId = userId;
-            Username = username;
-            UserImageId = userImageId;
+            CreationTime = creationTime;
+            Received = received;
+            Type = type;
         }
     }
 }
