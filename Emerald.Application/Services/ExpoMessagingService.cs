@@ -2,6 +2,7 @@
 using Emerald.Infrastructure.Repositories;
 using Expo.Server.Client;
 using Expo.Server.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace Emerald.Application.Services
                 PushBadgeCount = 1,
                 PushTitle = title,
                 PushBody = body,
-                PushData = @object
+                PushData = JsonConvert.SerializeObject(@object)
             };
             
             var result = await client.PushSendAsync(request);
