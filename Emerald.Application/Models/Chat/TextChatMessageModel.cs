@@ -10,8 +10,8 @@ namespace Emerald.Application.Models.Chat
     {
         public string Text { get; set; }
 
-        public TextChatMessageModel(DateTime creationTime, bool received, string text)
-            : base(creationTime, received, ChatType.Text)
+        public TextChatMessageModel(DateTime creationTime, bool received, ObjectId sender, string text)
+            : base(creationTime, received, sender, ChatType.Text)
         {
             Text = text;
         }

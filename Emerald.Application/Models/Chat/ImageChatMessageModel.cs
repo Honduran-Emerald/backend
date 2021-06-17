@@ -10,8 +10,8 @@ namespace Emerald.Application.Models.Chat
     {
         public string ImageId { get; set; }
 
-        public ImageChatMessageModel(DateTime creationTime, bool received, string imageId)
-            : base(creationTime, received, ChatType.Image)
+        public ImageChatMessageModel(DateTime creationTime, bool received, ObjectId sender, string imageId)
+            : base(creationTime, received, sender, ChatType.Image)
         {
             ImageId = imageId;
         }

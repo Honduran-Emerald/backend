@@ -11,12 +11,14 @@ namespace Emerald.Application.Models.Chat
         public DateTime CreationTime { get; set; }
         public bool Received { get; set; }
 
+        public ObjectId Sender { get; set; }
         public ChatType Type { get; set; }
 
-        public ChatMessageModel(DateTime creationTime, bool received, ChatType type)
+        public ChatMessageModel(DateTime creationTime, bool received, ObjectId sender, ChatType type)
         {
             CreationTime = creationTime;
             Received = received;
+            Sender = sender;
             Type = type;
         }
     }

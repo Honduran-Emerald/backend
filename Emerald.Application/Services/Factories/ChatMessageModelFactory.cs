@@ -33,12 +33,14 @@ namespace Emerald.Application.Services.Factories
                     return new TextChatMessageModel(
                             source.CreationTime,
                             chat.LastTimeReceived > source.CreationTime,
+                            chat.UserSenderId,
                             message.Text);
 
                 case ImageChatMessage message:
                     return new ImageChatMessageModel(
                             source.CreationTime,
                             chat.LastTimeReceived > source.CreationTime,
+                            chat.UserSenderId,
                             message.ImageId);
 
                 default:
