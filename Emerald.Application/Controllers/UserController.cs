@@ -16,6 +16,7 @@ namespace Emerald.Application.Controllers
 {
     [ApiController]
     [Route("user")]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private UserModelFactory userModelFactory;
@@ -31,6 +32,29 @@ namespace Emerald.Application.Controllers
             this.userService = userService;
         }
 
+        /// <summary>
+        /// Set FCM cloud messaging token
+        /// </summary>
+        /// <param name="messagingToken"></param>
+        /// <returns></returns>
+        [HttpPost("updatemessagetoken")]
+        public async Task<IActionResult> UpdateMessagingToken(
+            [FromBody] string messagingToken,
+            [FromServices] IUserRepository userRepository,
+            [FromServices] IUserService userService)
+        {
+            User user = await userService.CurrentUser();
+            user.MessagingToken = messagingToken;
+            await userRepository.Update(user);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Change profile picture of authorized user
+        /// </summary>
+        /// <param name="image"></param>
+        /// <returns></returns>
         [HttpPost("updateimage")]
         public async Task<IActionResult> UpdateProfileImage(
             [FromForm] IFormFile image,
