@@ -8,10 +8,12 @@ namespace Emerald.Application.Models.Response.Chat
 {
     public class ChatGetResponse
     {
+        public ChatModel ChatModel { get; set; }
         public List<ChatMessageModel> Messages { get; set; }
 
-        public ChatGetResponse(List<ChatMessageModel> messages)
+        public ChatGetResponse(ChatModel chatModel, List<ChatMessageModel> messages)
         {
+            ChatModel = chatModel;
             Messages = messages;
         }
     }
