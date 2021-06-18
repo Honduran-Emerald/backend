@@ -86,8 +86,10 @@ namespace Emerald.Application.Controllers
                 });
             }
 
-            return Ok(new UserUpdateImageResponse(
-                await imageService.Upload(new MemoryStream(binary))));
+            User user = await userService.CurrentUser();
+            user.ImageId = await imageService.Upload(new MemoryStream(binary));
+
+            return Ok(new UserUpdateImageResponse(user.ImageId));
         }
 
         /// <summary>
