@@ -21,6 +21,9 @@ namespace Emerald.Infrastructure.Repositories
         {
             this.userManager = userManager;
             users = dbContext.Emerald.GetCollection<User>("Users");
+            users.Indexes.CreateOneAsync(new CreateIndexModel<User>(
+                Builders<User>.IndexKeys.Ascending(u => u.MessagingToken)));
+
             this.mediator = mediator;
         }
 

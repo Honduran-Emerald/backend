@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
+using MongoDB.Driver.Linq;
 using System.Threading.Tasks;
 
 namespace Emerald.Application.Controllers
@@ -37,13 +38,23 @@ namespace Emerald.Application.Controllers
         /// </summary>
         /// <param name="messagingToken"></param>
         /// <returns></returns>
-        [HttpPost("updatemessagetoken")]
+        [HttpPost("updatemessagingtoken")]
         public async Task<IActionResult> UpdateMessagingToken(
             [FromBody] string messagingToken,
             [FromServices] IUserRepository userRepository,
             [FromServices] IUserService userService)
         {
-            User user = await userService.CurrentUser();
+            User? user = await userRepository.GetQueryable()
+                .Where(u => u.MessagingToken == messagingToken)
+                .FirstOrDefaultAsync();
+
+            if (user != null)
+            {
+                user.MessagingToken = null;
+                await userRepository.Update(user);
+            }
+
+            user = await userService.CurrentUser();
             user.MessagingToken = messagingToken;
             await userRepository.Update(user);
 

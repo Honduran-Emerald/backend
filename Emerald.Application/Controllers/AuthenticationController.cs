@@ -6,6 +6,8 @@ using Emerald.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -96,6 +98,35 @@ namespace Emerald.Application.Controllers
             {
                 Token = await authentication.GenerateToken(await userManager.GetUserAsync(User))
             });
+        }
+
+
+        /// <summary>
+        /// Remove a messaging token from current containing user
+        /// </summary>
+        /// <param name="messagingToken"></param>
+        /// <returns></returns>
+        [HttpPost("invalidatemessagingtoken")]
+        public async Task<IActionResult> InvalidateMessagingToken(
+            [FromBody] string messagingToken,
+            [FromServices] IUserRepository userRepository)
+        {
+            User? user = await userRepository.GetQueryable()
+                .Where(u => u.MessagingToken == messagingToken)
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return BadRequest(new
+                {
+                    Message = "Token not found"
+                });
+            }
+
+            user.MessagingToken = null;
+            await userRepository.Update(user);
+
+            return Ok();
         }
     }
 }
