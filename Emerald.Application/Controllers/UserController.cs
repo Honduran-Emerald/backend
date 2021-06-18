@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using MongoDB.Driver.Linq;
+using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Emerald.Application.Controllers
@@ -68,13 +70,15 @@ namespace Emerald.Application.Controllers
         /// <returns></returns>
         [HttpPost("updateimage")]
         public async Task<IActionResult> UpdateProfileImage(
-            [FromForm] IFormFile image,
+            [FromBody] string binaryImage,
             [FromServices] IImageService imageService,
             [FromServices] ISafeSearchService safeSearchService,
             [FromServices] IUserService userService)
         {
+            byte[] binary = Convert.FromBase64String(binaryImage);
+
             if (await safeSearchService.Detect(
-                    await Image.FromStreamAsync(image.OpenReadStream())))
+                    await Image.FromStreamAsync(new MemoryStream(binary))))
             {
                 return BadRequest(new
                 {
@@ -83,7 +87,7 @@ namespace Emerald.Application.Controllers
             }
 
             return Ok(new UserUpdateImageResponse(
-                await imageService.Upload(image.OpenReadStream())));
+                await imageService.Upload(new MemoryStream(binary))));
         }
 
         /// <summary>

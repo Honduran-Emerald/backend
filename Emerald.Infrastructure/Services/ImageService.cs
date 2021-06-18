@@ -35,7 +35,14 @@ namespace Emerald.Infrastructure.Services
 
         public async Task<Stream> Download(string imageId)
         {
-            return await imageBucket.OpenDownloadStreamByNameAsync(imageId);
+            try
+            {
+                return await imageBucket.OpenDownloadStreamByNameAsync(imageId);
+            }
+            catch (GridFSFileNotFoundException)
+            {
+                throw new ArgumentException("File not found");
+            }
         }
 
         public async Task<string> Upload(Stream stream)

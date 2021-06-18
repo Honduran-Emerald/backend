@@ -99,7 +99,7 @@ namespace Emerald.Application
             else
             {
                 services.AddSingleton<ISafeSearchService, DevelopmentSafeSearchService>();
-                services.AddSingleton<IMessagingService, ExpoMessagingService>();
+                services.AddSingleton<IMessagingService, DevelopmentMessagingService>();
             }
 
             services.AddControllers()

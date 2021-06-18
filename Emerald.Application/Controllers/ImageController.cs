@@ -30,11 +30,21 @@ namespace Emerald.Application.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("get/{imageId}")]
-        public async Task<FileStreamResult> Get(string imageId)
+        public async Task<IActionResult> Get(string imageId)
         {
-            return new FileStreamResult(
-                await imageService.Download(imageId),
-                "image/jpeg");
+            try
+            {
+                return new FileStreamResult(
+                    await imageService.Download(imageId),
+                    "image/jpeg");
+            }
+            catch (ArgumentException)
+            {
+                return BadRequest(new
+                {
+                    Message = "File not found"
+                });
+            }
         }
 
         /// <summary>

@@ -24,6 +24,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Emerald.Application.Controllers.AuthenticationController.InvalidateMessagingToken(System.String,Emerald.Infrastructure.Repositories.IUserRepository)">
+            <summary>
+            Remove a messaging token from current containing user
+            </summary>
+            <param name="messagingToken"></param>
+            <returns></returns>
+        </member>
         <member name="M:Emerald.Application.Controllers.ChatController.Get(MongoDB.Bson.ObjectId,System.Int32,Microsoft.Extensions.Configuration.IConfiguration,Emerald.Application.Services.IUserService,Emerald.Domain.Repositories.IChatMessageRepository,Emerald.Domain.Repositories.IChatRepository,Emerald.Application.Services.Factories.ChatMessageModelFactory,Emerald.Application.Services.Factories.ChatModelFactory)">
             <summary>
             Get a pack of messages between the authorized user and a another user
@@ -161,7 +168,7 @@
             <param name="messagingToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Emerald.Application.Controllers.UserController.UpdateProfileImage(Microsoft.AspNetCore.Http.IFormFile,Emerald.Infrastructure.Services.IImageService,Emerald.Infrastructure.Services.ISafeSearchService,Emerald.Application.Services.IUserService)">
+        <member name="M:Emerald.Application.Controllers.UserController.UpdateProfileImage(System.String,Emerald.Infrastructure.Services.IImageService,Emerald.Infrastructure.Services.ISafeSearchService,Emerald.Application.Services.IUserService)">
             <summary>
             Change profile picture of authorized user
             </summary>
