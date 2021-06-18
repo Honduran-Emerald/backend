@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace Emerald.Infrastructure.Repositories
 {
-    // user can be add by 
     public interface IUserRepository
     {
         Task Add(User user);

@@ -59,7 +59,7 @@ namespace Emerald.Application.Controllers
             List<ChatMessage> chatMessages = await chatMessageRepository.GetQueryable()
                 .Where(c => c.ReceiverId == userId || c.SenderId == userId)
                 .Where(c => c.ReceiverId == user.Id || c.SenderId == user.Id)
-                .OrderBy(c => c.CreationTime)
+                .OrderByDescending(c => c.CreationTime)
                 .Skip(offset)
                 .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
                 .ToListAsync();
@@ -89,6 +89,7 @@ namespace Emerald.Application.Controllers
 
             return Ok(new ChatQueryResponse(
                 await chatModelFactory.Create(await chatRepository.GetQueryable()
+                    .OrderByDescending(c => c.LastTimeReceived)
                     .Where(c => c.UserReceiverId == user.Id)
                     .ToListAsync())));
         }
