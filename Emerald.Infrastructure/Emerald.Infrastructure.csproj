@@ -15,5 +15,6 @@
   <ItemGroup>
     <PackageReference Include="Google.Cloud.Vision.V1" Version="2.3.0" />
     <PackageReference Include="MongoDB.Driver.GridFS" Version="2.12.4" />
+    <PackageReference Include="NEST" Version="7.13.1" />
   </ItemGroup>
 </Project>
