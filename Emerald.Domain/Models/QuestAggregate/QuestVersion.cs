@@ -14,6 +14,7 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
         public string Description { get; set; }
         public List<string> Tags { get; set; }
 
+        public string LocationName { get; set; }
         public Location Location { get; set; }
         public string? ImageId { get; set; }
         public string ApproximateTime { get; set; }
@@ -39,6 +40,7 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
             Description = questPrototype.Description!;
             Tags = questPrototype.Tags;
 
+            LocationName = questPrototype.LocationName!;
             Location = questPrototype.Location!;
             ImageId = questPrototype.ImageIdByReference(questPrototype.ImageReference)!;
             ApproximateTime = questPrototype.ApproximateTime!;
@@ -61,6 +63,7 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
             Description = default!;
             Tags = default!;
 
+            LocationName = default!;
             Location = default!;
             ImageId = default!;
             ApproximateTime = default!;

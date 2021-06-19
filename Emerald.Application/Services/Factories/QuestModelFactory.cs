@@ -47,7 +47,7 @@ namespace Emerald.Application.Services.Factories
                 @public: quest.Public,
 
                 approximateTime: version?.ApproximateTime,
-                locationName: "Darmstadt",
+                locationName: version?.LocationName,
                 location: version == null
                 ? null
                 : new LocationModel(
