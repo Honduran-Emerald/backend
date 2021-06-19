@@ -176,6 +176,7 @@ namespace Emerald.Application
                     options.Password.RequireLowercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
+                    options.User.RequireUniqueEmail = true;
                 });
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
