@@ -178,13 +178,18 @@ namespace Emerald.Application.Controllers
                 chatMessage switch
                 {
                     TextChatMessageModel textChatMessage => textChatMessage.Text.Length > 50
-                    ? textChatMessage.Text.Substring(0, 50)
-                    : textChatMessage.Text,
+                        ? textChatMessage.Text.Substring(0, 50)
+                        : textChatMessage.Text,
                     ImageChatMessageModel => "Image",
                     _ => throw new ArgumentException("Got invalid chatmessage type")
                 },
                 sender.ImageId,
-                chatMessage);
+                new
+                {
+                    UserImageId = sender.Id,
+                    Username = sender.UserName,
+                    Message = chatMessage
+                });
         }
     }
 }
