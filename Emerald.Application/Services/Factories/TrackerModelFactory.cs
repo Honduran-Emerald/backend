@@ -48,7 +48,8 @@ namespace Emerald.Application.Services.Factories
                 questVersion.AgentProfileImageId,
                 questVersion.AgentProfileName,
                 module.Objective,
-                owner.UserName);
+                owner.UserName,
+                source.GetCurrentTrackerPath());
         }
 
         public async Task<TrackerModel> Create(Tracker source)

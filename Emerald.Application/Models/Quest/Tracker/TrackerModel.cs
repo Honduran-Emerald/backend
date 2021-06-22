@@ -22,7 +22,9 @@ namespace Emerald.Application.Models.Quest.Tracker
         public string Objective { get; set; }
         public string Author { get; set; }
 
-        public TrackerModel(ObjectId questId, ObjectId trackerId, bool newestQuestVersion, bool finished, VoteType vote, DateTime creationTime, string questName, string agentProfileImageId, string agentProfileName, string objective, string author)
+        public TrackerNode TrackerNode { get; set; }
+
+        public TrackerModel(ObjectId questId, ObjectId trackerId, bool newestQuestVersion, bool finished, VoteType vote, DateTime creationTime, string questName, string agentProfileImageId, string agentProfileName, string objective, string author, TrackerNode trackerNode)
         {
             QuestId = questId;
             TrackerId = trackerId;
@@ -35,6 +37,7 @@ namespace Emerald.Application.Models.Quest.Tracker
             AgentProfileName = agentProfileName;
             Objective = objective;
             Author = author;
+            TrackerNode = trackerNode;
         }
 
         public TrackerModel()
@@ -48,6 +51,7 @@ namespace Emerald.Application.Models.Quest.Tracker
             AgentProfileImageId = default!;
             AgentProfileName = default!;
             Author = default!;
+            TrackerNode = default!;
         }
     }
 }

@@ -92,6 +92,13 @@
             <param name="request"></param>
             <returns></returns>
         </member>
+        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Delete(MongoDB.Bson.ObjectId,Emerald.Infrastructure.Repositories.IComponentRepository,Emerald.Domain.Repositories.IModuleRepository,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Infrastructure.Repositories.ITrackerRepository,Emerald.Application.Services.IUserService)">
+            <summary>
+            Delete a quest if owned by authorized user
+            </summary>
+            <param name="questId"></param>
+            <returns></returns>
+        </member>
         <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Get(MongoDB.Bson.ObjectId,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Domain.Repositories.IQuestPrototypeRepository)">
             <summary>
             Query all information about a single by the authorized user created quest
@@ -141,7 +148,7 @@
             <param name="trackerId"></param>
             <returns></returns>
         </member>
-        <member name="M:Emerald.Application.Controllers.QuestPlayController.QueryTrackerNodes(MongoDB.Bson.ObjectId)">
+        <member name="M:Emerald.Application.Controllers.QuestPlayController.QueryTrackerNodes(MongoDB.Bson.ObjectId,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Application.Services.Factories.QuestModelFactory)">
             <summary>
             Query trackernodes with all module and memento information for a single playing quest
             </summary>
