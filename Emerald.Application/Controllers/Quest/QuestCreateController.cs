@@ -5,11 +5,14 @@ using Emerald.Application.Models.Response.Quest;
 using Emerald.Application.Services;
 using Emerald.Application.Services.Factories;
 using Emerald.Domain.Models;
+using Emerald.Domain.Models.ComponentAggregate;
 using Emerald.Domain.Models.LockAggregate;
 using Emerald.Domain.Models.ModuleAggregate;
 using Emerald.Domain.Models.PrototypeAggregate;
+using Emerald.Domain.Models.QuestAggregate;
 using Emerald.Domain.Models.QuestPrototypeAggregate;
 using Emerald.Domain.Models.QuestVersionAggregate;
+using Emerald.Domain.Models.TrackerAggregate;
 using Emerald.Domain.Models.UserAggregate;
 using Emerald.Domain.Repositories;
 using Emerald.Domain.Services;
@@ -83,6 +86,57 @@ namespace Emerald.Application.Controllers.Quest
             await questRepository.Add(quest);
 
             return Ok(new QuestCreateCreateResponse(quest.Id, questPrototype));
+        }
+
+        /// <summary>
+        /// Delete a quest if owned by authorized user
+        /// </summary>
+        /// <param name="questId"></param>
+        /// <returns></returns>
+        [HttpPost("delete")]
+        public async Task<IActionResult> Delete(
+            [FromBody] ObjectId questId,
+            [FromServices] IComponentRepository componentRepository,
+            [FromServices] IModuleRepository moduleRepository,
+            [FromServices] IQuestRepository questRepository,
+            [FromServices] ITrackerRepository trackerRepository,
+            [FromServices] IUserService userService)
+        {
+            User user = await userService.CurrentUser();
+            Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(questId);
+
+            if (quest.OwnerUserId != user.Id)
+            {
+                return BadRequest(new
+                {
+                    Message = "User is not the owner of the quest"
+                });
+            }
+
+            foreach (QuestVersion questVersion in quest.QuestVersions)
+                foreach (ObjectId moduleId in questVersion.ModuleIds)
+                {
+                    Module module = await moduleRepository.Get(moduleId);
+
+                    foreach (ObjectId componentId in module.ComponentIds)
+                    {
+                        await componentRepository.Remove(
+                            await componentRepository.Get(componentId));
+                    }
+
+                    await moduleRepository.Remove(module);
+                }
+
+            foreach (Tracker tracker in await trackerRepository.GetQueryable()
+                .Where(t => t.QuestId == quest.Id)
+                .ToListAsync())
+            {
+                await trackerRepository.Remove(tracker);
+            }
+
+            await questRepository.Remove(quest);
+
+            return Ok();
         }
 
         /// <summary>

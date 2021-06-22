@@ -1,5 +1,7 @@
 ﻿using Emerald.Domain.Models.QuestAggregate;
+using Emerald.Domain.Models.QuestVersionAggregate;
 using Emerald.Infrastructure.Exceptions;
+using Emerald.Infrastructure.Services;
 using MediatR;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -12,11 +14,27 @@ namespace Emerald.Infrastructure.Repositories
     {
         private IMongoCollection<Quest> collection;
         private IMediator mediator;
+        private IImageIndexService imageIndexService;
 
-        public QuestRepository(IMongoDbContext dbContext, IMediator mediator)
+        public QuestRepository(IMongoDbContext dbContext, IMediator mediator, IImageIndexService imageIndexService)
         {
             collection = dbContext.Emerald.GetCollection<Quest>("Quests");
             this.mediator = mediator;
+            this.imageIndexService = imageIndexService;
+        }
+
+        public async Task Remove(Quest quest)
+        {
+            await collection.DeleteOneAsync(q => q.Id == quest.Id);
+
+            foreach (QuestVersion questVersion in quest.QuestVersions)
+            {
+                if (questVersion.ImageId != null)
+                    await imageIndexService.DecreaseImageReference(questVersion.ImageId);
+
+                if (questVersion.AgentProfileImageId != null)
+                    await imageIndexService.DecreaseImageReference(questVersion.AgentProfileImageId);
+            }
         }
 
         public async Task Add(Quest quest)

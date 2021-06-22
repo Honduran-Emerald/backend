@@ -7,6 +7,7 @@ namespace Emerald.Infrastructure.Repositories
 {
     public interface IQuestRepository
     {
+        Task Remove(Quest quest);
         Task Add(Quest quest);
         Task Update(Quest quest);
 
