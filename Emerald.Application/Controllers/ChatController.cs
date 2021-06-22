@@ -186,7 +186,7 @@ namespace Emerald.Application.Controllers
                 sender.ImageId,
                 new
                 {
-                    UserImageId = sender.Id,
+                    UserImageId = sender.ImageId,
                     Username = sender.UserName,
                     Message = chatMessage
                 });
