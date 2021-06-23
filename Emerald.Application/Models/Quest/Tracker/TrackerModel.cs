@@ -22,9 +22,9 @@ namespace Emerald.Application.Models.Quest.Tracker
         public string Objective { get; set; }
         public string Author { get; set; }
 
-        public TrackerNode TrackerNode { get; set; }
+        public TrackerNodeModel TrackerNode { get; set; }
 
-        public TrackerModel(ObjectId questId, ObjectId trackerId, bool newestQuestVersion, bool finished, VoteType vote, DateTime creationTime, string questName, string agentProfileImageId, string agentProfileName, string objective, string author, TrackerNode trackerNode)
+        public TrackerModel(ObjectId questId, ObjectId trackerId, bool newestQuestVersion, bool finished, VoteType vote, DateTime creationTime, string questName, string agentProfileImageId, string agentProfileName, string objective, string author, TrackerNodeModel trackerNode)
         {
             QuestId = questId;
             TrackerId = trackerId;

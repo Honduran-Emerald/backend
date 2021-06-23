@@ -6,6 +6,7 @@ using Emerald.Domain.Models.TrackerAggregate;
 using Emerald.Domain.Models.UserAggregate;
 using Emerald.Domain.Repositories;
 using Emerald.Infrastructure.Repositories;
+using Google.Apis.Auth.OAuth2;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,12 +18,14 @@ namespace Emerald.Application.Services.Factories
         private IQuestRepository questRepository;
         private IModuleRepository moduleRepository;
         private IUserRepository userRepository;
+        private TrackerNodeModelFactory trackerNodeModelFactory;
 
-        public TrackerModelFactory(IQuestRepository questRepository, IModuleRepository moduleRepository, IUserRepository userRepository)
+        public TrackerModelFactory(IQuestRepository questRepository, IModuleRepository moduleRepository, IUserRepository userRepository, TrackerNodeModelFactory trackerNodeModelFactory)
         {
             this.questRepository = questRepository;
             this.moduleRepository = moduleRepository;
             this.userRepository = userRepository;
+            this.trackerNodeModelFactory = trackerNodeModelFactory;
         }
 
         public async Task<TrackerModel> Create(Tracker source, Quest quest)
@@ -49,7 +52,8 @@ namespace Emerald.Application.Services.Factories
                 questVersion.AgentProfileName,
                 module.Objective,
                 owner.UserName,
-                source.GetCurrentTrackerPath());
+                await trackerNodeModelFactory.Create(
+                    source.GetCurrentTrackerPath()));
         }
 
         public async Task<TrackerModel> Create(Tracker source)
