@@ -11,7 +11,8 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate
     [BsonKnownTypes(
         typeof(ChoiceModulePrototype),
         typeof(EndingModulePrototype),
-        typeof(StoryModulePrototype))]
+        typeof(StoryModulePrototype),
+        typeof(LocationModulePrototype))]
     public abstract class ModulePrototype
     {
         public int Id { get; set; }

@@ -51,6 +51,15 @@ namespace Emerald.Application.Services.Factories
                         module.Objective,
                         componentModels,
                         endingModule.EndingFactor);
+
+                case LocationModule locationModule:
+                    return new LocationModuleModel(
+                        module.Id.ToString(),
+                        module.Objective,
+                        componentModels,
+                        new Models.LocationModel(
+                            locationModule.Location.Longitude,
+                            locationModule.Location.Latitude));
             }
 
             throw new Exception("Got invalid Module");

@@ -22,6 +22,7 @@ namespace Emerald.Application.Models.Quest.Module
                 .RegisterSubtype<ChoiceModulePrototype>(ModuleType.Choice)
                 .RegisterSubtype<StoryModulePrototype>(ModuleType.Story)
                 .RegisterSubtype<EndingModulePrototype>(ModuleType.Ending)
+                .RegisterSubtype<LocationModulePrototype>(ModuleType.Location)
                 .SerializeDiscriminatorProperty()
                 .Build());
         }

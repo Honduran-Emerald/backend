@@ -5,15 +5,15 @@ namespace Emerald.Application.Models.Quest.Module
 {
     public abstract class ModuleModel
     {
-        public string ModuleId { get; set; }
+        public string Id { get; set; }
 
         public string Objective { get; set; }
         public ModuleType Type { get; set; }
         public List<ComponentModel> Components { get; set; }
 
-        protected ModuleModel(string moduleId, string objective, ModuleType type, List<ComponentModel> components)
+        public ModuleModel(string moduleId, string objective, ModuleType type, List<ComponentModel> components)
         {
-            ModuleId = moduleId;
+            Id = moduleId;
             Objective = objective;
             Type = type;
             Components = components;
@@ -21,7 +21,7 @@ namespace Emerald.Application.Models.Quest.Module
 
         public ModuleModel()
         {
-            ModuleId = default!;
+            Id = default!;
             Type = default!;
             Objective = default!;
             Components = default!;

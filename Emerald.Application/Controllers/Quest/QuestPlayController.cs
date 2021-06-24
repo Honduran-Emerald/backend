@@ -1,4 +1,5 @@
-﻿using Emerald.Application.Models.Quest.Events;
+﻿using Emerald.Application.Models.Quest;
+using Emerald.Application.Models.Quest.Events;
 using Emerald.Application.Models.Request;
 using Emerald.Application.Models.Request.Quest;
 using Emerald.Application.Models.Response.Quest;
@@ -227,7 +228,9 @@ namespace Emerald.Application.Controllers
         /// <returns></returns>
         [HttpGet("querytrackernodes")]
         public async Task<ActionResult<QuestPlayQueryTrackerNodesResponse>> QueryTrackerNodes(
-            [FromQuery] ObjectId trackerId)
+            [FromQuery] ObjectId trackerId,
+            [FromServices] IQuestRepository questRepository,
+            [FromServices] QuestModelFactory questModelFactory)
         {
             Tracker tracker = await trackerRepository.Get(trackerId);
 
@@ -236,7 +239,12 @@ namespace Emerald.Application.Controllers
                 return StatusCode(252);
             }
 
+            Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(tracker.QuestId);
+
             return Ok(new QuestPlayQueryTrackerNodesResponse(
+                await questModelFactory.Create(new QuestPairModel(
+                    quest,
+                    quest.GetQuestVersion(tracker.QuestVersion))),
                 await trackerNodeFactory.Create(tracker.Nodes)));
         }
 
