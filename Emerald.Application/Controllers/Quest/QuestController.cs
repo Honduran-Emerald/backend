@@ -1,6 +1,8 @@
 ﻿using Emerald.Application.Models.Quest;
 using Emerald.Application.Models.Response.Quest;
+using Emerald.Application.Services;
 using Emerald.Application.Services.Factories;
+using Emerald.Domain.Models.TrackerAggregate;
 using Emerald.Domain.Models.UserAggregate;
 using Emerald.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -63,6 +66,62 @@ namespace Emerald.Application.Controllers.Quest
                                         .OrderByDescending(v => v.Version)
                                         .FirstOrDefault()))
                         .ToList())));
+        }
+
+        public async Task<ActionResult<QuestQueryResponse>> QueryVoted(
+            [FromQuery] int offset,
+            [FromQuery] VoteType voteType,
+            [FromServices] ITrackerRepository trackerRepository,
+            [FromServices] IQuestRepository questRepository,
+            [FromServices] QuestModelFactory questModelFactory,
+            [FromServices] IUserService userService)
+        {
+            User user = await userService.CurrentUser();
+            List<QuestPairModel> quests = new List<QuestPairModel>();
+
+            foreach (Tracker tracker in await trackerRepository.GetQueryable()
+                .Where(t => t.UserId == user.Id)
+                .Where(t => t.Vote == voteType)
+                .Skip(offset)
+                .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
+                .ToListAsync())
+            {
+                var quest = await questRepository.Get(tracker.QuestId);
+
+                quests.Add(new QuestPairModel(
+                    quest, quest.GetQuestVersion(tracker.QuestVersion)));
+            }
+
+            return Ok(new QuestQueryResponse(
+                await questModelFactory.Create(quests)));
+        }
+
+        public async Task<ActionResult<QuestQueryResponse>> QueryFinished(
+            [FromQuery] int offset,
+            [FromQuery] bool finished,
+            [FromServices] ITrackerRepository trackerRepository,
+            [FromServices] IQuestRepository questRepository,
+            [FromServices] QuestModelFactory questModelFactory,
+            [FromServices] IUserService userService)
+        {
+            User user = await userService.CurrentUser();
+            List<QuestPairModel> quests = new List<QuestPairModel>();
+
+            foreach (Tracker tracker in await trackerRepository.GetQueryable()
+                .Where(t => t.UserId == user.Id)
+                .Where(t => t.Finished == finished)
+                .Skip(offset)
+                .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
+                .ToListAsync())
+            {
+                var quest = await questRepository.Get(tracker.QuestId);
+
+                quests.Add(new QuestPairModel(
+                    quest, quest.GetQuestVersion(tracker.QuestVersion)));
+            }
+
+            return Ok(new QuestQueryResponse(
+                await questModelFactory.Create(quests)));
         }
     }
 }
