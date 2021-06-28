@@ -4,10 +4,13 @@ using Emerald.Application.Services;
 using Emerald.Application.Services.Factories;
 using Emerald.Domain.Models.TrackerAggregate;
 using Emerald.Domain.Models.UserAggregate;
+using Emerald.Infrastructure.ElasticModels;
 using Emerald.Infrastructure.Repositories;
+using Emerald.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System.Collections.Generic;
@@ -18,6 +21,7 @@ namespace Emerald.Application.Controllers.Quest
 {
     [ApiController]
     [Route("/quest")]
+    [Authorize]
     public class QuestController : ControllerBase
     {
         private IUserRepository userRepository;
@@ -38,11 +42,60 @@ namespace Emerald.Application.Controllers.Quest
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [Authorize]
         [HttpGet("query")]
         public async Task<ActionResult<QuestQueryResponse>> Query(
-            [FromQuery] QuestQueryRequest request)
+            [FromQuery] QuestQueryRequest request,
+            [FromServices] IElasticService elasticService)
         {
+            var searchResult = await elasticService.ElasticClient.SearchAsync<QuestElasticModel>(s =>
+            {
+                if (request.PreferAfter.HasValue)
+                {
+                    s.Query(q => q.Boosting(b => b
+                        .Boost(2)
+                        .Negative(n => n)
+                        .Positive(p => p
+                            .Bool(b2 => b2.Must(m => m
+                                .DateRange(d => d
+                                    .Field(f => f.CreationTime)
+                                    .LessThan(request.PreferAfter)))))));
+                }
+
+                if (request.Location != null && request.Radius != null)
+                {
+                    s.Query(q =>
+                        q.Bool(b => b.Must(m => m
+                            .GeoDistance(g => g
+                                .Field(f => f.Location)
+                                .Location(new Nest.GeoLocation(
+                                    request.Location.Latitude,
+                                    request.Location.Longitude))
+                                .Distance($"{request.Radius}m")
+                                .ValidationMethod(Nest.GeoValidationMethod.IgnoreMalformed)))));
+                }
+                
+                if (request.Search != null)
+                {
+                    s.Query(q => q.Match(m => m
+                        .Field(f => f.Tags)
+                        .Field(f => f.Title)
+                        .Query(request.Search)));
+                }
+
+                return s
+                    .Sort(s => s.Descending(d => d.Votes))
+                    .Skip(request.Offset)
+                    .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"));
+            });
+
+            var quests = new List<Domain.Models.QuestAggregate.Quest>();
+
+            foreach (var doc in searchResult.Documents)
+            {
+                quests.Add(await questRepository.Get(ObjectId.Parse(doc.Id)));
+            }
+            
+            /*
             User user = await userRepository.Get(User);
 
             var queryable = questRepository.GetQueryable()
@@ -59,7 +112,7 @@ namespace Emerald.Application.Controllers.Quest
                     .Skip(request.Offset)
                     .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
                     .ToListAsync();
-
+            */
             return Ok(new QuestQueryResponse(
                 quests: await questModelFactory.Create(
                     quests.Select(q => new QuestPairModel(q, q.QuestVersions
@@ -68,6 +121,13 @@ namespace Emerald.Application.Controllers.Quest
                         .ToList())));
         }
 
+        /// <summary>
+        /// Query all quests with the specified vote by the authorized user
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <param name="voteType"></param>
+        /// <returns></returns>
+        [HttpGet("queryvoted")]
         public async Task<ActionResult<QuestQueryResponse>> QueryVoted(
             [FromQuery] int offset,
             [FromQuery] VoteType voteType,
@@ -96,6 +156,13 @@ namespace Emerald.Application.Controllers.Quest
                 await questModelFactory.Create(quests)));
         }
 
+        /// <summary>
+        /// Query all quests with the specified finish state by the authorized user
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <param name="finished"></param>
+        /// <returns></returns>
+        [HttpGet("queryfinished")]
         public async Task<ActionResult<QuestQueryResponse>> QueryFinished(
             [FromQuery] int offset,
             [FromQuery] bool finished,

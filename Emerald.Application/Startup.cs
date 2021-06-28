@@ -11,6 +11,7 @@ using Emerald.Domain.Models.UserAggregate;
 using Emerald.Domain.Repositories;
 using Emerald.Domain.Services;
 using Emerald.Infrastructure;
+using Emerald.Infrastructure.ElasticModels;
 using Emerald.Infrastructure.Repositories;
 using Emerald.Infrastructure.Services;
 using Emerald.Infrastructure.ViewModelStash;
@@ -38,6 +39,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Emerald.Application
 {
@@ -84,7 +87,9 @@ namespace Emerald.Application
             services.AddScoped<IJwtAuthentication, JwtAuthentication>()
                     .AddScoped<IUserService, UserService>()
                     .AddSingleton<IMongoDbContext, MongoDbContext>()
-                    .AddSingleton<IImageService, ImageService>();
+                    .AddSingleton<IImageService, ImageService>()
+                    .AddSingleton<IElasticService, ElasticService>()
+                    .AddScoped<QuestElasticModelFactory>();
 
             if (env.IsProduction())
             {
@@ -227,6 +232,13 @@ namespace Emerald.Application
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Honduran Emerald");
             });
+            
+            var f = new TaskFactory(CancellationToken.None,
+                  TaskCreationOptions.None,
+                  TaskContinuationOptions.None,
+                  TaskScheduler.Default);
+
+            app.CreateElasticIndices().GetAwaiter().GetResult();
         }
     }
 }

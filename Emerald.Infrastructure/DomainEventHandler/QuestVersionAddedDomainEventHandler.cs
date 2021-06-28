@@ -1,4 +1,6 @@
 ﻿using Emerald.Domain.Events;
+using Emerald.Infrastructure.ElasticModels;
+using Emerald.Infrastructure.Repositories;
 using Emerald.Infrastructure.Services;
 using MediatR;
 using System;
@@ -13,7 +15,7 @@ namespace Emerald.Infrastructure.DomainEventHandler
     public class QuestVersionAddedDomainEventHandler : INotificationHandler<QuestVersionAddedDomainEvent>
     {
         private IImageIndexService imageIndexService;
-
+        
         public QuestVersionAddedDomainEventHandler(IImageIndexService imageIndexService)
         {
             this.imageIndexService = imageIndexService;

@@ -1,5 +1,8 @@
 ﻿using Emerald.Domain.Models.TrackerAggregate;
+using Emerald.Infrastructure.ElasticModels;
+using Emerald.Infrastructure.ElasticModels.Events;
 using Emerald.Infrastructure.ViewModels;
+using MediatR;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Threading.Tasks;
@@ -9,10 +12,12 @@ namespace Emerald.Infrastructure.ViewModelStash
     public class QuestViewModelStash
     {
         private IMongoCollection<QuestViewModel> collection;
+        private IMediator mediator;
 
-        public QuestViewModelStash(IMongoDbContext context)
+        public QuestViewModelStash(IMongoDbContext context, IMediator mediator)
         {
             collection = context.Emerald.GetCollection<QuestViewModel>("QuestViewModel");
+            this.mediator = mediator;
         }
 
         public async Task<QuestViewModel> Get(ObjectId questId)
@@ -64,6 +69,7 @@ namespace Emerald.Infrastructure.ViewModelStash
         public async Task Update(QuestViewModel model)
         {
             await collection.ReplaceOneAsync(m => m.Id == model.Id, model);
+            await mediator.Publish(new QuestElasticModelChangedEvent(model.Id));
         }
     }
 }

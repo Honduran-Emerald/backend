@@ -162,14 +162,6 @@ namespace Emerald.Application.Controllers
                 });
             }
 
-            if (tracker.Vote != VoteType.None)
-            {
-                return BadRequest(new
-                {
-                    Message = "Quest already voted"
-                });
-            }
-
             switch (request.Vote)
             {
                 case VoteType.Up:
@@ -193,7 +185,7 @@ namespace Emerald.Application.Controllers
         /// <returns></returns>
         [HttpPost("reset")]
         public async Task<IActionResult> Reset(
-            [FromForm][Required] ObjectId trackerId)
+            [FromBody][Required] ObjectId trackerId)
         {
             User user = await userRepository.Get(User);
             Tracker tracker = await trackerRepository.Get(trackerId);
