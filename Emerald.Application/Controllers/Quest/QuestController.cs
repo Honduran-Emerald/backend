@@ -68,6 +68,13 @@ namespace Emerald.Application.Controllers.Quest
                         .ToList())));
         }
 
+        /// <summary>
+        /// Query all quests with the specified vote by the authorized user
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <param name="voteType"></param>
+        /// <returns></returns>
+        [HttpGet("queryvoted")]
         public async Task<ActionResult<QuestQueryResponse>> QueryVoted(
             [FromQuery] int offset,
             [FromQuery] VoteType voteType,
@@ -96,6 +103,13 @@ namespace Emerald.Application.Controllers.Quest
                 await questModelFactory.Create(quests)));
         }
 
+        /// <summary>
+        /// Query all quests with the specified finish state by the authorized user
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <param name="finished"></param>
+        /// <returns></returns>
+        [HttpGet("queryfinished")]
         public async Task<ActionResult<QuestQueryResponse>> QueryFinished(
             [FromQuery] int offset,
             [FromQuery] bool finished,

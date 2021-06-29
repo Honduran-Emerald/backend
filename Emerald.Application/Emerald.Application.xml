@@ -78,6 +78,22 @@
             <param name="request"></param>
             <returns></returns>
         </member>
+        <member name="M:Emerald.Application.Controllers.Quest.QuestController.QueryVoted(System.Int32,Emerald.Domain.Models.TrackerAggregate.VoteType,Emerald.Infrastructure.Repositories.ITrackerRepository,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Application.Services.Factories.QuestModelFactory,Emerald.Application.Services.IUserService)">
+            <summary>
+            Query all quests with the specified vote by the authorized user
+            </summary>
+            <param name="offset"></param>
+            <param name="voteType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.Quest.QuestController.QueryFinished(System.Int32,System.Boolean,Emerald.Infrastructure.Repositories.ITrackerRepository,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Application.Services.Factories.QuestModelFactory,Emerald.Application.Services.IUserService)">
+            <summary>
+            Query all quests with the specified finish state by the authorized user
+            </summary>
+            <param name="offset"></param>
+            <param name="finished"></param>
+            <returns></returns>
+        </member>
         <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Query(System.Int32,Microsoft.Extensions.Configuration.IConfiguration,Emerald.Application.Services.IUserService,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Application.Services.Factories.QuestPrototypeModelFactory)">
             <summary>
             Query all quests created by the authorized user with special creator information
