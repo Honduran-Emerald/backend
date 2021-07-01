@@ -8,12 +8,12 @@ namespace Emerald.Application.Models.Quest.Module
 {
     public class LocationModuleModel : ModuleModel
     {
-        public LocationModel LocationModel { get; set; }
+        public LocationModel Location { get; set; }
 
         public LocationModuleModel(string moduleId, string objective, List<ComponentModel> components, LocationModel locationModel)
                : base(moduleId, objective, ModuleType.Location, components)
         {
-            LocationModel = locationModel;
+            Location = locationModel;
         }
     }
 }
