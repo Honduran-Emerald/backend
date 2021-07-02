@@ -21,6 +21,7 @@ namespace Emerald.Application.Models.Quest.Tracker
 
         public string Objective { get; set; }
         public string Author { get; set; }
+        public int ExperienceCollected { get; set; }
 
         public TrackerNodeModel TrackerNode { get; set; }
 

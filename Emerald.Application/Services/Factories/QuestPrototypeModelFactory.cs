@@ -36,15 +36,9 @@ namespace Emerald.Application.Services.Factories
                     user.Id,
                     source.Id));
 
-            QuestModel? questModel = null;
-
-            if (source.QuestVersions.Count > 0)
-            {
-                questModel = await questModelFactory.Create(
-                   new QuestPairModel(source, source.GetCurrentQuestVersion()),
-                   trackerModel);
-            }
-
+            QuestModel? questModel = await questModelFactory.Create(
+               new QuestPairModel(source, source.GetCurrentQuestVersion()),
+               trackerModel);
             QuestPrototype questPrototype = await questPrototypeRepository.Get(source.PrototypeId);
 
             return new QuestPrototypeModel(
