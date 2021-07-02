@@ -28,7 +28,7 @@ namespace Emerald.Domain.Models.ModuleAggregate.Modules
             {
                 case ChoiceRequestEvent choiceEvent:
                     return new ResponseEventCollection(
-                        memento,
+                    new ChoiceModuleMemento(choiceEvent.Choice),
                         new List<IResponseEvent>
                         {
                             new ExperienceResponseEvent(500),
