@@ -26,6 +26,7 @@ namespace Emerald.Application.Services.Factories
                 glory: user.Glory,
                 questCount: user.QuestIds.Count,
                 trackerCount: user.TrackerIds.Count,
+                user.Followers.Count,
                 currentUser.Id == user.Id
                 ? false : currentUser.Following.Contains(user.Id),
                 currentUser.Id == user.Id
