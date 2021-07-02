@@ -1,5 +1,6 @@
 ﻿using Emerald.Domain.Models.PrototypeAggregate;
 using MongoDB.Bson;
+using MongoDB.Driver.GeoJsonObjectModel;
 using System;
 using System.Collections.Generic;
 using Vitamin.Value.Domain.SeedWork;
@@ -15,7 +16,7 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
         public List<string> Tags { get; set; }
 
         public string LocationName { get; set; }
-        public Location Location { get; set; }
+        public GeoJsonPoint<GeoJson2DGeographicCoordinates> Location { get; set; }
         public string? ImageId { get; set; }
         public string ApproximateTime { get; set; }
 
@@ -41,7 +42,10 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
             Tags = questPrototype.Tags;
 
             LocationName = questPrototype.LocationName!;
-            Location = questPrototype.Location!;
+            Location = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(
+                new GeoJson2DGeographicCoordinates(
+                    questPrototype.Location!.Longitude,
+                    questPrototype.Location!.Latitude));
             ImageId = questPrototype.ImageIdByReference(questPrototype.ImageReference)!;
             ApproximateTime = questPrototype.ApproximateTime!;
 

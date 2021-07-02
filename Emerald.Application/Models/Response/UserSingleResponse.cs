@@ -1,15 +1,15 @@
 ﻿namespace Emerald.Application.Models.Response
 {
-    public class UserMeResponse
+    public class UserSingleResponse
     {
         public UserModel User { get; set; }
 
-        public UserMeResponse(UserModel user)
+        public UserSingleResponse(UserModel user)
         {
             User = user;
         }
 
-        private UserMeResponse()
+        private UserSingleResponse()
         {
             User = default!;
         }

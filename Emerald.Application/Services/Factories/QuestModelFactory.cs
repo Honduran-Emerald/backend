@@ -51,8 +51,8 @@ namespace Emerald.Application.Services.Factories
                 location: version == null
                 ? null
                 : new LocationModel(
-                    version.Location.Longitude,
-                    version.Location.Latitude),
+                    version.Location.Coordinates.Longitude,
+                    version.Location.Coordinates.Latitude),
 
                 title: version?.Title,
                 description: version?.Description,

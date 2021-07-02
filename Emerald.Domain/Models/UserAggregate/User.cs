@@ -106,5 +106,16 @@ namespace Emerald.Domain.Models.UserAggregate
             Followers.Add(user.Id);
             user.Followers.Add(Id);
         }
+
+        public void Unfollow(User user)
+        {
+            if (Following.Contains(user.Id) == false)
+            {
+                throw new DomainException($"Not following {user.UserName}");
+            }
+
+            Followers.Remove(user.Id);
+            user.Followers.Remove(Id);
+        }
     }
 }

@@ -9,10 +9,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver.Linq;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Emerald.Application.Controllers
@@ -99,9 +102,9 @@ namespace Emerald.Application.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpGet("me")]
-        public async Task<ActionResult<UserMeResponse>> Me()
+        public async Task<ActionResult<UserSingleResponse>> Me()
         {
-            return Ok(new UserMeResponse(
+            return Ok(new UserSingleResponse(
                 await userModelFactory.Create(
                     await userService.CurrentUser())));
         }
@@ -112,11 +115,119 @@ namespace Emerald.Application.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpGet("get")]
-        public async Task<ActionResult<UserMeResponse>> Get(
+        public async Task<ActionResult<UserSingleResponse>> Get(
             [FromQuery] ObjectId userId)
         {
-            return Ok(new UserMeResponse(
+            return Ok(new UserSingleResponse(
                 await userModelFactory.Create(await userRepository.Get(userId))));
+        }
+
+        /// <summary>
+        /// Get all users followed by the authorized user
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        [HttpGet("followers")]
+        public async Task<ActionResult<UserMultipleResponse>> Followers(
+            [FromQuery] int offset,
+            [FromServices] IConfiguration configuration,
+            [FromServices] IUserService userService,
+            [FromServices] IUserRepository userRepository,
+            [FromServices] UserModelFactory userModelFactory)
+        {
+            var response = new UserMultipleResponse(new List<Models.UserModel>());
+            var user = await userService.CurrentUser();
+
+            foreach (ObjectId follower in user.Followers
+                .Skip(offset)
+                .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize")))
+            {
+                response.Users.Add(
+                    await userModelFactory.Create(await userRepository.Get(follower)));
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Get all users following the authorized user
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        [HttpGet("following")]
+        public async Task<ActionResult<UserMultipleResponse>> Following(
+            [FromQuery] int offset,
+            [FromServices] IConfiguration configuration,
+            [FromServices] IUserService userService,
+            [FromServices] IUserRepository userRepository,
+            [FromServices] UserModelFactory userModelFactory)
+        {
+            var response = new UserMultipleResponse(new List<Models.UserModel>());
+            var user = await userService.CurrentUser();
+
+            foreach (ObjectId following in user.Following
+                .Skip(offset)
+                .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize")))
+            {
+                response.Users.Add(
+                    await userModelFactory.Create(await userRepository.Get(following)));
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Follow or unfollow a user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpPost("togglefollow")]
+        public async Task<IActionResult> ToggleFollow(
+            [FromBody] ObjectId userId,
+            [FromServices] IUserService userService,
+            [FromServices] IUserRepository userRepository)
+        {
+            var user = await userService.CurrentUser();
+            var following = await userRepository.Get(userId);
+
+            if (user.Following.Contains(userId))
+            {
+                user.Unfollow(following);
+            }
+            else
+            {
+                user.Follow(following);
+            }
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// All followers from the authorized user, that the authorized follower is following back
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        [HttpGet("friends")]
+        public async Task<ActionResult<UserMultipleResponse>> Friends(
+            [FromQuery] int offset,
+            [FromServices] IConfiguration configuration,
+            [FromServices] IUserService userService,
+            [FromServices] IUserRepository userRepository,
+            [FromServices] UserModelFactory userModelFactory)
+        {
+            var response = new UserMultipleResponse(new List<Models.UserModel>());
+            var user = await userService.CurrentUser();
+
+            foreach (ObjectId friend in user.Following
+                .Where(u => user.Followers.Contains(u))
+                .Skip(offset)
+                .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize")))
+            {
+                response.Users.Add(
+                    await userModelFactory.Create(await userRepository.Get(friend)));
+            }
+
+            return Ok(response);
         }
     }
 }

@@ -13,7 +13,10 @@
         public int QuestCount { get; set; }
         public int TrackerCount { get; set; }
 
-        public UserModel(string userId, string userName, string? image, int level, long experience, int glory, int questCount, int trackerCount)
+        public bool Following { get; set; }
+        public bool Follower { get; set; }
+
+        public UserModel(string userId, string userName, string? image, int level, long experience, int glory, int questCount, int trackerCount, bool following, bool follower)
         {
             UserId = userId;
             UserName = userName;
@@ -23,6 +26,8 @@
             Glory = glory;
             QuestCount = questCount;
             TrackerCount = trackerCount;
+            Following = following;
+            Follower = follower;
         }
 
         public UserModel()
