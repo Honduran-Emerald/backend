@@ -9,7 +9,7 @@ namespace Emerald.Application.Models.Quest.Tracker
         public MementoModel? Memento { get; set; }
         public ModuleModel Module { get; set; }
         public DateTime CreationTime { get; set; }
-
+         
         public TrackerNodeModel(MementoModel? memento, ModuleModel module, DateTime creationTime)
         {
             Memento = memento;
