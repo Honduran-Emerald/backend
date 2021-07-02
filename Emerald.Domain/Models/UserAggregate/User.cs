@@ -103,7 +103,7 @@ namespace Emerald.Domain.Models.UserAggregate
                 throw new DomainException($"Already following {user.UserName}");
             }
 
-            Followers.Add(user.Id);
+            Following.Add(user.Id);
             user.Followers.Add(Id);
         }
 
