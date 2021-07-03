@@ -28,8 +28,6 @@ namespace Emerald.Infrastructure.ViewModels.EventHandler
                     break;
             }
 
-            if (notification.PreviousVoteType == VoteType.Down)
-
             await stash.IncreaseVote(notification.QuestId, notification.VoteType);
         }
     }
