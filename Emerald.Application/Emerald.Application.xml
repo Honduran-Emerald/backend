@@ -164,6 +164,13 @@
             <param name="trackerId"></param>
             <returns></returns>
         </member>
+        <member name="M:Emerald.Application.Controllers.QuestPlayController.Remove(MongoDB.Bson.ObjectId,Emerald.Infrastructure.Repositories.ITrackerRepository,Emerald.Application.Services.IUserService)">
+            <summary>
+            Completely remove a tracker from the authorized user 
+            </summary>
+            <param name="trackerId"></param>
+            <returns></returns>
+        </member>
         <member name="M:Emerald.Application.Controllers.QuestPlayController.QueryTrackerNodes(MongoDB.Bson.ObjectId,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Application.Services.Factories.QuestModelFactory)">
             <summary>
             Query trackernodes with all module and memento information for a single playing quest
@@ -219,16 +226,16 @@
         </member>
         <member name="M:Emerald.Application.Controllers.UserController.Following(System.Int32,Microsoft.Extensions.Configuration.IConfiguration,Emerald.Application.Services.IUserService,Emerald.Infrastructure.Repositories.IUserRepository,Emerald.Application.Services.Factories.UserModelFactory)">
             <summary>
-            Get all users following the authorized user
+            Follow or unfollow a user
             </summary>
-            <param name="offset"></param>
+            <param name="userId"></param>
             <returns></returns>
         </member>
         <member name="M:Emerald.Application.Controllers.UserController.ToggleFollow(MongoDB.Bson.ObjectId,Emerald.Application.Services.IUserService,Emerald.Infrastructure.Repositories.IUserRepository)">
             <summary>
-            Follow or unfollow a user
+            Get all users following the authorized user
             </summary>
-            <param name="userId"></param>
+            <param name="offset"></param>
             <returns></returns>
         </member>
         <member name="M:Emerald.Application.Controllers.UserController.Friends(System.Int32,Microsoft.Extensions.Configuration.IConfiguration,Emerald.Application.Services.IUserService,Emerald.Infrastructure.Repositories.IUserRepository,Emerald.Application.Services.Factories.UserModelFactory)">

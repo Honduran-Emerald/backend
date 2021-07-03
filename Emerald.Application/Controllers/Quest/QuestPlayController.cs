@@ -162,14 +162,6 @@ namespace Emerald.Application.Controllers
                 });
             }
 
-            if (tracker.Vote != VoteType.None)
-            {
-                return BadRequest(new
-                {
-                    Message = "Quest already voted"
-                });
-            }
-
             switch (request.Vote)
             {
                 case VoteType.Up:
@@ -178,6 +170,10 @@ namespace Emerald.Application.Controllers
 
                 case VoteType.Down:
                     tracker.Downvote();
+                    break;
+
+                case VoteType.None:
+                    tracker.Unvote();
                     break;
             }
 
@@ -219,6 +215,43 @@ namespace Emerald.Application.Controllers
 
             await trackerRepository.Update(tracker);
 
+            return Ok();
+        }
+
+        /// <summary>
+        /// Completely remove a tracker from the authorized user 
+        /// </summary>
+        /// <param name="trackerId"></param>
+        /// <returns></returns>
+        [HttpPost("remove")]
+        public async Task<IActionResult> Remove(
+            [FromBody] ObjectId trackerId,
+            [FromServices] ITrackerRepository trackerRepository,
+            [FromServices] IUserService userService)
+        {
+            Tracker tracker = await trackerRepository.GetQueryable()
+                .Where(t => t.Id == trackerId)
+                .FirstOrDefaultAsync();
+
+            if (tracker == null)
+            {
+                return BadRequest(new
+                {
+                    Message = "Tracker not found"
+                });
+            }
+
+            User user = await userService.CurrentUser();
+
+            if (tracker.UserId == user.Id)
+            {
+                return BadRequest(new
+                {
+                    Message = "Tracker from other user"
+                });
+            }
+
+            await trackerRepository.Remove(tracker);
             return Ok();
         }
 

@@ -16,6 +16,7 @@ namespace Emerald.Domain.Models.TrackerAggregate
         public ObjectId QuestId { get; set; }
         public int QuestVersion { get; set; }
 
+        public int ExperienceCollected { get; set; }
         public VoteType Vote { get; set; }
         public DateTime CreatedAt { get; set; }
 
@@ -40,6 +41,11 @@ namespace Emerald.Domain.Models.TrackerAggregate
             Nodes = new List<TrackerNode>();
         }
 
+        public void IncreaseExperience(int experience)
+        {
+            ExperienceCollected += experience;
+        }
+
         public void AddTrackerPath(TrackerNode trackerPath)
         {
             Nodes.Add(trackerPath);
@@ -52,23 +58,19 @@ namespace Emerald.Domain.Models.TrackerAggregate
 
         public void Upvote()
         {
-            if (Vote != VoteType.None)
-            {
-                throw new DomainException("Quest already voted");
-            }
-
             Vote = VoteType.Up;
             AddDomainEvent(new QuestVotedDomainEvent(QuestId, UserId, Vote));
         }
 
         public void Downvote()
         {
-            if (Vote != VoteType.None)
-            {
-                throw new DomainException("Quest already voted");
-            }
-
             Vote = VoteType.Down;
+            AddDomainEvent(new QuestVotedDomainEvent(QuestId, UserId, Vote));
+        }
+
+        public void Unvote()
+        {
+            Vote = VoteType.None;
             AddDomainEvent(new QuestVotedDomainEvent(QuestId, UserId, Vote));
         }
 
@@ -80,6 +82,8 @@ namespace Emerald.Domain.Models.TrackerAggregate
 
         public void Reset(int questVersion)
         {
+            ExperienceCollected = 0;
+            CreatedAt = DateTime.UtcNow;
             QuestVersion = questVersion;
 
             Nodes.Clear();

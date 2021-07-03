@@ -200,6 +200,10 @@ namespace Emerald.Application.Controllers.Quest
             }
 
             await questPrototypeRepository.Update(request.QuestPrototype);
+
+            quest.Outdated = true;
+            await questRepository.Update(quest);
+
             return Ok(new QuestCreatePutResponse(newImages));
         }
 

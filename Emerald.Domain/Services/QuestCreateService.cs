@@ -59,6 +59,7 @@ namespace Emerald.Domain.Services
                 questPrototype,
                 moduleIds,
                 prototypeContext.ConvertModuleId((int) questPrototype.FirstModuleReference!));
+            quest.Outdated = false;
 
             await questRepository.Update(quest);
         }

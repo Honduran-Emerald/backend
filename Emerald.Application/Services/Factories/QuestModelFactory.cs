@@ -60,14 +60,17 @@ namespace Emerald.Application.Services.Factories
                 imageId: version?.ImageId,
                 version: version == null ? 1 : version.Version,
 
-                profileImageId: version?.AgentProfileImageId,
-                profileName: version?.AgentProfileName,
+                agentProfileImageId: version?.AgentProfileImageId,
+                agentProfileName: version?.AgentProfileName,
 
                 creationTime: quest.CreationTime,
-
+                
                 votes: viewModel.Votes,
                 plays: viewModel.Plays,
-                finishes: viewModel.Finishes);
+                finishes: viewModel.Finishes,
+
+                released: quest.QuestVersions.Count > 0,
+                outdated: quest.Outdated);
         }
 
         public async Task<QuestModel> Create(QuestPairModel questPair)

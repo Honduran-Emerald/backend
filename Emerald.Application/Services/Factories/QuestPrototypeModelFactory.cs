@@ -53,7 +53,7 @@ namespace Emerald.Application.Services.Factories
                 questPrototype.ImageIdByReference(questPrototype.AgentProfileReference),
                 source.QuestVersions.Count > 0,
                 source.Public,
-                true);
+                source.Outdated);
         }
     }
 }

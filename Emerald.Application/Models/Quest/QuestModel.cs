@@ -37,7 +37,10 @@ namespace Emerald.Application.Models.Quest
         public int Plays { get; set; }
         public int Finishes { get; set; }
 
-        public QuestModel(string id, ObjectId ownerId, TrackerModel? tracker, string ownerName, string? ownerImageId, bool @public, int version, string? approximateTime, string? locationName, string? title, string? description, List<string>? tags, LocationModel? location, string? imageId, string? profileImageId, string? profileName, DateTime creationTime, int votes, int plays, int finishes)
+        public bool Released { get; set; }
+        public bool Outdated { get; set; }
+
+        public QuestModel(string id, ObjectId ownerId, TrackerModel? tracker, string ownerName, string? ownerImageId, bool @public, int version, string? approximateTime, string? locationName, string? title, string? description, List<string>? tags, LocationModel? location, string? imageId, string? agentProfileImageId, string? agentProfileName, DateTime creationTime, int votes, int plays, int finishes, bool released, bool outdated)
         {
             Id = id;
             OwnerId = ownerId;
@@ -53,12 +56,14 @@ namespace Emerald.Application.Models.Quest
             Tags = tags;
             Location = location;
             ImageId = imageId;
-            AgentProfileImageId = profileImageId;
-            AgentProfileName = profileName;
+            AgentProfileImageId = agentProfileImageId;
+            AgentProfileName = agentProfileName;
             CreationTime = creationTime;
             Votes = votes;
             Plays = plays;
             Finishes = finishes;
+            Released = released;
+            Outdated = outdated;
         }
 
         private QuestModel()

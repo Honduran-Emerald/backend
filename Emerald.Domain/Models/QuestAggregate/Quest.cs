@@ -20,6 +20,8 @@ namespace Emerald.Domain.Models.QuestAggregate
         public List<QuestVersion> QuestVersions { get; set; }
         public DateTime CreationTime { get; set; }
 
+        public bool Outdated { get; set; }
+
         public Quest(User user, QuestPrototype questPrototype)
         {
             Public = true;

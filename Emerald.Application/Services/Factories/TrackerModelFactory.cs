@@ -52,6 +52,7 @@ namespace Emerald.Application.Services.Factories
                 questVersion.AgentProfileName,
                 module.Objective,
                 owner.UserName,
+                source.ExperienceCollected,
                 await trackerNodeModelFactory.Create(
                     source.GetCurrentTrackerPath()));
         }

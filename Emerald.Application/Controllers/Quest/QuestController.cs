@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
+using MongoDB.Driver.GeoJsonObjectModel;
 using MongoDB.Driver.Linq;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,6 +46,7 @@ namespace Emerald.Application.Controllers.Quest
         {
             User user = await userRepository.Get(User);
 
+
             var queryable = questRepository.GetQueryable()
                     .Where(q => q.Public || q.OwnerUserId == user.Id)
                     .Where(q => q.QuestVersions.Count > 0)
@@ -53,6 +55,18 @@ namespace Emerald.Application.Controllers.Quest
             if (request.OwnerId != null)
             {
                 queryable = queryable.Where(q => q.OwnerUserId == request.OwnerId);
+            }
+
+            if (request.Location != null)
+            {
+                if (request.Radius != null)
+                {
+                    var filter = Builders<Domain.Models.QuestAggregate.Quest>.Filter
+                        .Near(q => q.QuestVersions.Last().Location, new GeoJsonPoint<GeoJson2DGeographicCoordinates>(
+                            new GeoJson2DGeographicCoordinates(request.Location.Longitude, request.Location.Latitude)));
+
+                    queryable.Where(x => filter.Inject());
+                }
             }
 
             var quests = await queryable

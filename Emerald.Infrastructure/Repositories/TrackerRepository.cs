@@ -60,6 +60,8 @@ namespace Emerald.Infrastructure.Repositories
 
         public async Task Remove(Tracker tracker)
         {
+            tracker.Unvote();
+            await mediator.PublishEntity(tracker);
             await collection.DeleteOneAsync(t => t.Id == tracker.Id);
         }
 
