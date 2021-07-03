@@ -20,11 +20,13 @@ namespace Emerald.Application.Models.Prototype
         public string? AgentProfileName { get; set; }
         public string? AgentProfileImageId { get; set; }
 
+        public string? ApproximateTime { get; set; }
+
         public bool Released { get; set; }
         public bool Public { get; set; }
         public bool Outdated { get; set; }
 
-        public QuestPrototypeModel(ObjectId questId, QuestModel? quest, string? title, string? imageId, string? description, Location? location, string? locationName, string? agentProfileName, string? agentProfileImageId, bool released, bool @public, bool outdated)
+        public QuestPrototypeModel(ObjectId questId, QuestModel? quest, string? title, string? imageId, string? description, Location? location, string? locationName, string? agentProfileName, string? agentProfileImageId, string? approximateTime, bool released, bool @public, bool outdated)
         {
             QuestId = questId;
             Quest = quest;
@@ -35,6 +37,7 @@ namespace Emerald.Application.Models.Prototype
             LocationName = locationName;
             AgentProfileName = agentProfileName;
             AgentProfileImageId = agentProfileImageId;
+            ApproximateTime = approximateTime;
             Released = released;
             Public = @public;
             Outdated = outdated;

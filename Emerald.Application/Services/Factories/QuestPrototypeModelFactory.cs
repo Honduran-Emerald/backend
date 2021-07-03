@@ -51,6 +51,7 @@ namespace Emerald.Application.Services.Factories
                 questPrototype.LocationName,
                 questPrototype.AgentProfileName,
                 questPrototype.ImageIdByReference(questPrototype.AgentProfileReference),
+                questPrototype.ApproximateTime,
                 source.QuestVersions.Count > 0,
                 source.Public,
                 source.Outdated);
