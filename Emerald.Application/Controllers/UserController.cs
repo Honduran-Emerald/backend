@@ -150,9 +150,9 @@ namespace Emerald.Application.Controllers
         }
 
         /// <summary>
-        /// Follow or unfollow a user
+        /// Get all users following the authorized user
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="offset"></param>
         /// <returns></returns>
         [HttpGet("following")]
         public async Task<ActionResult<UserMultipleResponse>> Following(
@@ -177,9 +177,9 @@ namespace Emerald.Application.Controllers
         }
 
         /// <summary>
-        /// Get all users following the authorized user
+        /// Follow or unfollow a user
         /// </summary>
-        /// <param name="offset"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
         [HttpPost("togglefollow")]
         public async Task<IActionResult> ToggleFollow(
@@ -198,6 +198,9 @@ namespace Emerald.Application.Controllers
             {
                 user.Follow(following);
             }
+
+            await userRepository.Update(user);
+            await userRepository.Update(following);
 
             return Ok();
         }
