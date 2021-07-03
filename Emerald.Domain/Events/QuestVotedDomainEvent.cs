@@ -9,12 +9,14 @@ namespace Emerald.Domain.Events
         public ObjectId QuestId { get; set; }
         public ObjectId UserId { get; set; }
         public VoteType VoteType { get; set; }
+        public VoteType PreviousVoteType { get; set; }
 
-        public QuestVotedDomainEvent(ObjectId questId, ObjectId userId, VoteType voteType)
+        public QuestVotedDomainEvent(ObjectId questId, ObjectId userId, VoteType voteType, VoteType previousVoteType)
         {
             QuestId = questId;
             UserId = userId;
             VoteType = voteType;
+            PreviousVoteType = previousVoteType;
         }
     }
 }

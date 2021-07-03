@@ -58,20 +58,23 @@ namespace Emerald.Domain.Models.TrackerAggregate
 
         public void Upvote()
         {
+            var previous = Vote;
             Vote = VoteType.Up;
-            AddDomainEvent(new QuestVotedDomainEvent(QuestId, UserId, Vote));
+            AddDomainEvent(new QuestVotedDomainEvent(QuestId, UserId, Vote, previous));
         }
 
         public void Downvote()
         {
+            var previous = Vote;
             Vote = VoteType.Down;
-            AddDomainEvent(new QuestVotedDomainEvent(QuestId, UserId, Vote));
+            AddDomainEvent(new QuestVotedDomainEvent(QuestId, UserId, Vote, previous));
         }
 
         public void Unvote()
         {
+            var previous = Vote;
             Vote = VoteType.None;
-            AddDomainEvent(new QuestVotedDomainEvent(QuestId, UserId, Vote));
+            AddDomainEvent(new QuestVotedDomainEvent(QuestId, UserId, Vote, previous));
         }
 
         public void Finish()

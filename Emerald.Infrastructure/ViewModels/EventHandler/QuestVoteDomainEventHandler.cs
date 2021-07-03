@@ -1,4 +1,5 @@
 ﻿using Emerald.Domain.Events;
+using Emerald.Domain.Models.TrackerAggregate;
 using Emerald.Infrastructure.ViewModelStash;
 using MediatR;
 using System.Threading;
@@ -17,6 +18,18 @@ namespace Emerald.Infrastructure.ViewModels.EventHandler
 
         public async Task Handle(QuestVotedDomainEvent notification, CancellationToken cancellationToken)
         {
+            switch (notification.PreviousVoteType)
+            {
+                case VoteType.Down:
+                    await stash.IncreaseVote(notification.QuestId, VoteType.Up);
+                    break;
+                case VoteType.Up:
+                    await stash.IncreaseVote(notification.QuestId, VoteType.Down);
+                    break;
+            }
+
+            if (notification.PreviousVoteType == VoteType.Down)
+
             await stash.IncreaseVote(notification.QuestId, notification.VoteType);
         }
     }
