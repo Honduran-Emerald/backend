@@ -53,7 +53,7 @@ namespace Emerald.Infrastructure.ViewModelStash
             {
                 ++model.Votes;
             }
-            else
+            else if (voteType == VoteType.Down)
             {
                 --model.Votes;
             }
