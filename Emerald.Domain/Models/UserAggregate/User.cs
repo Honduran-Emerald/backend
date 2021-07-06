@@ -114,7 +114,7 @@ namespace Emerald.Domain.Models.UserAggregate
                 throw new DomainException($"Not following {user.UserName}");
             }
 
-            Followers.Remove(user.Id);
+            Following.Remove(user.Id);
             user.Followers.Remove(Id);
         }
     }
