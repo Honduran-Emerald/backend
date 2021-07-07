@@ -232,5 +232,33 @@ namespace Emerald.Application.Controllers
 
             return Ok(response);
         }
+
+        /// <summary>
+        /// Query for users optionally by search string
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        [HttpGet("query")]
+        public async Task<ActionResult<UserMultipleResponse>> Query(
+            [FromQuery] int offset,
+            [FromQuery] string? search,
+            [FromServices] IConfiguration configuration,
+            [FromServices] IUserService userService,
+            [FromServices] IUserRepository userRepository,
+            [FromServices] UserModelFactory userModelFactory)
+        {
+            var usersQuery = userRepository.GetQueryable();
+
+            if (search != null)
+            {
+                usersQuery.Where(u => u.UserName.Contains(search));
+            }
+
+            return Ok(new UserMultipleResponse(
+                await userModelFactory.Create(usersQuery
+                    .Skip(offset)
+                    .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
+                    .ToList())));
+        }
     }
 }
