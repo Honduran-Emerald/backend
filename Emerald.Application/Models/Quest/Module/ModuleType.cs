@@ -27,10 +27,10 @@ namespace Emerald.Application.Models.Quest.Module
                 .RegisterSubtype<StoryModulePrototype>(ModuleType.Story)
                 .RegisterSubtype<EndingModulePrototype>(ModuleType.Ending)
                 .RegisterSubtype<LocationModulePrototype>(ModuleType.Location)
-                .RegisterSubtype<ChoiceModulePrototype>(ModuleType.Passphrase)
-                .RegisterSubtype<StoryModulePrototype>(ModuleType.QrCode)
-                .RegisterSubtype<EndingModulePrototype>(ModuleType.Random)
-                .RegisterSubtype<LocationModulePrototype>(ModuleType.WideArea)
+                .RegisterSubtype<PasspharseModulePrototype>(ModuleType.Passphrase)
+                .RegisterSubtype<QrCodeModulePrototype>(ModuleType.QrCode)
+                .RegisterSubtype<RandomModulePrototype>(ModuleType.Random)
+                .RegisterSubtype<WideAreaModulePrototype>(ModuleType.WideArea)
                 .SerializeDiscriminatorProperty()
                 .Build());
         }
