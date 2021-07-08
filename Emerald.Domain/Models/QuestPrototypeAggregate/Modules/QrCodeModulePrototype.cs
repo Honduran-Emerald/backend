@@ -15,7 +15,7 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Modules
         public string? Text { get; set; }
 
         public override Module ConvertToModule(IPrototypeContext context)
-            => new PassphraseModule(context.ConvertModuleId(Id), Objective, Text!, context.ConvertModuleId(NextModuleReference!.Value));
+            => new QrCodeModule(context.ConvertModuleId(Id), Objective, Text!, context.ConvertModuleId(NextModuleReference!.Value));
 
         public override void Verify()
         {
