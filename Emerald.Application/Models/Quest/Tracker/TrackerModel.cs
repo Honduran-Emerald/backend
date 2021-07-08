@@ -16,7 +16,7 @@ namespace Emerald.Application.Models.Quest.Tracker
 
         public string QuestName { get; set; }
 
-        public string AgentProfileImageId { get; set; }
+        public string? AgentProfileImageId { get; set; }
         public string AgentProfileName { get; set; }
 
         public string Objective { get; set; }
@@ -25,7 +25,7 @@ namespace Emerald.Application.Models.Quest.Tracker
 
         public TrackerNodeModel TrackerNode { get; set; }
 
-        public TrackerModel(ObjectId questId, ObjectId trackerId, bool newestQuestVersion, bool finished, VoteType vote, DateTime creationTime, string questName, string agentProfileImageId, string agentProfileName, string objective, string author, int experienceCollected, TrackerNodeModel trackerNode)
+        public TrackerModel(ObjectId questId, ObjectId trackerId, bool newestQuestVersion, bool finished, VoteType vote, DateTime creationTime, string questName, string? agentProfileImageId, string agentProfileName, string objective, string author, int experienceCollected, TrackerNodeModel trackerNode)
         {
             QuestId = questId;
             TrackerId = trackerId;

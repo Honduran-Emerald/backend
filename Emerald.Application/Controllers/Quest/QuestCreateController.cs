@@ -71,6 +71,7 @@ namespace Emerald.Application.Controllers.Quest
         [HttpPost("create")]
         public async Task<ActionResult<QuestCreateCreateResponse>> Create(
             [FromBody] QuestCreateCreateRequest request,
+            [FromServices] IUserRepository userRepository,
             [FromServices] IUserService userService,
             [FromServices] IQuestRepository questRepository,
             [FromServices] IQuestPrototypeRepository questPrototypeRepository)
@@ -83,6 +84,8 @@ namespace Emerald.Application.Controllers.Quest
             var quest = new Domain.Models.QuestAggregate.Quest(
                 user, questPrototype);
 
+            user.QuestIds.Add(quest.Id);
+            await userRepository.Update(user);
             await questRepository.Add(quest);
 
             return Ok(new QuestCreateCreateResponse(quest.Id, questPrototype));

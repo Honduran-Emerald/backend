@@ -13,7 +13,11 @@ namespace Emerald.Domain.Models.ModuleAggregate
         typeof(ChoiceModule),
         typeof(EndingModule),
         typeof(StoryModule),
-        typeof(LocationModule))]
+        typeof(LocationModule),
+        typeof(PassphraseModule),
+        typeof(QrCodeModule),
+        typeof(RandomModule),
+        typeof(WideAreaModule))]
     public abstract class Module : Entity
     {
         public List<ObjectId> ComponentIds { get; set; }

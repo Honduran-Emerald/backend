@@ -47,7 +47,12 @@ namespace Emerald.Domain.Services
 
             foreach (IResponseEvent responseEvent in responseEventCollection.Events)
             {
-                await mediator.Publish(responseEvent.ToDomainEvent(user.Id, tracker.Id));
+                INotification? domainEvent = responseEvent.ToDomainEvent(user.Id, tracker.Id);
+
+                if (domainEvent != null)
+                {
+                    await mediator.Publish(domainEvent);
+                }
             }
 
             return responseEventCollection;

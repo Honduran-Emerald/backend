@@ -209,10 +209,12 @@ namespace Emerald.Application.Controllers
 
             var quest = await questRepository.Get(tracker.QuestId);
 
+            user.Experience -= tracker.ExperienceCollected;
             tracker.Reset(quest.GetCurrentQuestVersionNumber());
             var questVersion = quest.GetQuestVersion(tracker.QuestVersion);
             tracker.AddTrackerPath(new TrackerNode(questVersion.FirstModuleId));
 
+            await userRepository.Update(user);
             await trackerRepository.Update(tracker);
 
             return Ok();
@@ -251,6 +253,8 @@ namespace Emerald.Application.Controllers
                 });
             }
 
+            user.Experience -= tracker.ExperienceCollected;
+            await userRepository.Update(user);
             await trackerRepository.Remove(tracker);
             return Ok();
         }

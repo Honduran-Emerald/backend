@@ -10,7 +10,11 @@ namespace Emerald.Application.Models.Quest.Module
         Choice,
         Location,
         Story,
-        Ending
+        Ending,
+        Passphrase,
+        QrCode,
+        Random,
+        WideArea
     }
 
     public static class JsonSerializerSettingsExtension
@@ -23,6 +27,10 @@ namespace Emerald.Application.Models.Quest.Module
                 .RegisterSubtype<StoryModulePrototype>(ModuleType.Story)
                 .RegisterSubtype<EndingModulePrototype>(ModuleType.Ending)
                 .RegisterSubtype<LocationModulePrototype>(ModuleType.Location)
+                .RegisterSubtype<ChoiceModulePrototype>(ModuleType.Passphrase)
+                .RegisterSubtype<StoryModulePrototype>(ModuleType.QrCode)
+                .RegisterSubtype<EndingModulePrototype>(ModuleType.Random)
+                .RegisterSubtype<LocationModulePrototype>(ModuleType.WideArea)
                 .SerializeDiscriminatorProperty()
                 .Build());
         }

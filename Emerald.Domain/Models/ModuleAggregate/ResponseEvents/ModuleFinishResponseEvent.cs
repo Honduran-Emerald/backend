@@ -13,7 +13,7 @@ namespace Emerald.Domain.Models.ModuleAggregate
             ModuleId = moduleId;
         }
 
-        public INotification ToDomainEvent(ObjectId userId, ObjectId trackerId)
+        public INotification? ToDomainEvent(ObjectId userId, ObjectId trackerId)
             => new QuestResponseDomainEvent<ModuleFinishResponseEvent>(userId, trackerId, this);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Emerald.Domain.Models.PrototypeAggregate;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver.GeoJsonObjectModel;
 using System;
 using System.Collections.Generic;
@@ -20,8 +21,11 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
         public string? ImageId { get; set; }
         public string ApproximateTime { get; set; }
 
-        public string AgentProfileImageId { get; set; }
-        public string AgentProfileName { get; set; }
+        public string? AgentProfileImageId { get; set; }
+        public string? AgentProfileName { get; set; }
+
+        [BsonIgnoreIfNull]
+        public bool AgentEnabled { get; set; }
 
         public DateTime CreationTime { get; set; }
 
@@ -49,9 +53,14 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
             ImageId = questPrototype.ImageIdByReference(questPrototype.ImageReference)!;
             ApproximateTime = questPrototype.ApproximateTime!;
 
-            AgentProfileImageId = questPrototype.ImageIdByReference(questPrototype.AgentProfileReference)!;
-            AgentProfileName = questPrototype.AgentProfileName!;
-
+            if (questPrototype.AgentEnabled)
+            {
+                AgentProfileImageId = questPrototype.ImageIdByReference(questPrototype.AgentProfileReference)!;
+                AgentProfileName = questPrototype.AgentProfileName!;
+            }
+             
+            AgentEnabled = questPrototype.AgentEnabled;
+            
             CreationTime = DateTime.UtcNow;
 
             ModuleIds = new List<ObjectId>();

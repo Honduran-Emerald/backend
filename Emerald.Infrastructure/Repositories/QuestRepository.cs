@@ -68,10 +68,5 @@ namespace Emerald.Infrastructure.Repositories
         {
             return collection.AsQueryable();
         }
-
-        public IFindFluent<Quest> Find(Expression<Func<Quest, bool>> filter)
-        {
-            return collection.Find(filter);
-        }
     }
 }

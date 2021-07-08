@@ -12,7 +12,11 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate
         typeof(ChoiceModulePrototype),
         typeof(EndingModulePrototype),
         typeof(StoryModulePrototype),
-        typeof(LocationModulePrototype))]
+        typeof(LocationModulePrototype),
+        typeof(PasspharseModulePrototype),
+        typeof(QrCodeModulePrototype),
+        typeof(RandomModulePrototype),
+        typeof(WideAreaModulePrototype))]
     public abstract class ModulePrototype
     {
         public int Id { get; set; }

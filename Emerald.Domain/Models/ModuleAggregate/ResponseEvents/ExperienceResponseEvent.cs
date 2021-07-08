@@ -13,7 +13,7 @@ namespace Emerald.Domain.Models.ModuleAggregate.ResponseEvents
             Experience = experience;
         }
 
-        public INotification ToDomainEvent(ObjectId userId, ObjectId trackerId)
+        public INotification? ToDomainEvent(ObjectId userId, ObjectId trackerId)
             => new QuestResponseDomainEvent<ExperienceResponseEvent>(userId, trackerId, this);
     }
 }

@@ -5,6 +5,6 @@ namespace Emerald.Domain.Models
 {
     public interface IResponseEvent
     {
-        INotification ToDomainEvent(ObjectId userId, ObjectId trackerId);
+        INotification? ToDomainEvent(ObjectId userId, ObjectId trackerId);
     }
 }

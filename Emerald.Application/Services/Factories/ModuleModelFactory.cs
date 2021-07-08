@@ -60,6 +60,34 @@ namespace Emerald.Application.Services.Factories
                         new Models.LocationModel(
                             locationModule.Location.Longitude,
                             locationModule.Location.Latitude));
+
+                case PassphraseModule passphraseModule:
+                    return new PassphraseModuleModel(
+                        module.Id.ToString(),
+                        module.Objective,
+                        componentModels);
+
+                case QrCodeModule qrCodeModule:
+                    return new QrCodeModuleModel(
+                        module.Id.ToString(),
+                        module.Objective,
+                        componentModels);
+
+                case WideAreaModule wideAreaModule:
+                    return new WideAreaModuleModel(
+                        module.Id.ToString(),
+                        module.Objective,
+                        componentModels,
+                        new Models.LocationModel(
+                            wideAreaModule.Location.Longitude,
+                            wideAreaModule.Location.Latitude),
+                        wideAreaModule.Radius);
+
+                case RandomModule randomModule:
+                    return new RandomModuleModel(
+                        module.Id.ToString(),
+                        module.Objective,
+                        componentModels);
             }
 
             throw new Exception("Got invalid Module");

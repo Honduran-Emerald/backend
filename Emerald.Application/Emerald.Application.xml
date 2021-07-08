@@ -78,7 +78,7 @@
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:Emerald.Application.Controllers.Quest.QuestController.QueryVoted(System.Int32,Emerald.Domain.Models.TrackerAggregate.VoteType,Emerald.Infrastructure.Repositories.ITrackerRepository,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Application.Services.Factories.QuestModelFactory,Emerald.Application.Services.IUserService)">
+        <member name="M:Emerald.Application.Controllers.Quest.QuestController.QueryVoted(System.Nullable{MongoDB.Bson.ObjectId},System.Int32,Emerald.Domain.Models.TrackerAggregate.VoteType,Emerald.Infrastructure.Repositories.ITrackerRepository,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Application.Services.Factories.QuestModelFactory,Emerald.Application.Services.IUserService)">
             <summary>
             Query all quests with the specified vote by the authorized user
             </summary>
@@ -86,12 +86,28 @@
             <param name="voteType"></param>
             <returns></returns>
         </member>
-        <member name="M:Emerald.Application.Controllers.Quest.QuestController.QueryFinished(System.Int32,System.Boolean,Emerald.Infrastructure.Repositories.ITrackerRepository,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Application.Services.Factories.QuestModelFactory,Emerald.Application.Services.IUserService)">
+        <member name="M:Emerald.Application.Controllers.Quest.QuestController.QueryFinished(System.Nullable{MongoDB.Bson.ObjectId},System.Int32,System.Boolean,Emerald.Infrastructure.Repositories.ITrackerRepository,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Application.Services.Factories.QuestModelFactory,Emerald.Application.Services.IUserService)">
             <summary>
             Query all quests with the specified finish state by the authorized user
             </summary>
             <param name="offset"></param>
             <param name="finished"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.Quest.QuestController.QueryNew(System.Int32,Emerald.Application.Models.LocationModel,System.Single,Emerald.Infrastructure.Repositories.ITrackerRepository,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Application.Services.Factories.QuestModelFactory,Emerald.Application.Services.IUserService)">
+            <summary>
+            Query quests ordered by creationtime
+            </summary>
+            <param name="offset"></param>
+            <param name="location"></param>
+            <param name="radius"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.Quest.QuestController.QueryFollowing(System.Int32,Emerald.Infrastructure.Repositories.ITrackerRepository,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Application.Services.Factories.QuestModelFactory,Emerald.Application.Services.IUserService)">
+            <summary>
+            Query quests from users the authorized user follows in creationtime order
+            </summary>
+            <param name="offset"></param>
             <returns></returns>
         </member>
         <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Query(System.Int32,Microsoft.Extensions.Configuration.IConfiguration,Emerald.Application.Services.IUserService,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Application.Services.Factories.QuestPrototypeModelFactory)">
@@ -101,7 +117,7 @@
             <param name="offset"></param>
             <returns></returns>
         </member>
-        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Create(Emerald.Application.Models.Request.Quest.QuestCreateCreateRequest,Emerald.Application.Services.IUserService,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Domain.Repositories.IQuestPrototypeRepository)">
+        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Create(Emerald.Application.Models.Request.Quest.QuestCreateCreateRequest,Emerald.Infrastructure.Repositories.IUserRepository,Emerald.Application.Services.IUserService,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Domain.Repositories.IQuestPrototypeRepository)">
             <summary>
             Create new quest together with a new questprototype
             </summary>

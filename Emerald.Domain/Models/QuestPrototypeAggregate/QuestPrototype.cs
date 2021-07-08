@@ -1,4 +1,5 @@
 ﻿using Emerald.Domain.Models.QuestPrototypeAggregate;
+using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Generic;
 using System.Linq;
 using Vitamin.Value.Domain.SeedWork;
@@ -18,6 +19,9 @@ namespace Emerald.Domain.Models.PrototypeAggregate
 
         public int? AgentProfileReference { get; set; }
         public string? AgentProfileName { get; set; }
+
+        [BsonIgnoreIfNull]
+        public bool AgentEnabled { get; set; }
 
         public int? FirstModuleReference { get; set; }
         public List<ModulePrototype> Modules { get; set; }

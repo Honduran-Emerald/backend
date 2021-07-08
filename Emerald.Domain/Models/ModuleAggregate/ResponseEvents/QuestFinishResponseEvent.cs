@@ -13,7 +13,7 @@ namespace Emerald.Domain.Models.ModuleAggregate.ResponseEvents
             FinishFactor = finishFactor;
         }
 
-        public INotification ToDomainEvent(ObjectId userId, ObjectId trackerId)
+        public INotification? ToDomainEvent(ObjectId userId, ObjectId trackerId)
             => new QuestResponseDomainEvent<QuestFinishResponseEvent>(userId, trackerId, this);
     }
 }

@@ -9,6 +9,7 @@ using Emerald.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GeoJsonObjectModel;
 using MongoDB.Driver.Linq;
@@ -88,6 +89,7 @@ namespace Emerald.Application.Controllers.Quest
         /// <returns></returns>
         [HttpGet("queryvoted")]
         public async Task<ActionResult<QuestQueryResponse>> QueryVoted(
+            [FromQuery] ObjectId? userId,
             [FromQuery] int offset,
             [FromQuery] VoteType voteType,
             [FromServices] ITrackerRepository trackerRepository,
@@ -95,7 +97,16 @@ namespace Emerald.Application.Controllers.Quest
             [FromServices] QuestModelFactory questModelFactory,
             [FromServices] IUserService userService)
         {
-            User user = await userService.CurrentUser();
+            User user;
+
+            if (userId.HasValue)
+            {
+                user = await userRepository.Get(userId.Value);
+            }
+            else
+            {
+                user = await userService.CurrentUser();
+            }
             List<QuestPairModel> quests = new List<QuestPairModel>();
 
             foreach (Tracker tracker in await trackerRepository.GetQueryable()
@@ -123,6 +134,7 @@ namespace Emerald.Application.Controllers.Quest
         /// <returns></returns>
         [HttpGet("queryfinished")]
         public async Task<ActionResult<QuestQueryResponse>> QueryFinished(
+            [FromQuery] ObjectId? userId,
             [FromQuery] int offset,
             [FromQuery] bool finished,
             [FromServices] ITrackerRepository trackerRepository,
@@ -130,7 +142,17 @@ namespace Emerald.Application.Controllers.Quest
             [FromServices] QuestModelFactory questModelFactory,
             [FromServices] IUserService userService)
         {
-            User user = await userService.CurrentUser();
+            User user;
+
+            if (userId.HasValue)
+            {
+                user = await userRepository.Get(userId.Value);
+            }
+            else
+            {
+                user = await userService.CurrentUser();
+            }
+
             List<QuestPairModel> quests = new List<QuestPairModel>();
 
             foreach (Tracker tracker in await trackerRepository.GetQueryable()
@@ -175,6 +197,32 @@ namespace Emerald.Application.Controllers.Quest
                 await questModelFactory.Create(
                     await questRepository.GetQueryable()
                         .Where(q => filter.Inject())
+                        .OrderByDescending(q => q.CreationTime)
+                        .Skip(offset)
+                        .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
+                        .Select(q => new QuestPairModel(q, q.QuestVersions[0]))
+                        .ToListAsync())));
+        }
+
+        /// <summary>
+        /// Query quests from users the authorized user follows in creationtime order
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        [HttpGet("queryfollowing")]
+        public async Task<ActionResult<QuestQueryResponse>> QueryFollowing(
+            [FromQuery] int offset,
+            [FromServices] ITrackerRepository trackerRepository,
+            [FromServices] IQuestRepository questRepository,
+            [FromServices] QuestModelFactory questModelFactory,
+            [FromServices] IUserService userService)
+        {
+            User user = await userService.CurrentUser();
+
+            return Ok(new QuestQueryResponse(
+                await questModelFactory.Create(
+                    await questRepository.GetQueryable()
+                        .Where(q => user.Following.Contains(q.OwnerUserId))
                         .OrderByDescending(q => q.CreationTime)
                         .Skip(offset)
                         .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))

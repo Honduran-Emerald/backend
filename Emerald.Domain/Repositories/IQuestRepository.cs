@@ -16,6 +16,5 @@ namespace Emerald.Infrastructure.Repositories
 
         Task<Quest> Get(ObjectId questId);
         IMongoQueryable<Quest> GetQueryable();
-        IFindFluent<Quest> Find(Expression<Func<Quest, bool>> filter);
     }
 }

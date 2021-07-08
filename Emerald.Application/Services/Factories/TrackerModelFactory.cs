@@ -48,8 +48,12 @@ namespace Emerald.Application.Services.Factories
                 vote: source.Vote,
                 creationTime: source.CreatedAt,
                 questVersion.Title,
-                questVersion.AgentProfileImageId,
-                questVersion.AgentProfileName,
+                questVersion.AgentEnabled 
+                    ? questVersion.AgentProfileImageId
+                    : owner.ImageId,
+                questVersion.AgentEnabled 
+                    ? questVersion.AgentProfileName!
+                    : owner.UserName,
                 module.Objective,
                 owner.UserName,
                 source.ExperienceCollected,
