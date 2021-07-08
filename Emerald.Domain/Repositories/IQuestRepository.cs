@@ -1,6 +1,9 @@
 ﻿using Emerald.Domain.Models.QuestAggregate;
 using MongoDB.Bson;
+using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using System;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Emerald.Infrastructure.Repositories
@@ -13,5 +16,6 @@ namespace Emerald.Infrastructure.Repositories
 
         Task<Quest> Get(ObjectId questId);
         IMongoQueryable<Quest> GetQueryable();
+        IFindFluent<Quest> Find(Expression<Func<Quest, bool>> filter);
     }
 }

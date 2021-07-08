@@ -1,4 +1,5 @@
-﻿using Emerald.Application.Models.Quest;
+﻿using Emerald.Application.Models;
+using Emerald.Application.Models.Quest;
 using Emerald.Application.Models.Response.Quest;
 using Emerald.Application.Services;
 using Emerald.Application.Services.Factories;
@@ -57,16 +58,13 @@ namespace Emerald.Application.Controllers.Quest
                 queryable = queryable.Where(q => q.OwnerUserId == request.OwnerId);
             }
 
-            if (request.Location != null)
+            if (request.Location != null && request.Radius != null)
             {
-                if (request.Radius != null)
-                {
-                    var filter = Builders<Domain.Models.QuestAggregate.Quest>.Filter
-                        .Near(q => q.QuestVersions.Last().Location, new GeoJsonPoint<GeoJson2DGeographicCoordinates>(
-                            new GeoJson2DGeographicCoordinates(request.Location.Longitude, request.Location.Latitude)));
+                var filter = Builders<Domain.Models.QuestAggregate.Quest>.Filter
+                    .Near(q => q.QuestVersions.Last().Location, new GeoJsonPoint<GeoJson2DGeographicCoordinates>(
+                        new GeoJson2DGeographicCoordinates(request.Location.Longitude, request.Location.Latitude)), request.Radius);
 
-                    queryable.Where(x => filter.Inject());
-                }
+                queryable = queryable.Where(x => filter.Inject());
             }
 
             var quests = await queryable
@@ -150,6 +148,38 @@ namespace Emerald.Application.Controllers.Quest
 
             return Ok(new QuestQueryResponse(
                 await questModelFactory.Create(quests)));
+        }
+
+        /// <summary>
+        /// Query quests ordered by creationtime
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <param name="location"></param>
+        /// <param name="radius"></param>
+        /// <returns></returns>
+        [HttpGet("querynew")]
+        public async Task<ActionResult<QuestQueryResponse>> QueryNew(
+            [FromQuery] int offset,
+            [FromQuery] LocationModel location,
+            [FromQuery] float radius,
+            [FromServices] ITrackerRepository trackerRepository,
+            [FromServices] IQuestRepository questRepository,
+            [FromServices] QuestModelFactory questModelFactory,
+            [FromServices] IUserService userService)
+        {
+            var filter = Builders<Domain.Models.QuestAggregate.Quest>.Filter
+                .Near(q => q.QuestVersions.Last().Location, new GeoJsonPoint<GeoJson2DGeographicCoordinates>(
+                    new GeoJson2DGeographicCoordinates(location.Longitude, location.Latitude)), radius);
+
+            return Ok(new QuestQueryResponse(
+                await questModelFactory.Create(
+                    await questRepository.GetQueryable()
+                        .Where(q => filter.Inject())
+                        .OrderByDescending(q => q.CreationTime)
+                        .Skip(offset)
+                        .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
+                        .Select(q => new QuestPairModel(q, q.QuestVersions[0]))
+                        .ToListAsync())));
         }
     }
 }

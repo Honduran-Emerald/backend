@@ -6,6 +6,8 @@ using MediatR;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using System;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Emerald.Infrastructure.Repositories
@@ -65,6 +67,11 @@ namespace Emerald.Infrastructure.Repositories
         public IMongoQueryable<Quest> GetQueryable()
         {
             return collection.AsQueryable();
+        }
+
+        public IFindFluent<Quest> Find(Expression<Func<Quest, bool>> filter)
+        {
+            return collection.Find(filter);
         }
     }
 }

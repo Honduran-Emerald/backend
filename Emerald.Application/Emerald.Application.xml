@@ -226,21 +226,28 @@
         </member>
         <member name="M:Emerald.Application.Controllers.UserController.Following(System.Int32,Microsoft.Extensions.Configuration.IConfiguration,Emerald.Application.Services.IUserService,Emerald.Infrastructure.Repositories.IUserRepository,Emerald.Application.Services.Factories.UserModelFactory)">
             <summary>
-            Follow or unfollow a user
-            </summary>
-            <param name="userId"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Emerald.Application.Controllers.UserController.ToggleFollow(MongoDB.Bson.ObjectId,Emerald.Application.Services.IUserService,Emerald.Infrastructure.Repositories.IUserRepository)">
-            <summary>
             Get all users following the authorized user
             </summary>
             <param name="offset"></param>
             <returns></returns>
         </member>
+        <member name="M:Emerald.Application.Controllers.UserController.ToggleFollow(MongoDB.Bson.ObjectId,Emerald.Application.Services.IUserService,Emerald.Infrastructure.Repositories.IUserRepository)">
+            <summary>
+            Follow or unfollow a user
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
         <member name="M:Emerald.Application.Controllers.UserController.Friends(System.Int32,Microsoft.Extensions.Configuration.IConfiguration,Emerald.Application.Services.IUserService,Emerald.Infrastructure.Repositories.IUserRepository,Emerald.Application.Services.Factories.UserModelFactory)">
             <summary>
             All followers from the authorized user, that the authorized follower is following back
+            </summary>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.UserController.Query(System.Int32,System.String,Microsoft.Extensions.Configuration.IConfiguration,Emerald.Application.Services.IUserService,Emerald.Infrastructure.Repositories.IUserRepository,Emerald.Application.Services.Factories.UserModelFactory)">
+            <summary>
+            Query for users optionally by search string
             </summary>
             <param name="offset"></param>
             <returns></returns>
