@@ -207,6 +207,13 @@
             <param name="choiceEvent"></param>
             <returns></returns>
         </member>
+        <member name="M:Emerald.Application.Controllers.QuestPlayController.HandleEvent(Emerald.Application.Models.Quest.RequestEvent.TextRequestEventModel)">
+            <summary>
+            Trigger text event with a string text value
+            </summary>
+            <param name="choiceEvent"></param>
+            <returns></returns>
+        </member>
         <member name="M:Emerald.Application.Controllers.UserController.UpdateMessagingToken(System.String,Emerald.Infrastructure.Repositories.IUserRepository,Emerald.Application.Services.IUserService)">
             <summary>
             Set FCM cloud messaging token

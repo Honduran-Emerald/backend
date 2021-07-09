@@ -3,6 +3,7 @@
     public enum MementoType
     {
         Choice,
+        Text,
         Empty
     }
 }

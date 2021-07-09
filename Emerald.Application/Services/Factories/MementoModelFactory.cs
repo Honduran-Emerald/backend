@@ -17,6 +17,9 @@ namespace Emerald.Application.Services.Factories
             {
                 case ChoiceModuleMemento choiceMemento:
                     return new ChoiceMementoModel(choiceMemento.Choice);
+
+                case TextModuleMemento textModuleMemento:
+                    return new TextMementoModel(textModuleMemento.Text);
             }
 
             throw new Exception("Got invalid TrackerPathMemento");

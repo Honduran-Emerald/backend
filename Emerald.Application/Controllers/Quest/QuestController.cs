@@ -204,13 +204,14 @@ namespace Emerald.Application.Controllers.Quest
 
             return Ok(new QuestQueryResponse(
                 await questModelFactory.Create(
-                    await questRepository.GetQueryable()
+                    (await questRepository.GetQueryable()
                         .Where(q => filter.Inject())
                         .OrderByDescending(q => q.CreationTime)
                         .Skip(offset)
                         .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
+                        .ToListAsync())
                         .Select(q => new QuestPairModel(q, q.QuestVersions[0]))
-                        .ToListAsync())));
+                        .ToList())));
         }
 
         /// <summary>
@@ -230,13 +231,14 @@ namespace Emerald.Application.Controllers.Quest
 
             return Ok(new QuestQueryResponse(
                 await questModelFactory.Create(
-                    await questRepository.GetQueryable()
+                    (await questRepository.GetQueryable()
                         .Where(q => user.Following.Contains(q.OwnerUserId))
                         .OrderByDescending(q => q.CreationTime)
                         .Skip(offset)
                         .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
+                        .ToListAsync())
                         .Select(q => new QuestPairModel(q, q.QuestVersions[0]))
-                        .ToListAsync())));
+                        .ToList())));
         }
     }
 }
