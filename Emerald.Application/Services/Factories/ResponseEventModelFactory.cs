@@ -49,6 +49,11 @@ namespace Emerald.Application.Services
                             questFinishResponseEvent.FinishFactor));
 
                         break;
+                    case FailureResponseEvent failureResponseEvent:
+                        responseEvents.Add(new FailureResponseEventModel(
+                            failureResponseEvent.Close));
+
+                        break;
                     default:
                         throw new Exception($"Got invalid ResponseEvent ({responseEvent.GetType().Name})");
                 }

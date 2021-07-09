@@ -14,12 +14,14 @@ namespace Emerald.Domain.Models.ChatAggregate
         public ObjectId UserReceiverId { get; set; }
 
         public DateTime LastTimeReceived { get; set; }
+        public DateTime LastTimeRead { get; set; }
 
         public Chat(ObjectId userSenderId, ObjectId userReceiverId)
         {
             UserSenderId = userSenderId;
             UserReceiverId = userReceiverId;
             LastTimeReceived = DateTime.UtcNow;
+            LastTimeRead = DateTime.UtcNow;
         }
 
         public void UpdateLastTimeRead()

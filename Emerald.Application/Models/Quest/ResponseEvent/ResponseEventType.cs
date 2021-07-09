@@ -4,6 +4,7 @@
     {
         ModuleFinish,
         Experience,
-        QuestFinish
+        QuestFinish,
+        Failure
     }
 }

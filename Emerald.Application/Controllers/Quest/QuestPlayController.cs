@@ -1,5 +1,6 @@
 ﻿using Emerald.Application.Models.Quest;
 using Emerald.Application.Models.Quest.Events;
+using Emerald.Application.Models.Quest.RequestEvent;
 using Emerald.Application.Models.Request;
 using Emerald.Application.Models.Request.Quest;
 using Emerald.Application.Models.Response.Quest;
@@ -316,6 +317,33 @@ namespace Emerald.Application.Controllers
                 await userRepository.Get(User),
                 tracker,
                 new ChoiceRequestEvent(choiceEvent.Choice));
+
+            return Ok(new QuestPlayEventResponse
+            {
+                ResponseEventCollection = await responseEventFactory.Create(responseEvent)
+            });
+        }
+
+        /// <summary>
+        /// Trigger text event with a string text value
+        /// </summary>
+        /// <param name="choiceEvent"></param>
+        /// <returns></returns>
+        [HttpPost("event/text")]
+        public async Task<ActionResult<QuestPlayEventResponse>> HandleEvent(
+            [FromBody] TextRequestEventModel textEvent)
+        {
+            Tracker tracker = await trackerRepository.Get(textEvent.TrackerId);
+
+            if (tracker.IsLocked())
+            {
+                return StatusCode(252);
+            }
+
+            ResponseEventCollection responseEvent = await questPlayService.HandleEvent(
+                await userRepository.Get(User),
+                tracker,
+                new TextRequestEvent(textEvent.Text));
 
             return Ok(new QuestPlayEventResponse
             {
