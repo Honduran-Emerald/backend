@@ -36,8 +36,7 @@ namespace Emerald.Domain.Models.ModuleAggregate.Modules
                     memento,
                     new List<IResponseEvent>
                     {
-                        new FailureResponseEvent(false),
-                        new ExperienceResponseEvent(-10)
+                        new FailureResponseEvent(false)
                     })
             : new ResponseEventCollection(
                         memento,
