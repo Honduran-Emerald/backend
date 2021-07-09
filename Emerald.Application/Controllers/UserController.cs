@@ -251,7 +251,7 @@ namespace Emerald.Application.Controllers
 
             if (search != null)
             {
-                usersQuery.Where(u => u.UserName.Contains(search));
+                usersQuery = usersQuery.Where(u => u.UserName.Contains(search));
             }
 
             return Ok(new UserMultipleResponse(
