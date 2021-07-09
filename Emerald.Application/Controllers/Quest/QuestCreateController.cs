@@ -99,6 +99,7 @@ namespace Emerald.Application.Controllers.Quest
         [HttpPost("delete")]
         public async Task<IActionResult> Delete(
             [FromBody] ObjectId questId,
+            [FromServices] IUserRepository userRepository,
             [FromServices] IComponentRepository componentRepository,
             [FromServices] IModuleRepository moduleRepository,
             [FromServices] IQuestRepository questRepository,
@@ -137,6 +138,8 @@ namespace Emerald.Application.Controllers.Quest
                 await trackerRepository.Remove(tracker);
             }
 
+            user.QuestIds.Remove(quest.Id);
+            await userRepository.Update(user);
             await questRepository.Remove(quest);
 
             return Ok();
