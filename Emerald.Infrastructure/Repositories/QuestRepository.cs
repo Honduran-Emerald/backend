@@ -24,6 +24,8 @@ namespace Emerald.Infrastructure.Repositories
             collection = dbContext.Emerald.GetCollection<Quest>("Quests");
             collection.Indexes.CreateOne(new CreateIndexModel<Quest>(Builders<Quest>.IndexKeys
                 .Geo2DSphere(q => q.QuestVersions.Last().Location)));
+            collection.Indexes.CreateOne(new CreateIndexModel<Quest>(Builders<Quest>.IndexKeys
+                .Geo2DSphere(q => q.QuestVersions[0].Location)));
             this.mediator = mediator;
             this.imageIndexService = imageIndexService;
         }

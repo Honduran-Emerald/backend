@@ -63,8 +63,8 @@ namespace Emerald.Application.Controllers.Quest
             if (request.Location != null && request.Radius != null)
             {
                 filter = Builders<Domain.Models.QuestAggregate.Quest>.Filter.And(filter,
-                    Builders<Domain.Models.QuestAggregate.Quest>.Filter.Near(
-                        q => q.QuestVersions.Last().Location, new GeoJsonPoint<GeoJson2DGeographicCoordinates>(
+                    Builders<Domain.Models.QuestAggregate.Quest>.Filter.NearSphere(
+                        q => q.QuestVersions[0].Location, GeoJson.Point(
                             new GeoJson2DGeographicCoordinates(request.Location.Longitude, request.Location.Latitude)), request.Radius));
             }
 
@@ -118,9 +118,13 @@ namespace Emerald.Application.Controllers.Quest
                 .ToListAsync())
             {
                 var quest = await questRepository.Get(tracker.QuestId);
-
-                quests.Add(new QuestPairModel(
-                    quest, quest.GetQuestVersion(tracker.QuestVersion)));
+                
+                if (quest.Public && quest.QuestVersions.Count > 0
+                                 && quest.Locks.Count == 0)
+                {
+                    quests.Add(new QuestPairModel(
+                        quest, quest.GetQuestVersion(tracker.QuestVersion)));
+                }
             }
 
             return Ok(new QuestQueryResponse(
@@ -165,8 +169,12 @@ namespace Emerald.Application.Controllers.Quest
             {
                 var quest = await questRepository.Get(tracker.QuestId);
 
-                quests.Add(new QuestPairModel(
-                    quest, quest.GetQuestVersion(tracker.QuestVersion)));
+                if (quest.Public && quest.QuestVersions.Count > 0
+                                 && quest.Locks.Count == 0)
+                {
+                    quests.Add(new QuestPairModel(
+                        quest, quest.GetQuestVersion(tracker.QuestVersion)));
+                }
             }
 
             return Ok(new QuestQueryResponse(
@@ -190,10 +198,14 @@ namespace Emerald.Application.Controllers.Quest
             [FromServices] QuestModelFactory questModelFactory,
             [FromServices] IUserService userService)
         {
-            var filter = Builders<Domain.Models.QuestAggregate.Quest>.Filter
-                .Near(q => q.QuestVersions.Last().Location, new GeoJsonPoint<GeoJson2DGeographicCoordinates>(
-                    new GeoJson2DGeographicCoordinates(location.Longitude, location.Latitude)), radius);
-
+            var filter = Builders<Domain.Models.QuestAggregate.Quest>.Filter.And(
+                Builders<Domain.Models.QuestAggregate.Quest>.Filter.Near(q => 
+                    q.QuestVersions.Last().Location, new GeoJsonPoint<GeoJson2DGeographicCoordinates>(
+                        new GeoJson2DGeographicCoordinates(location.Longitude, location.Latitude)), radius),
+                Builders<Domain.Models.QuestAggregate.Quest>.Filter.Eq(q =>
+                    q.Public && q.QuestVersions.Count > 0
+                             && q.Locks.Count == 0, true));
+            
             return Ok(new QuestQueryResponse(
                 await questModelFactory.Create(
                     (
@@ -235,7 +247,10 @@ namespace Emerald.Application.Controllers.Quest
             return Ok(new QuestQueryResponse(
                 await questModelFactory.Create(
                     (await questRepository.GetQueryable()
-                        .Where(q => user.Following.Contains(q.OwnerUserId))
+                        .Where(q => user.Following.Contains(q.OwnerUserId) &&
+                            (q.Public || q.OwnerUserId == user.Id)
+                             && q.QuestVersions.Count > 0
+                             && q.Locks.Count == 0)
                         .OrderByDescending(q => q.CreationTime)
                         .Skip(offset)
                         .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
