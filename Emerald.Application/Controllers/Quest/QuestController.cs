@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 
 namespace Emerald.Application.Controllers.Quest
 {
+    [Authorize]
     [ApiController]
     [Route("/quest")]
     public class QuestController : ControllerBase
@@ -41,7 +42,6 @@ namespace Emerald.Application.Controllers.Quest
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [Authorize]
         [HttpGet("query")]
         public async Task<ActionResult<QuestQueryResponse>> Query(
             [FromQuery] QuestQueryRequest request)
@@ -95,7 +95,6 @@ namespace Emerald.Application.Controllers.Quest
         /// <param name="offset"></param>
         /// <param name="voteType"></param>
         /// <returns></returns>
-        [Authorize]
         [HttpGet("queryvoted")]
         public async Task<ActionResult<QuestQueryResponse>> QueryVoted(
             [FromQuery] ObjectId? userId,
