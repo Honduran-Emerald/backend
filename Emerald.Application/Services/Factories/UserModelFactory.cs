@@ -1,5 +1,7 @@
 ﻿using Emerald.Application.Models;
 using Emerald.Domain.Models.UserAggregate;
+using Emerald.Infrastructure.Repositories;
+using MongoDB.Driver.Linq;
 using System.Threading.Tasks;
 
 namespace Emerald.Application.Services.Factories
@@ -7,10 +9,12 @@ namespace Emerald.Application.Services.Factories
     public class UserModelFactory : IModelFactory<User, UserModel>
     {
         private IUserService userService;
+        private IQuestRepository questRepository;
 
-        public UserModelFactory(IUserService userService)
+        public UserModelFactory(IUserService userService, IQuestRepository questRepository)
         {
             this.userService = userService;
+            this.questRepository = questRepository;
         }
 
         public async Task<UserModel> Create(User user)
@@ -24,6 +28,10 @@ namespace Emerald.Application.Services.Factories
                 level: user.GetLevel(),
                 experience: user.Experience,
                 glory: user.Glory,
+                publishedCount: await questRepository.GetQueryable()
+                    .Where(q => q.OwnerUserId == currentUser.Id &&
+                                q.QuestVersions.Count > 0)
+                    .CountAsync(),
                 questCount: user.QuestIds.Count,
                 trackerCount: user.TrackerIds.Count,
                 user.Followers.Count,
