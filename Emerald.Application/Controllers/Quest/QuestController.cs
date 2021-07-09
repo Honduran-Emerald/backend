@@ -48,7 +48,14 @@ namespace Emerald.Application.Controllers.Quest
         {
             User user = await userRepository.Get(User);
 
-
+            /*
+            Builders<Domain.Models.QuestAggregate.Quest>.Filter.And(
+                Builders<Domain.Models.QuestAggregate.Quest>.Filter.NearSphere(
+                    q => q.QuestVersions.Last().Location, new GeoJsonPoint<GeoJson2DGeographicCoordinates>(
+                        new GeoJson2DGeographicCoordinates(request.Location.Longitude, request.Location.Latitude)), request.Radius)),
+                Builders<Domain.Models.QuestAggregate.Quest>.Filter.Eq(q => q.)));
+            */
+                
             var queryable = questRepository.GetQueryable()
                     .Where(q => q.Public || q.OwnerUserId == user.Id)
                     .Where(q => q.QuestVersions.Count > 0)
@@ -59,14 +66,15 @@ namespace Emerald.Application.Controllers.Quest
                 queryable = queryable.Where(q => q.OwnerUserId == request.OwnerId);
             }
 
+            /*
             if (request.Location != null && request.Radius != null)
             {
                 var filter = Builders<Domain.Models.QuestAggregate.Quest>.Filter
-                    .Near(q => q.QuestVersions.Last().Location, new GeoJsonPoint<GeoJson2DGeographicCoordinates>(
-                        new GeoJson2DGeographicCoordinates(request.Location.Longitude, request.Location.Latitude)), request.Radius);
+                    ;
 
                 queryable = queryable.Where(x => filter.Inject());
             }
+            */
 
             var quests = await queryable
                     .Skip(request.Offset)
@@ -87,6 +95,7 @@ namespace Emerald.Application.Controllers.Quest
         /// <param name="offset"></param>
         /// <param name="voteType"></param>
         /// <returns></returns>
+        [Authorize]
         [HttpGet("queryvoted")]
         public async Task<ActionResult<QuestQueryResponse>> QueryVoted(
             [FromQuery] ObjectId? userId,
@@ -107,6 +116,7 @@ namespace Emerald.Application.Controllers.Quest
             {
                 user = await userService.CurrentUser();
             }
+
             List<QuestPairModel> quests = new List<QuestPairModel>();
 
             foreach (Tracker tracker in await trackerRepository.GetQueryable()
