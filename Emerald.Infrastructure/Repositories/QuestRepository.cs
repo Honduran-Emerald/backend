@@ -7,6 +7,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -21,6 +22,8 @@ namespace Emerald.Infrastructure.Repositories
         public QuestRepository(IMongoDbContext dbContext, IMediator mediator, IImageIndexService imageIndexService)
         {
             collection = dbContext.Emerald.GetCollection<Quest>("Quests");
+            collection.Indexes.CreateOne(new CreateIndexModel<Quest>(Builders<Quest>.IndexKeys
+                .Geo2DSphere(q => q.QuestVersions.Last().Location)));
             this.mediator = mediator;
             this.imageIndexService = imageIndexService;
         }
@@ -68,5 +71,7 @@ namespace Emerald.Infrastructure.Repositories
         {
             return collection.AsQueryable();
         }
+
+        public IMongoCollection<Quest> Collection => collection;
     }
 }

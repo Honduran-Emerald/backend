@@ -16,5 +16,7 @@ namespace Emerald.Infrastructure.Repositories
 
         Task<Quest> Get(ObjectId questId);
         IMongoQueryable<Quest> GetQueryable();
+
+        IMongoCollection<Quest> Collection { get; }
     }
 }
