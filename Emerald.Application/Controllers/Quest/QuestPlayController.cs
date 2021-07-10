@@ -246,7 +246,7 @@ namespace Emerald.Application.Controllers
 
             User user = await userService.CurrentUser();
 
-            if (tracker.UserId == user.Id)
+            if (tracker.UserId != user.Id)
             {
                 return BadRequest(new
                 {
