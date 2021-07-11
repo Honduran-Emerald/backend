@@ -1,6 +1,7 @@
 ﻿using Emerald.Application.Models.Quest;
 using Emerald.Application.Models.Quest.Events;
 using Emerald.Application.Models.Quest.RequestEvent;
+using Emerald.Application.Models.Quest.Tracker;
 using Emerald.Application.Models.Request;
 using Emerald.Application.Models.Request.Quest;
 using Emerald.Application.Models.Response.Quest;
@@ -19,6 +20,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using MongoDB.Driver.Linq;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -349,6 +351,23 @@ namespace Emerald.Application.Controllers
             {
                 ResponseEventCollection = await responseEventFactory.Create(responseEvent)
             });
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Get(
+            [FromQuery] List<ObjectId> trakcerIds,
+            [FromServices] ITrackerRepository trackerRepository,
+            [FromServices] TrackerModelFactory trackerModelFactory)
+        {
+            List<TrackerModel> trackerModels = new List<TrackerModel>();
+
+            foreach (ObjectId trackerId in trakcerIds)
+            {
+                trackerModels.Add(await trackerModelFactory.Create(await trackerRepository.Get(trackerId)));
+            }
+
+            return Ok(trackerModels);
         }
     }
 }

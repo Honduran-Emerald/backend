@@ -198,6 +198,8 @@ namespace Emerald.Application.Controllers.Quest
             [FromServices] QuestModelFactory questModelFactory,
             [FromServices] IUserService userService)
         {
+            return Ok(new QuestQueryResponse(new List<QuestModel>()));
+            /*
             var filter = Builders<Domain.Models.QuestAggregate.Quest>.Filter.And(
                 Builders<Domain.Models.QuestAggregate.Quest>.Filter.Near(q => 
                     q.QuestVersions.Last().Location, new GeoJsonPoint<GeoJson2DGeographicCoordinates>(
@@ -223,10 +225,10 @@ namespace Emerald.Application.Controllers.Quest
                         .Skip(offset)
                         .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
                         .ToListAsync()
-                        */
                         )
                         .Select(q => new QuestPairModel(q, q.QuestVersions[0]))
                         .ToList())));
+            */
         }
 
         /// <summary>
@@ -257,6 +259,25 @@ namespace Emerald.Application.Controllers.Quest
                         .ToListAsync())
                         .Select(q => new QuestPairModel(q, q.QuestVersions[0]))
                         .ToList())));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get(
+            [FromQuery] List<ObjectId> replayIds,
+            [FromServices] ITrackerRepository trackerRepository,
+            [FromServices] IQuestRepository questRepository,
+            [FromServices] QuestModelFactory questModelFactory)
+        {
+            List<QuestModel> questModels = new List<QuestModel>();
+
+            foreach (ObjectId replayId in replayIds)
+            {
+                var quest = await questRepository.Get(replayId);
+                questModels.Add(await questModelFactory.Create(
+                    new QuestPairModel(quest, quest.GetCurrentQuestVersion())));
+            }
+
+            return Ok(questModels);
         }
     }
 }
