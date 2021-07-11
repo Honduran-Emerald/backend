@@ -80,7 +80,7 @@ namespace Emerald.Domain.Models.UserAggregate
 
         public int GetLevel()
         {
-            return (int)Math.Round(Math.Sqrt((Experience + 22562.5) / 250.0) - 8.5);
+            return (int)Math.Floor(Math.Sqrt((Experience + 22562.5) / 250.0) - 8.5);
         }
 
         public void ClearEvents()
