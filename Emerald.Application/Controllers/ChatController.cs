@@ -64,11 +64,11 @@ namespace Emerald.Application.Controllers
                 .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
                 .ToListAsync();
 
-            Chat currentUserChat = await chatRepository.EmplaceGet(user.Id, userId);
-            currentUserChat.UpdateLastTimeRead();
-            await chatRepository.Update(currentUserChat);
 
             Chat otherUserChat = await chatRepository.EmplaceGet(userId, user.Id);
+            otherUserChat.UpdateLastTimeRead();
+            await chatRepository.Update(otherUserChat);
+            Chat currentUserChat = await chatRepository.EmplaceGet(user.Id, userId);
 
             return Ok(new ChatGetResponse(
                 await chatModelFactory.Create(otherUserChat),
