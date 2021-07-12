@@ -177,6 +177,7 @@ namespace Emerald.Application
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
                     options.User.RequireUniqueEmail = true;
+                    options.User.AllowedUserNameCharacters = "";
                 });
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
