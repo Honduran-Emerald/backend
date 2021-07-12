@@ -260,5 +260,22 @@ namespace Emerald.Application.Controllers
                     .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
                     .ToList())));
         }
+
+        /// <summary>
+        /// Change authorized username
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        [HttpPost("setusername")]
+        public async Task<IActionResult> Rename(
+            [FromBody] string username,
+            [FromServices] UserManager<User> userManager,
+            [FromServices] IUserService userService)
+        {
+            User user = await userService.CurrentUser();
+            await userManager.SetUserNameAsync(user, username);
+
+            return Ok();
+        }
     }
 }
