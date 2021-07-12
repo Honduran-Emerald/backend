@@ -50,7 +50,9 @@ namespace Emerald.Domain.Models.QuestVersionAggregate
                 new GeoJson2DGeographicCoordinates(
                     questPrototype.Location!.Longitude,
                     questPrototype.Location!.Latitude));
-            ImageId = questPrototype.ImageIdByReference(questPrototype.ImageReference)!;
+            ImageId = questPrototype.ImageReference == null
+                ? null
+                : questPrototype.ImageIdByReference(questPrototype.ImageReference)!;
             ApproximateTime = questPrototype.ApproximateTime!;
 
             if (questPrototype.AgentEnabled)

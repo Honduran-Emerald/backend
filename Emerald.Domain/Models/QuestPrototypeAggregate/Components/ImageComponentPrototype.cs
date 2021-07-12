@@ -14,14 +14,10 @@ namespace Emerald.Domain.Models.QuestPrototypeAggregate.Components
         }
 
         public override Component ConvertToComponent(IPrototypeContext context)
-            => new ImageComponent(context.ConvertImageId((int) ImageReference!));
+            => new ImageComponent(ImageReference == null ? null : context.ConvertImageId((int)ImageReference!));
 
         public override void Verify()
         {
-            if (ImageReference == null)
-            {
-                throw new DomainException($"ImageReference in ImageComponent can not null");
-            }
         }
 
         public override void AggregateImageReferences(List<int> imageReferences)
