@@ -6,6 +6,7 @@ using Emerald.Application.Services.Factories;
 using Emerald.Domain.Models.TrackerAggregate;
 using Emerald.Domain.Models.UserAggregate;
 using Emerald.Infrastructure.Repositories;
+using GeoCoordinatePortable;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -48,34 +49,35 @@ namespace Emerald.Application.Controllers.Quest
         {
             User user = await userRepository.Get(User);
 
-            var filter = Builders<Domain.Models.QuestAggregate.Quest>.Filter
+            var mongoQueryable = questRepository.GetQueryable()
                 .Where(q => (q.Public || q.OwnerUserId == user.Id)
-                         && q.QuestVersions.Count > 0
-                         && q.Locks.Count == 0);
+                            && q.QuestVersions.Count > 0
+                            && q.Locks.Count == 0);
 
             if (request.OwnerId != null)
             {
-                filter = Builders<Domain.Models.QuestAggregate.Quest>.Filter.And(filter,
-                    Builders<Domain.Models.QuestAggregate.Quest>.Filter
-                        .Where(q => q.OwnerUserId == request.OwnerId));
+                mongoQueryable = mongoQueryable.Where(q => q.OwnerUserId == request.OwnerId);
             }
 
-            if (request.Location != null && request.Radius != null)
+            var queryable = (IEnumerable<Domain.Models.QuestAggregate.Quest>) await mongoQueryable
+                .ToListAsync();
+
+            if (request.Location != null)
             {
-                filter = Builders<Domain.Models.QuestAggregate.Quest>.Filter.And(filter,
-                    Builders<Domain.Models.QuestAggregate.Quest>.Filter.NearSphere(
-                        q => q.QuestVersions[0].Location, GeoJson.Point(
-                            new GeoJson2DGeographicCoordinates(request.Location.Longitude, request.Location.Latitude)), request.Radius));
+                queryable = queryable.OrderBy(q => new GeoCoordinate(q.GetCurrentQuestVersion()!.Location.Coordinates.Latitude,
+                                                q.GetCurrentQuestVersion()!.Location.Coordinates.Longitude).GetDistanceTo(
+                    new GeoCoordinate(request.Location.Latitude, request.Location.Longitude)))
+                    .Where(q => new GeoCoordinate(q.GetCurrentQuestVersion()!.Location.Coordinates.Latitude,
+                                                q.GetCurrentQuestVersion()!.Location.Coordinates.Longitude).GetDistanceTo(
+                    new GeoCoordinate(request.Location.Latitude, request.Location.Longitude)) < request.Radius);
             }
-
-            var quests = await questRepository.Collection.Find(filter)
-                    .Skip(request.Offset)
-                    .Limit(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
-                    .ToListAsync();
 
             return Ok(new QuestQueryResponse(
                 quests: await questModelFactory.Create(
-                    quests.Select(q => new QuestPairModel(q, q.QuestVersions
+                    queryable.Skip(request.Offset)
+                        .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
+                        .ToList()
+                        .Select(q => new QuestPairModel(q, q.QuestVersions
                                         .OrderByDescending(v => v.Version)
                                         .FirstOrDefault()))
                         .ToList())));
@@ -198,7 +200,31 @@ namespace Emerald.Application.Controllers.Quest
             [FromServices] QuestModelFactory questModelFactory,
             [FromServices] IUserService userService)
         {
-            return Ok(new QuestQueryResponse(new List<QuestModel>()));
+            User user = await userRepository.Get(User);
+
+            var mongoQueryable = questRepository.GetQueryable()
+                .Where(q => (q.Public || q.OwnerUserId == user.Id)
+                            && q.QuestVersions.Count > 0
+                            && q.Locks.Count == 0);
+
+            var queryable = (IEnumerable<Domain.Models.QuestAggregate.Quest>) await mongoQueryable.ToListAsync();
+
+            queryable = queryable
+                .Where(q => new GeoCoordinate(q.GetCurrentQuestVersion()!.Location.Coordinates.Latitude,
+                                            q.GetCurrentQuestVersion()!.Location.Coordinates.Longitude).GetDistanceTo(
+                new GeoCoordinate(location.Latitude, location.Longitude)) < radius);
+        
+            return Ok(new QuestQueryResponse(
+                quests: await questModelFactory.Create(
+                    queryable
+                        .OrderByDescending(q => q.CreationTime)
+                        .Skip(offset)
+                        .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
+                        .ToList()
+                        .Select(q => new QuestPairModel(q, q.QuestVersions
+                                        .OrderByDescending(v => v.Version)
+                                        .FirstOrDefault()))
+                        .ToList())));
             /*
             var filter = Builders<Domain.Models.QuestAggregate.Quest>.Filter.And(
                 Builders<Domain.Models.QuestAggregate.Quest>.Filter.Near(q => 

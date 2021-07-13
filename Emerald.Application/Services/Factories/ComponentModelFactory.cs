@@ -19,7 +19,7 @@ namespace Emerald.Application.Services.Factories
                 case ImageComponent imageComponent:
                     return new ImageComponentModel(
                         component.Id.ToString(),
-                        imageComponent.ImageId);
+                        imageComponent.ImageId!);
 
                 case AnswerComponent answerComponent:
                     return new AnswerComponentModel(

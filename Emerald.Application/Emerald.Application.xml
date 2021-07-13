@@ -124,7 +124,7 @@
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Delete(MongoDB.Bson.ObjectId,Emerald.Infrastructure.Repositories.IComponentRepository,Emerald.Domain.Repositories.IModuleRepository,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Infrastructure.Repositories.ITrackerRepository,Emerald.Application.Services.IUserService)">
+        <member name="M:Emerald.Application.Controllers.Quest.QuestCreateController.Delete(MongoDB.Bson.ObjectId,Emerald.Infrastructure.Repositories.IUserRepository,Emerald.Infrastructure.Repositories.IComponentRepository,Emerald.Domain.Repositories.IModuleRepository,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Infrastructure.Repositories.ITrackerRepository,Emerald.Application.Services.IUserService)">
             <summary>
             Delete a quest if owned by authorized user
             </summary>
@@ -273,6 +273,13 @@
             Query for users optionally by search string
             </summary>
             <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Emerald.Application.Controllers.UserController.Rename(System.String,Microsoft.AspNetCore.Identity.UserManager{Emerald.Domain.Models.UserAggregate.User},Emerald.Application.Services.IUserService)">
+            <summary>
+            Change authorized username
+            </summary>
+            <param name="username"></param>
             <returns></returns>
         </member>
     </members>

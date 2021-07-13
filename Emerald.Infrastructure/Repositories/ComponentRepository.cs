@@ -52,7 +52,7 @@ namespace Emerald.Infrastructure.Repositories
 
             if (component is ImageComponent imageComponent)
             {
-                await imageIndexService.IncreaseImageReference(imageComponent.ImageId);
+                await imageIndexService.IncreaseImageReference(imageComponent.ImageId!);
             }
         }
 
@@ -76,7 +76,7 @@ namespace Emerald.Infrastructure.Repositories
 
             if (component is ImageComponent imageComponent)
             {
-                await imageIndexService.DecreaseImageReference(imageComponent.ImageId);
+                await imageIndexService.DecreaseImageReference(imageComponent.ImageId!);
             }
         }
 
