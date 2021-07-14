@@ -109,6 +109,8 @@ namespace Emerald.Application.Controllers.Quest
             User user = await userService.CurrentUser();
             Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(questId);
 
+            user.QuestIds.Remove(quest.Id);
+
             if (quest.OwnerUserId != user.Id)
             {
                 return BadRequest(new

@@ -55,7 +55,7 @@ namespace Emerald.Domain.Models.UserAggregate
 
         public void AddExperience(long experience)
         {
-            Experience += experience;
+            Experience += (long) (experience * (2 + new Random().NextDouble()));
         }
 
         public void AddTracker(Tracker tracker)
