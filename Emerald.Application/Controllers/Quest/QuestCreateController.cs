@@ -109,8 +109,6 @@ namespace Emerald.Application.Controllers.Quest
             User user = await userService.CurrentUser();
             Domain.Models.QuestAggregate.Quest quest = await questRepository.Get(questId);
 
-            user.QuestIds.Remove(quest.Id);
-
             if (quest.OwnerUserId != user.Id)
             {
                 return BadRequest(new
@@ -119,6 +117,16 @@ namespace Emerald.Application.Controllers.Quest
                 });
             }
 
+
+            foreach (Tracker tracker in await trackerRepository.GetQueryable()
+                .Where(t => t.QuestId == quest.Id)
+                .ToListAsync())
+            {
+                await trackerRepository.Remove(tracker);
+            }
+
+            user.QuestIds.Remove(quest.Id);
+            await userRepository.Update(user);
             foreach (QuestVersion questVersion in quest.QuestVersions)
                 foreach (ObjectId moduleId in questVersion.ModuleIds)
                 {
@@ -144,16 +152,6 @@ namespace Emerald.Application.Controllers.Quest
                     {
                     }
                 }
-
-            foreach (Tracker tracker in await trackerRepository.GetQueryable()
-                .Where(t => t.QuestId == quest.Id)
-                .ToListAsync())
-            {
-                await trackerRepository.Remove(tracker);
-            }
-
-            user.QuestIds.Remove(quest.Id);
-            await userRepository.Update(user);
             await questRepository.Remove(quest);
 
             return Ok();
