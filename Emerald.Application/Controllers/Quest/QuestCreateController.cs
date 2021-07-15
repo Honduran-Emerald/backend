@@ -126,11 +126,23 @@ namespace Emerald.Application.Controllers.Quest
 
                     foreach (ObjectId componentId in module.ComponentIds)
                     {
-                        await componentRepository.Remove(
-                            await componentRepository.Get(componentId));
+                        try
+                        {
+                            await componentRepository.Remove(
+                                await componentRepository.Get(componentId));
+                        }
+                        catch(Exception e)
+                        {
+                        }
                     }
 
-                    await moduleRepository.Remove(module);
+                    try
+                    {
+                        await moduleRepository.Remove(module);
+                    }
+                    catch (Exception e)
+                    {
+                    }
                 }
 
             foreach (Tracker tracker in await trackerRepository.GetQueryable()
