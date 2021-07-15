@@ -13,10 +13,10 @@ services:
     environment: 
       Mongo__ConnectionString: "mongodb://mongo:27017/emerald"
       Mongo__DatabaseName: "emerald"
-      Jwt__Key: ""
-      KissLog__OrganizationId: ""
-      KissLog__ApplicationId: ""
-      KissLog__ApiUrl: ""
+      Jwt__Key: "<Jwt Kew>"
+      KissLog__OrganizationId: "<Kisslog OrganizationId>"
+      KissLog__ApplicationId: "<Kisslog ApplicationId>"
+      KissLog__ApiUrl: "KissLog.ApiUrl=https://api.kisslog.net"
 
   mongo:
     image: mongo:latest
