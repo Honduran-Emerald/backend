@@ -35,7 +35,7 @@ namespace Emerald.Domain.Models.ModuleAggregate.Modules
                         new List<IResponseEvent>
                         {
                             new ModuleFinishResponseEvent(isLeft ? NextLeftModuleId : NextRightModuleId),
-                            new ExperienceResponseEvent((long) (100 / Math.Clamp(0.05 + (isLeft ? (LeftRatio) : (1 - LeftRatio)), 0, 1)))
+                            new ExperienceResponseEvent((long) ((2 + new Random().NextDouble()) * 100 / Math.Clamp(0.05 + (isLeft ? (LeftRatio) : (1 - LeftRatio)), 0, 1)))
                         })
                 : new ResponseEventCollection(
                             memento,

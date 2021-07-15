@@ -1,4 +1,5 @@
 ﻿using Emerald.Application.Models.Quest.RequestEvent;
+using MongoDB.Bson;
 using System.ComponentModel.DataAnnotations;
 
 namespace Emerald.Application.Models.Quest.Events
@@ -7,6 +8,8 @@ namespace Emerald.Application.Models.Quest.Events
     {
         [Required]
         public int Choice { get; set; }
+
+        public ObjectId ModuleId { get; set; }
 
         private ChoiceRequestEventModel()
         {

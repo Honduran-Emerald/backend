@@ -315,6 +315,11 @@ namespace Emerald.Application.Controllers
                 return StatusCode(252);
             }
 
+            if (choiceEvent.ModuleId != tracker.GetCurrentTrackerPath().ModuleId)
+            {
+                return BadRequest();
+            }
+
             ResponseEventCollection responseEvent = await questPlayService.HandleEvent(
                 await userRepository.Get(User),
                 tracker,

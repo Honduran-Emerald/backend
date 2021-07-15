@@ -2,6 +2,7 @@
 using Emerald.Domain.Models.ModuleAggregate.ResponseEvents;
 using Emerald.Domain.Models.TrackerAggregate;
 using MongoDB.Bson;
+using System;
 using System.Collections.Generic;
 
 namespace Emerald.Domain.Models.ModuleAggregate.Modules
@@ -29,7 +30,7 @@ namespace Emerald.Domain.Models.ModuleAggregate.Modules
                     new List<IResponseEvent>
                     {
                         new QuestFinishResponseEvent(EndingFactor),
-                        new ExperienceResponseEvent((long) (2000 * EndingFactor))
+                        new ExperienceResponseEvent((long) (2000 * EndingFactor * (2 + new Random().NextDouble())))
                     });
             }
             else

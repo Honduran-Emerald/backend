@@ -2,6 +2,7 @@
 using Emerald.Domain.Models.ModuleAggregate.ResponseEvents;
 using Emerald.Domain.Models.TrackerAggregate;
 using MongoDB.Bson;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Vitamin.Value.Domain.SeedWork;
@@ -55,7 +56,7 @@ namespace Emerald.Domain.Models.ModuleAggregate.Modules
                     new List<IResponseEvent>
                     {
                         new ModuleFinishResponseEvent(Choices[choiceEvent.Choice].ModuleId),
-                        new ExperienceResponseEvent(200)
+                        new ExperienceResponseEvent((long)(200 * (2 + new Random().NextDouble())))
                     });
             }
             else

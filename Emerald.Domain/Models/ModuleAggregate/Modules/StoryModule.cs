@@ -2,6 +2,7 @@
 using Emerald.Domain.Models.ModuleAggregate.ResponseEvents;
 using Emerald.Domain.Models.TrackerAggregate;
 using MongoDB.Bson;
+using System;
 using System.Collections.Generic;
 
 namespace Emerald.Domain.Models.ModuleAggregate.Modules
@@ -23,7 +24,7 @@ namespace Emerald.Domain.Models.ModuleAggregate.Modules
                     new List<IResponseEvent>
                     {
                         new ModuleFinishResponseEvent(NextModuleId),
-                        new ExperienceResponseEvent(150)
+                        new ExperienceResponseEvent((long)((2 + new Random().NextDouble()) * 150))
                     })
             : new ResponseEventCollection(
                         memento,

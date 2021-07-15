@@ -1,34 +1,25 @@
 # Install
 
+This will require a few GB of free space on your pc.
+
 ## 1. Local dependencies
 
-Install git (https://git-scm.com/downloads)
-Install docker (https://docs.docker.com/get-docker/)
+Install git (https://git-scm.com/downloads). 
+Install docker (https://docs.docker.com/get-docker/).
+With Windows it might be necessary to install wsl2 to use docker.
 
-Download repository with 'git clone https://github.com/Honduran-Emerald/backend'.
+Open a console in the folder where you want to install the backend.
+Download repository with the command 'git clone https://github.com/Honduran-Emerald/backend'.
 
 ## 2. Backend dependencies
 
-The following environment variables need to be filled in the Docker Compose file "docker-compose.yml" in the root directory.
-Fill the missing data marked with <...>.
+The following environment variables need to be filled in the Docker Compose file "docker-compose.yml" in the root directory (a normal texteditor like notepad can be used to open).
+Enter them in the fields marked with <...> (example: change KissLog__OrganizationId: "<>" to "xyz"):
 
-Setup Kisslog (https://kisslog.net), create a Organization and Application and fill both Ids in Docker Compose.
-Setup JwtKey, enter a secure Password for encryption of Authentication Tokens.
+Setup Kisslog (https://kisslog.net), create an organization and application and fill both ids in Docker Compose (this can take a bit longer).
+Setup JwtKey by entering a secure password of your choice for encryption of authentication tokens.
 
 ## 3. Run
 
-Start a console in the root directory and run 'docker-compose build' and 'docker-compose run'. The backend should be running at Port 812
-
-# Notes
-## MongoDB Mapping (Domain Modelling)
-https://mongodb.github.io/mongo-csharp-driver/2.8/reference/bson/mapping/
-## MongoDB Handling Inheritance
-https://codingcanvas.com/storing-polymorphic-classes-in-mongodb-using-c/
-## Geo Location
-https://docs.microsoft.com/de-de/dotnet/api/system.device.location.geocoordinate?view=netframework-4.8
-## Exmaple MongoDB with ASP.NET Core and Identity
-https://github.com/coolc0ders/SocialAuthXamarinFormsAspNetCore/blob/master/AuthDemoWeb/AuthDemoWeb/Startup.cs
-https://github.com/HueByte/CloudLette/tree/master/src/backend
-https://github.com/hamed-shirbandi/CorMon/tree/master/CorMon.Web
-## MongoDB with Identity
-https://github.com/matteofabbri/AspNetCore.Identity.Mongo
+Start a console in the root directory and run 'docker-compose build' and 'docker-compose up' (this can take a few minutes).
+The backend should be running at Port 812 and can now be accessed though the browser at 'http://localhost:812/swagger'.

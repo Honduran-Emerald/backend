@@ -13,9 +13,9 @@ services:
     environment: 
       Mongo__ConnectionString: "mongodb://mongo:27017/emerald"
       Mongo__DatabaseName: "emerald"
-      Jwt__Key: "<Jwt Kew>"
-      KissLog__OrganizationId: "<Kisslog OrganizationId>"
-      KissLog__ApplicationId: "<Kisslog ApplicationId>"
+      Jwt__Key: "bqT4%vB7&cJgT5rpV*H6H%#@qsds^-93@y*6fCw#&UsZmZEXL@d8R*^DaUMgS4!X"
+      KissLog__OrganizationId: "KissLog.OrganizationId=9c5fee9c-056f-4c13-bee5-3b9689d01ac6"
+      KissLog__ApplicationId: "KissLog.ApplicationId=fc4be889-6d7d-4625-bd0c-5a917a97d94d"
       KissLog__ApiUrl: "KissLog.ApiUrl=https://api.kisslog.net"
 
   mongo:

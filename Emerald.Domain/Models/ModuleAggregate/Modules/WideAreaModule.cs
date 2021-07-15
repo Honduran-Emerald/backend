@@ -31,7 +31,7 @@ namespace Emerald.Domain.Models.ModuleAggregate.Modules
                     new List<IResponseEvent>
                     {
                         new ModuleFinishResponseEvent(NextModuleId),
-                        new ExperienceResponseEvent(300)
+                        new ExperienceResponseEvent((long)((2 + new Random().NextDouble()) * 300))
                     })
             : new ResponseEventCollection(
                         memento,
