@@ -127,29 +127,37 @@ namespace Emerald.Application.Controllers.Quest
 
             user.QuestIds.Remove(quest.Id);
             await userRepository.Update(user);
+
             foreach (QuestVersion questVersion in quest.QuestVersions)
                 foreach (ObjectId moduleId in questVersion.ModuleIds)
                 {
-                    Module module = await moduleRepository.Get(moduleId);
-
-                    foreach (ObjectId componentId in module.ComponentIds)
-                    {
-                        try
-                        {
-                            await componentRepository.Remove(
-                                await componentRepository.Get(componentId));
-                        }
-                        catch(Exception e)
-                        {
-                        }
-                    }
-
                     try
                     {
-                        await moduleRepository.Remove(module);
+                        Module module = await moduleRepository.Get(moduleId);
+
+                        foreach (ObjectId componentId in module.ComponentIds)
+                        {
+                            try
+                            {
+                                await componentRepository.Remove(
+                                    await componentRepository.Get(componentId));
+                            }
+                            catch (Exception e)
+                            {
+                            }
+                        }
+
+                        try
+                        {
+                            await moduleRepository.Remove(module);
+                        }
+                        catch (Exception e)
+                        {
+                        }
                     }
                     catch (Exception e)
                     {
+
                     }
                 }
             await questRepository.Remove(quest);
