@@ -26,7 +26,8 @@ namespace Emerald.Application.Infrastructure.Middleware
             {
                 if (httpContext.User.Identity != null && httpContext.User.Identity.IsAuthenticated)
                 {
-                    logger.LogWarning($"User '{httpContext.User.Identity.Name}' caused DomainException '{domainException.Message}'");
+                    logger.LogInformation(domainException.StackTrace);
+                    logger.LogWarning(domainException, $"User '{httpContext.User.Identity.Name}' caused DomainException '{domainException.Message}'");
                 }
                 else
                 {
