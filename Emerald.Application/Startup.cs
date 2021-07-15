@@ -187,6 +187,8 @@ namespace Emerald.Application
                 services.AddScoped(context => Logger.Factory.Get())
                         .AddLogging(logging => logging.AddKissLog());
             }
+
+            services.AddRazorPages();
         }
 
         public void Configure(IApplicationBuilder app, ILogger<Startup> logger)
