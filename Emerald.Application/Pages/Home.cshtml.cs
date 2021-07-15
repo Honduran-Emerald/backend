@@ -15,10 +15,9 @@ namespace Emerald.Application
     {
         private IUserRepository userRepository;
 
-        public HomeModel(IUserRepository userRepository, List<User> users)
+        public HomeModel(IUserRepository userRepository)
         {
             this.userRepository = userRepository;
-            Users = users;
         }
 
         public List<User> Users { get; set; }
