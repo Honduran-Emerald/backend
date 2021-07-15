@@ -78,6 +78,13 @@
             <param name="request"></param>
             <returns></returns>
         </member>
+        <member name="M:Emerald.Application.Controllers.Quest.QuestController.QueryName(System.Int32,Emerald.Application.Models.LocationModel,System.Nullable{System.Single},System.String)">
+            <summary>
+            Query quests based on name
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
         <member name="M:Emerald.Application.Controllers.Quest.QuestController.QueryVoted(System.Nullable{MongoDB.Bson.ObjectId},System.Int32,Emerald.Domain.Models.TrackerAggregate.VoteType,Emerald.Infrastructure.Repositories.ITrackerRepository,Emerald.Infrastructure.Repositories.IQuestRepository,Emerald.Application.Services.Factories.QuestModelFactory,Emerald.Application.Services.IUserService)">
             <summary>
             Query all quests with the specified vote by the authorized user

@@ -4,6 +4,7 @@ using Emerald.Domain.Models.TrackerAggregate;
 using Emerald.Domain.SeedWork;
 using MediatR;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using Vitamin.Value.Domain;
@@ -11,6 +12,7 @@ using Vitamin.Value.Domain.SeedWork;
 
 namespace Emerald.Domain.Models.UserAggregate
 {
+    [BsonIgnoreExtraElements]
     public class User : MongoUser, IEntity<ObjectId>
     {
         public List<ObjectId> QuestIds { get; set; }
@@ -31,8 +33,11 @@ namespace Emerald.Domain.Models.UserAggregate
         private List<INotification> domainEvents;
         public IReadOnlyCollection<INotification> DomainEvents => domainEvents;
 
+        public DateTime CreationTime { get; set; }
+
         public User() : base()
         {
+            CreationTime = DateTime.UtcNow;
             Locks = new List<Lock>();
             QuestIds = new List<ObjectId>();
             TrackerIds = new List<ObjectId>();

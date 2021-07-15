@@ -15,6 +15,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.GeoJsonObjectModel;
 using MongoDB.Driver.Linq;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -75,6 +76,51 @@ namespace Emerald.Application.Controllers.Quest
             return Ok(new QuestQueryResponse(
                 quests: await questModelFactory.Create(
                     queryable.Skip(request.Offset)
+                        .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
+                        .ToList()
+                        .Select(q => new QuestPairModel(q, q.QuestVersions
+                                        .OrderByDescending(v => v.Version)
+                                        .FirstOrDefault()))
+                        .ToList())));
+        }
+
+        /// <summary>
+        /// Query quests based on name
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpGet("queryname")]
+        public async Task<ActionResult<QuestQueryResponse>> QueryName(
+            [FromQuery, Required] int offset,
+            [FromQuery] LocationModel? location,
+            [FromQuery] float? radius,
+            [FromQuery, Required] string search)
+        {
+            User user = await userRepository.Get(User);
+
+            var mongoQueryable = questRepository.GetQueryable()
+                .Where(q => (q.Public || q.OwnerUserId == user.Id)
+                            && q.QuestVersions.Count > 0
+                            && q.Locks.Count == 0);
+
+            var queryable = (IEnumerable<Domain.Models.QuestAggregate.Quest>)await mongoQueryable
+                .ToListAsync();
+
+            if (location != null)
+            {
+                queryable = queryable.OrderBy(q => new GeoCoordinate(q.GetCurrentQuestVersion()!.Location.Coordinates.Latitude,
+                                                q.GetCurrentQuestVersion()!.Location.Coordinates.Longitude).GetDistanceTo(
+                    new GeoCoordinate(location.Latitude, location.Longitude)))
+                    .Where(q => new GeoCoordinate(q.GetCurrentQuestVersion()!.Location.Coordinates.Latitude,
+                                                q.GetCurrentQuestVersion()!.Location.Coordinates.Longitude).GetDistanceTo(
+                    new GeoCoordinate(location.Latitude, location.Longitude)) < radius);
+            }
+
+            queryable = queryable.Where(q => q.GetCurrentQuestVersion()!.Title.ToUpper().Contains(search.ToUpper()));
+
+            return Ok(new QuestQueryResponse(
+                quests: await questModelFactory.Create(
+                    queryable.Skip(offset)
                         .Take(configuration.GetValue<int>("Emerald:MediumResponsePackSize"))
                         .ToList()
                         .Select(q => new QuestPairModel(q, q.QuestVersions

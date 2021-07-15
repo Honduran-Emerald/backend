@@ -1,0 +1,14 @@
+﻿@page
+@model Emerald.Application.HomeModel
+
+<div style="display: flex; flex-direction: column">
+    @foreach (var user in @Model.Users)
+    {
+        <div>
+            @($"{user.UserName} : {user.CreationTime} : {user.Email}")
+        </div>
+    }
+</div>
+
+@{
+}

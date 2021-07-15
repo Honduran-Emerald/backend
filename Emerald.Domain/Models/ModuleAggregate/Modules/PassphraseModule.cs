@@ -24,7 +24,7 @@ namespace Emerald.Domain.Models.ModuleAggregate.Modules
 
         public override ResponseEventCollection ProcessEvent(TrackerNodeMemento? memento, RequestEvent requestEvent)
             => requestEvent is TextRequestEvent textEvent
-            ? textEvent.Text == Text
+            ? textEvent.Text.ToUpper() == Text.ToUpper()
             ? new ResponseEventCollection(
                     new TextModuleMemento(textEvent.Text),
                     new List<IResponseEvent>
