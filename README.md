@@ -5,6 +5,8 @@
 Install git (https://git-scm.com/downloads)
 Install docker (https://docs.docker.com/get-docker/)
 
+Download repository with 'git clone https://github.com/Honduran-Emerald/backend'.
+
 ## 2. Backend dependencies
 
 The following environment variables need to be filled in the Docker Compose file "docker-compose.yml" in the root directory.
